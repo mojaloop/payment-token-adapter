@@ -1,0 +1,32 @@
+{
+  "name": "@mojaloop/payment-token-adapter",
+  "version": "1.0.0",
+  "description": "An adpater that facilitates payment token mapping between a Mojaloop Connector (SDK Scheme Adapter) and a Core Banking system Connector to support G2P payments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mojaloop/payment-token-adapter.git"
+  },
+  "keywords": [
+    "g2p"
+  ],
+  "author": "Elijah Okello",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mojaloop/payment-token-adapter/issues"
+  },
+  "homepage": "https://github.com/mojaloop/payment-token-adapter#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "eslint": "^8.56.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "npm-check-updates": "^16.14.13",
+    "typescript": "^5.3.3"
+  }
+}
