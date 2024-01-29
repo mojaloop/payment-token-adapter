@@ -1,3 +1,3 @@
-import { init, start } from "./server";
+import { init, start } from './service'
 
 init().then(() => start());

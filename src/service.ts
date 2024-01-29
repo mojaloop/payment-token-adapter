@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-import Hapi from "@hapi/hapi";
-import { Server } from "@hapi/hapi";
+import Hapi from '@hapi/hapi'
+import type { Server } from '@hapi/hapi';
 
 export let server: Server;
 

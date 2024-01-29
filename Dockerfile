@@ -9,7 +9,6 @@ WORKDIR /opt/app
 ## Copy basic files for installing dependencies
 COPY tsconfig.json package.json package-lock.json /opt/app/
 COPY src /opt/app/src
-COPY config /opt/app/config
 
 RUN npm ci
 
@@ -17,7 +16,7 @@ RUN npm ci
 RUN npm run build
 
 ## *Application*
-FROM node:lts-apline
+FROM node:lts-alpine
 
 RUN apk add --no-cache git python3 g++ make
 WORKDIR /opt/app
@@ -28,7 +27,6 @@ RUN npm ci --production
 
 ## Copy of dist directory from builder
 COPY --from=builder /opt/app/dist ./dist
-COPY --from=builder /opt/app/config ./config
 
 ## Expose any application ports
 # EXPOSE <PORT>
