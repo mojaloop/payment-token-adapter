@@ -32,6 +32,6 @@ import {IMapping} from "./types";
 export interface IAliasStorageRepo{
     init(): Promise<void>;
     destroy(): Promise<void>;
-    storeMapping(): Promise<void>;
-    getMapping(): Promise<IMapping>
+    storeMapping(tokenMapping:IMapping): Promise<void>;
+    getMapping(mappingID: string): Promise<IMapping | undefined>
 }

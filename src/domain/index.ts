@@ -27,18 +27,7 @@
 
 "use strict";
 
-export interface IMapping{
-    paymentToken: string;
-    accountId: string;
-    accountType: AccountType
-}
-
-export enum AccountType {
-    MSISDN = "MSISDN",
-    IBAN = "IBAN"
-}
 
 
-export interface IHttpClient{
+export * from "./aggregate";
 
-}

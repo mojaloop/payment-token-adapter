@@ -27,31 +27,27 @@
 
 "use strict";
 
-import {IAliasStorageRepo} from "./infrastructure";
-import {IMapping, AccountType} from "./types";
+import {IAliasStorageRepo} from "interfaces";
+import {AccountType, IMapping} from "interfaces";
 
-class MemoryAliasStorageRepo implements IAliasStorageRepo{
+export class MemoryAliasStorageRepo implements IAliasStorageRepo{
     private mappings = new Map<string, IMapping>;
 
     destroy(): Promise<void> {
         return Promise.resolve(undefined);
     }
 
-    getMapping(): Promise<IMapping> {
-        return Promise.resolve(
-            {
-                accountId:"893000343434343",
-                accountType:AccountType.IBAN,
-                paymentToken:"938u8903u49834u9238"
-            }
-        );
+    getMapping(mappingID: string): Promise<IMapping | undefined> {
+        // in the aggregate make sure to check if the returned mapping is defined
+        return Promise.resolve(this.mappings.get(mappingID));
     }
 
     init(): Promise<void> {
         return Promise.resolve(undefined);
     }
 
-    storeMapping(): Promise<void> {
+    storeMapping(tokenMapping: IMapping): Promise<void> {
+        this.mappings.set(tokenMapping.paymentToken,tokenMapping);
         return Promise.resolve(undefined);
     }
 

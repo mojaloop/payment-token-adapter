@@ -27,18 +27,25 @@
 
 "use strict";
 
-export interface IMapping{
-    paymentToken: string;
-    accountId: string;
-    accountType: AccountType
-}
 
-export enum AccountType {
-    MSISDN = "MSISDN",
-    IBAN = "IBAN"
-}
+import {AccountType, IAliasStorageRepo, IMapping} from "interfaces";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class Aggregate{
 
-export interface IHttpClient{
+    private aliasMappingRepo: IAliasStorageRepo;
+    private httpClient:unknown;
 
+    constructor(aliasMappingRepo: IAliasStorageRepo) {
+    this.aliasMappingRepo = aliasMappingRepo;
+
+    }
+
+    async createMapping(tokenMapping: IMapping){
+        await this.aliasMappingRepo.storeMapping(tokenMapping);
+    }
+
+    async getMapping(mappingId: string):Promise<IMapping | undefined> {
+        return await this.aliasMappingRepo.getMapping(mappingId);
+    }
 }

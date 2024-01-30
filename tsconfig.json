@@ -1,61 +1,54 @@
 {
   "include": [
-    "src",
-    "test",
-    "jest.bdd.config.js",
-    "jest.config.js",
-    "jest.integration.config.js",
-    ".eslintrc.js",
-    "docker",
-    "commitlint.config.js",
-    "types/ambient.d.ts",
-    "config",
+    "./src"
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "coverage",
+    "**/*.spec.ts",
     "test",
-    "commitlint.config.js",
-    "jest.bdd.config.js",
-    "jest.config.js"
+    "lib",
+    "coverage"
   ],
   "compilerOptions": {
-    "target": "es2020",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    // prevents this tsconfig from compiling any files
+    "target": "ES2022",
     "module": "commonjs",
-    "rootDirs": [
-      "src",
-      "test"
+    "types": [
+      "node",
+      "jest"
     ],
-    "baseUrl": ".",
-    "paths": {
-      "@project-shared": [ "./src/shared/index.ts" ],
-      "@project-interfaces": [ "./src/interface/types/index.ts" ],
-      "@project-src/*": [ "src/*" ],
-      "@project-types/*": [ "src/types/*" ],
-      "@project-shared/*": [ "./src/shared/*" ]
-    },
     "lib": [
-      "es2020"
+      "ES2022"
     ],
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "./",
-    "outDir": "dist",
+    "skipLibCheck": true,
     "strict": true,
+    // this includes all string enforcing rules ?
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "noImplicitThis": true,
     "alwaysStrict": true,
+    "resolveJsonModule": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": false,
+    "noFallthroughCasesInSwitch": true,
+    // Needed for CommonJS modules
+    "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "esModuleInterop": true,
-    "resolveJsonModule": true
+    "baseUrl": "./",
+    "paths": {
+      "*": [
+        "src/*",
+        "node_modules/*"
+      ]
+    },
+    "esModuleInterop": true
   }
 }
