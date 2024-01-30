@@ -29,9 +29,15 @@
 
 import {IMapping} from "./types";
 
-export interface IAliasStorageRepo{
+export interface ITokenMappingStorageRepo {
     init(): Promise<void>;
     destroy(): Promise<void>;
     storeMapping(tokenMapping:IMapping): Promise<void>;
     getMapping(mappingID: string): Promise<IMapping | undefined>
+}
+
+export interface IHttpClient{
+ init(): Promise<void>;
+ destroy(): Promise<void>;
+ send(url:string,payload:unknown, timeout_ms:number, method: string):Promise<void>;
 }

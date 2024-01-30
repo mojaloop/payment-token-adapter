@@ -28,26 +28,13 @@
 "use strict";
 
 
-import {ITokenMappingStorageRepo, IHttpClient, IMapping} from "interfaces";
+import {Request} from "@hapi/hapi";
+import {testHandler} from "./handlers";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class Aggregate{
-
-    private aliasMappingRepo: ITokenMappingStorageRepo;
-
-    constructor(aliasMappingRepo: ITokenMappingStorageRepo) {
-        this.aliasMappingRepo = aliasMappingRepo;
+export const routes = [
+    {
+        method: '*',
+        path: '/{any*}',
+        handler: testHandler
     }
-
-    async createMapping(tokenMapping: IMapping){
-        await this.aliasMappingRepo.storeMapping(tokenMapping);
-    }
-
-    async getMapping(mappingId: string):Promise<IMapping | undefined> {
-        return await this.aliasMappingRepo.getMapping(mappingId);
-    }
-
-    async destroy (){
-        return Promise.resolve();
-    }
-}
+]

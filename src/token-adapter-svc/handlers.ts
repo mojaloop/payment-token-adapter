@@ -28,26 +28,7 @@
 "use strict";
 
 
-import {ITokenMappingStorageRepo, IHttpClient, IMapping} from "interfaces";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class Aggregate{
-
-    private aliasMappingRepo: ITokenMappingStorageRepo;
-
-    constructor(aliasMappingRepo: ITokenMappingStorageRepo) {
-        this.aliasMappingRepo = aliasMappingRepo;
-    }
-
-    async createMapping(tokenMapping: IMapping){
-        await this.aliasMappingRepo.storeMapping(tokenMapping);
-    }
-
-    async getMapping(mappingId: string):Promise<IMapping | undefined> {
-        return await this.aliasMappingRepo.getMapping(mappingId);
-    }
-
-    async destroy (){
-        return Promise.resolve();
-    }
+//@ts-ignore
+export const testHandler = (request: Request, h) => {
+    return h.response("All is ok").code(200);
 }

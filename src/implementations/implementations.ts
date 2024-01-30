@@ -27,10 +27,10 @@
 
 "use strict";
 
-import {IAliasStorageRepo} from "interfaces";
+import {ITokenMappingStorageRepo} from "interfaces";
 import {IMapping} from "interfaces";
 
-export class MemoryAliasStorageRepo implements IAliasStorageRepo{
+export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo{
     private mappings = new Map<string, IMapping>;
 
     destroy(): Promise<void> {

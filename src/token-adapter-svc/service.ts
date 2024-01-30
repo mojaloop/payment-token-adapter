@@ -28,6 +28,52 @@
 "use strict";
 
 
+import {ITokenMappingStorageRepo, IHttpClient} from "../interfaces";
+import {MemoryTokenMappingStorageRepo} from "../implementations";
+import {Aggregate} from "../domain";
+import {Server} from "@hapi/hapi";
+import * as process from "process";
+import {routes} from "./routes";
+
+
+const SERVER_PORT = process.env["SERVER_PORT"] || 3000;
+const SERVER_HOST = process.env["SERVER_HOST"] || "0.0.0.0"
+
 export class Service {
+    static aliasMappingStorageRepo: ITokenMappingStorageRepo;
+    static tokenAdapterAggregate: Aggregate;
+    static app: Server
+
+    static async start(aliasMappingStorageRepo?: ITokenMappingStorageRepo){
+         if(!aliasMappingStorageRepo){
+          aliasMappingStorageRepo = new MemoryTokenMappingStorageRepo();
+          await aliasMappingStorageRepo.init();
+         }
+         this.aliasMappingStorageRepo = aliasMappingStorageRepo;
+
+         this.tokenAdapterAggregate = new Aggregate(this.aliasMappingStorageRepo);
+         // start server
+         await this.setUpAndStartHapiServer();
+    }
+
+   static async setUpAndStartHapiServer():Promise<void>{
+       return new Promise<void>(resolve => {
+           // Start Hapi Server
+           this.app = new Server({
+               port: SERVER_PORT,
+               host: SERVER_HOST
+           });
+
+           this.app.route(routes);
+
+           this.app.start();
+           console.log('Server running on %s', this.app.info.uri);
+       })
+   }
+
+   static async stop(){
+    await this.aliasMappingStorageRepo.destroy();
+    await this.tokenAdapterAggregate.destroy();
+   }
 
 }

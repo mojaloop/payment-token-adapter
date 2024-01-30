@@ -37,8 +37,3 @@ export enum AccountType {
     MSISDN = "MSISDN",
     IBAN = "IBAN"
 }
-
-
-export interface IHttpClient{
-
-}

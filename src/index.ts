@@ -27,5 +27,10 @@
 
 "use strict";
 
+import {Service} from "./token-adapter-svc";
 
+
+Service.start().then(() => {
+ console.log("Started Token Adapter service");
+});
 
