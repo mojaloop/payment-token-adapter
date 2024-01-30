@@ -20,12 +20,20 @@
  optionally within square brackets <email>.
 
 
-    - Okello Ivan Elijah <elijahokello90@gmail.com>
+ - Okello Ivan Elijah <elijahokello90@gmail.com>
 
  --------------
  ******/
 
 "use strict";
 
+export interface IMapping{
+    paymentToken: string;
+    accountId: string;
+    accountType: AccountType
+}
 
-
+export enum AccountType {
+    MSISDN = "MSISDN",
+    IBAN = "IBAN"
+}

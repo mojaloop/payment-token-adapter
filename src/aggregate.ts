@@ -20,7 +20,7 @@
  optionally within square brackets <email>.
 
 
-    - Okello Ivan Elijah <elijahokello90@gmail.com>
+ - Okello Ivan Elijah <elijahokello90@gmail.com>
 
  --------------
  ******/
@@ -28,4 +28,21 @@
 "use strict";
 
 
+import {AccountType, IMapping} from "@project-src/interfaces/types";
 
+class Aggregate{
+ constructor() {
+ }
+
+ createMapping(){
+
+ }
+
+ async getMapping():Promise<IMapping> {
+  return {
+   accountId:"893000343434343",
+   accountType:AccountType.IBAN,
+   paymentToken:"938u8903u49834u9238"
+  }
+ }
+}

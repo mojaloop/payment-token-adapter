@@ -20,12 +20,18 @@
  optionally within square brackets <email>.
 
 
-    - Okello Ivan Elijah <elijahokello90@gmail.com>
+ - Okello Ivan Elijah <elijahokello90@gmail.com>
 
  --------------
  ******/
 
 "use strict";
 
+import {IMapping} from "./types";
 
-
+export interface IAliasStorageRepo{
+    init(): Promise<void>;
+    destroy(): Promise<void>;
+    storeMapping(): Promise<void>;
+    getMapping(): Promise<IMapping>
+}

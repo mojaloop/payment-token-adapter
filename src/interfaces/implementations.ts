@@ -20,12 +20,40 @@
  optionally within square brackets <email>.
 
 
-    - Okello Ivan Elijah <elijahokello90@gmail.com>
+ - Okello Ivan Elijah <elijahokello90@gmail.com>
 
  --------------
  ******/
 
 "use strict";
 
+import {IAliasStorageRepo} from "./infrastructure";
+import {IMapping, AccountType} from "./types";
 
+class MemoryAliasStorageRepo implements IAliasStorageRepo{
+    private mappings = new Map<string, IMapping>;
+
+    destroy(): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+    getMapping(): Promise<IMapping> {
+        return Promise.resolve(
+            {
+                accountId:"893000343434343",
+                accountType:AccountType.IBAN,
+                paymentToken:"938u8903u49834u9238"
+            }
+        );
+    }
+
+    init(): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+    storeMapping(): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+}
 
