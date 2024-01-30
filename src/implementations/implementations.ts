@@ -28,7 +28,7 @@
 "use strict";
 
 import {IAliasStorageRepo} from "interfaces";
-import {AccountType, IMapping} from "interfaces";
+import {IMapping} from "interfaces";
 
 export class MemoryAliasStorageRepo implements IAliasStorageRepo{
     private mappings = new Map<string, IMapping>;

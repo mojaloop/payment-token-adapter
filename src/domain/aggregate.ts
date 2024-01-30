@@ -28,7 +28,7 @@
 "use strict";
 
 
-import {AccountType, IAliasStorageRepo, IMapping} from "interfaces";
+import {IAliasStorageRepo, IMapping} from "interfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Aggregate{
