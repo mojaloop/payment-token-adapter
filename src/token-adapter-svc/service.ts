@@ -34,7 +34,6 @@ import {Aggregate} from "../domain";
 import {Server} from "@hapi/hapi";
 import process from "process";
 import {TokenAdapterRoutes} from "./routes";
-import * as console from "console";
 
 
 const SERVER_PORT = process.env["SERVER_PORT"] || 3000;
