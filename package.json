@@ -4,7 +4,7 @@
   "description": "An adpater that facilitates payment token mapping between a Mojaloop Connector (SDK Scheme Adapter) and a Core Banking system Connector to support G2P payments",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles",
+    "test:unit": "jest --detectOpenHandles",
     "prepare": "",
     "clean": "npm run clean:npm; npm run clean:dist",
     "clean:dist": "rm -rf dist",

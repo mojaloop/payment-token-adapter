@@ -41,13 +41,16 @@ describe("token-adapter-svc test suite",()=>{
      });
 
      test("POST - token-adapter-svc: registerToken", async ()=>{
+         const headers = new Headers();
+         headers.append("Content-Type","application/json")
          const reqInit: RequestInit = {
              method: "POST",
              body: JSON.stringify({
                  paymentToken:"CM2903E3E0WE",
                  payeeId:"256781666410",
                  payeeIdType:"DEVICE"
-             })
+             }),
+             headers: headers
          }
 
          let res = await fetch('http://0.0.0.0:3000/tokens',reqInit);
@@ -55,13 +58,16 @@ describe("token-adapter-svc test suite",()=>{
 
      test("GET - token-adapter-svc: get token Mapping should return a mapping for an existent token mapping", async ()=>{
         // Arrange
+         const headers = new Headers();
+         headers.append("Content-Type","application/json");
          const reqInit: RequestInit = {
              method: "POST",
              body: JSON.stringify({
                  paymentToken:"CM2903E3E0WE",
                  payeeId:"256781666410",
                  payeeIdType:"DEVICE"
-             })
+             }),
+             headers: headers
          }
 
          let res = await fetch('http://0.0.0.0:3000/tokens',reqInit);
@@ -78,7 +84,7 @@ describe("token-adapter-svc test suite",()=>{
          expect(data).toEqual({
              paymentToken:"CM2903E3E0WE",
              payeeId:"256781666410",
-             payeeIdType:"ALIAS"
+             payeeIdType:"DEVICE"
          });
 
 

@@ -66,7 +66,7 @@ export class TokenAdapterRoutes {
     //@ts-expect-error h has no type
     private async registerTokenMapping(request, h){
         console.log("Received request");
-        const payload = JSON.parse(request.payload);
+        const payload = request.payload;
         await this.tokenAggregate.createMapping(
             {
                 paymentToken: payload.paymentToken,
@@ -100,7 +100,7 @@ export class TokenAdapterRoutes {
                 "message":"Party Not Found"
             }).code(404);
         }else{
-            h.response(tokenMapping).code(200);
+            return h.response(tokenMapping).code(200);
         }
     }
 }
