@@ -27,13 +27,19 @@
 
 "use strict";
 
-export interface IMapping{
+export interface IPaymentTokenMapping {
     paymentToken: string;
-    accountId: string;
-    accountType: AccountType
+    payeeId: string;
+    payeeIdType: PayeeIdType
 }
 
-export enum AccountType {
+export enum PayeeIdType {
     MSISDN = "MSISDN",
-    IBAN = "IBAN"
+    IBAN = "IBAN",
+    ACCOUNT_NO = "ACCOUNT_NO",
+    EMAIL = "EMAIL",
+    PERSONAL_ID = "PERSONAL_ID",
+    BUSINESS = "BUSINESS",
+    DEVICE = "DEVICE",
+    ACCOUNT_ID = "ACCOUNT_ID",
 }

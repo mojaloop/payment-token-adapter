@@ -28,7 +28,7 @@
 "use strict";
 
 
-import {ITokenMappingStorageRepo, IHttpClient, IMapping} from "interfaces";
+import {ITokenMappingStorageRepo, IPaymentTokenMapping} from "interfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class Aggregate{
@@ -39,12 +39,14 @@ export class Aggregate{
         this.aliasMappingRepo = aliasMappingRepo;
     }
 
-    async createMapping(tokenMapping: IMapping){
+    async createMapping(tokenMapping: IPaymentTokenMapping){
+        console.log(tokenMapping);
         await this.aliasMappingRepo.storeMapping(tokenMapping);
     }
 
-    async getMapping(mappingId: string):Promise<IMapping | undefined> {
-        return await this.aliasMappingRepo.getMapping(mappingId);
+    async getMapping(paymentToken: string):Promise<IPaymentTokenMapping | undefined> {
+        console.log(paymentToken);
+        return await this.aliasMappingRepo.getMapping(paymentToken);
     }
 
     async destroy (){

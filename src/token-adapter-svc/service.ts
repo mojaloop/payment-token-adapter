@@ -28,30 +28,31 @@
 "use strict";
 
 
-import {ITokenMappingStorageRepo, IHttpClient} from "../interfaces";
+import {ITokenMappingStorageRepo} from "interfaces";
 import {MemoryTokenMappingStorageRepo} from "../implementations";
 import {Aggregate} from "../domain";
 import {Server} from "@hapi/hapi";
-import * as process from "process";
-import {routes} from "./routes";
+import process from "process";
+import {TokenAdapterRoutes} from "./routes";
+import * as console from "console";
 
 
 const SERVER_PORT = process.env["SERVER_PORT"] || 3000;
-const SERVER_HOST = process.env["SERVER_HOST"] || "0.0.0.0"
+const SERVER_HOST = process.env["SERVER_HOST"] || "0.0.0.0";
 
 export class Service {
-    static aliasMappingStorageRepo: ITokenMappingStorageRepo;
+    static tokenMappingStorageRepo: ITokenMappingStorageRepo;
     static tokenAdapterAggregate: Aggregate;
-    static app: Server
+    static app: Server;
 
     static async start(aliasMappingStorageRepo?: ITokenMappingStorageRepo){
          if(!aliasMappingStorageRepo){
           aliasMappingStorageRepo = new MemoryTokenMappingStorageRepo();
           await aliasMappingStorageRepo.init();
          }
-         this.aliasMappingStorageRepo = aliasMappingStorageRepo;
+         this.tokenMappingStorageRepo = aliasMappingStorageRepo;
 
-         this.tokenAdapterAggregate = new Aggregate(this.aliasMappingStorageRepo);
+         this.tokenAdapterAggregate = new Aggregate(this.tokenMappingStorageRepo);
          // start server
          await this.setUpAndStartHapiServer();
     }
@@ -64,16 +65,51 @@ export class Service {
                host: SERVER_HOST
            });
 
-           this.app.route(routes);
+           const tokenAdapterRoutes = new TokenAdapterRoutes(this.tokenAdapterAggregate);
+
+           this.app.route(tokenAdapterRoutes.getRoutes());
 
            this.app.start();
            console.log('Server running on %s', this.app.info.uri);
-       })
+
+           resolve();
+       });
    }
 
    static async stop(){
-    await this.aliasMappingStorageRepo.destroy();
-    await this.tokenAdapterAggregate.destroy();
+        await this.tokenMappingStorageRepo.destroy();
+        await this.tokenAdapterAggregate.destroy();
+        await this.app.stop({timeout:60});
+
    }
 
 }
+
+async function _handle_int_and_term_signals(signal: NodeJS.Signals): Promise<void> {
+    console.info(`Service - ${signal} received - cleaning up...`);
+    let clean_exit = false;
+    setTimeout(() => {
+        clean_exit || process.abort();
+    }, 5000);
+
+    // call graceful stop routine
+    await Service.stop();
+
+    clean_exit = true;
+    process.exit();
+}
+
+//catches ctrl+c event
+process.on("SIGINT", _handle_int_and_term_signals.bind(this));
+//catches program termination event
+process.on("SIGTERM", _handle_int_and_term_signals.bind(this));
+
+//do something when app is closing
+process.on("exit", /* istanbul ignore next */async () => {
+    console.log("Service - exiting...");
+});
+process.on("uncaughtException", /* istanbul ignore next */(err: Error) => {
+    console.error(err);
+    console.log("UncaughtException - EXITING...");
+    process.exit(999);
+});

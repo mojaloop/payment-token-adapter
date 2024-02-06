@@ -28,13 +28,79 @@
 "use strict";
 
 
-import {Request} from "@hapi/hapi";
-import {testHandler} from "./handlers";
+import {ServerRoute} from "hapi";
+import {Aggregate} from "../domain";
+import {ReqRefDefaults} from "@hapi/hapi";
+import {PayeeIdType} from '../interfaces';
 
-export const routes = [
-    {
-        method: '*',
-        path: '/{any*}',
-        handler: testHandler
+export class TokenAdapterRoutes {
+    //@ts-expect-error ReqRefDefaults not found
+    private readonly routes: ServerRoute<ReqRefDefaults>[] = [];
+    private readonly tokenAggregate: Aggregate;
+
+    constructor(tokenAggregate: Aggregate) {
+
+        this.tokenAggregate = tokenAggregate;
+
+        // register token
+        this.registerTokenMapping = this.registerTokenMapping.bind(this);
+        this.routes.push({
+            method: 'POST',
+            path: '/tokens',
+            handler: this.registerTokenMapping
+        });
+
+        // get Token
+        this.getTokenMapping = this.getTokenMapping.bind(this);
+        this.routes.push({
+            method: 'GET',
+            path: '/parties/{payeeIdType}/{payeeId}',
+            handler: this.getTokenMapping
+        });
     }
-]
+
+    getRoutes(){
+        return this.routes;
+    }
+
+    //@ts-expect-error h has no type
+    private async registerTokenMapping(request, h){
+        console.log("Received request");
+        const payload = JSON.parse(request.payload);
+        await this.tokenAggregate.createMapping(
+            {
+                paymentToken: payload.paymentToken,
+                payeeIdType:
+                     payload.payeeIdType == "IBAN" ? PayeeIdType.IBAN
+                    : payload.payeeIdType == "MSISDN" ? PayeeIdType.MSISDN
+                    : payload.payeeIdType == "ACCOUNT_NO" ? PayeeIdType.ACCOUNT_NO
+                    : payload.payeeIdType == "EMAIL" ? PayeeIdType.EMAIL
+                    : payload.payeeIdType == "PERSONAL_ID" ? PayeeIdType.PERSONAL_ID
+                    : payload.payeeIdType == "BUSINESS" ? PayeeIdType.BUSINESS
+                    : payload.payeeIdType == "DEVICE" ? PayeeIdType.DEVICE
+                    : PayeeIdType.ACCOUNT_ID ,
+                payeeId: payload.payeeId
+            }
+        );
+        return h.response(`OK`).code(200);
+    }
+
+    //@ts-expect-error h has no type
+    private async getTokenMapping(request, h){
+        const params = request.params;
+
+        if(!params.payeeId){
+            h.response("Bad Request. Please specify Payment Token").code(400);
+        }
+
+        const tokenMapping = await this.tokenAggregate.getMapping(params.payeeId);
+        if(!tokenMapping){
+            return h.response({
+                "statusCode":"4001",
+                "message":"Party Not Found"
+            }).code(404);
+        }else{
+            h.response(tokenMapping).code(200);
+        }
+    }
+}

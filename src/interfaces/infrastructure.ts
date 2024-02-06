@@ -27,13 +27,13 @@
 
 "use strict";
 
-import {IMapping} from "./types";
+import {IPaymentTokenMapping} from "./types";
 
 export interface ITokenMappingStorageRepo {
     init(): Promise<void>;
     destroy(): Promise<void>;
-    storeMapping(tokenMapping:IMapping): Promise<void>;
-    getMapping(mappingID: string): Promise<IMapping | undefined>
+    storeMapping(tokenMapping:IPaymentTokenMapping): Promise<void>;
+    getMapping(mappingID: string): Promise<IPaymentTokenMapping | undefined>
 }
 
 export interface IHttpClient{

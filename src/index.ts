@@ -1,3 +1,4 @@
+// istanbul ignore file
 /*****
  License
  --------------
@@ -31,6 +32,6 @@ import {Service} from "./token-adapter-svc";
 
 
 Service.start().then(() => {
- console.log("Started Token Adapter service");
+ console.log("Token Adapter service up and running");
 });
 
