@@ -39,7 +39,7 @@ services:
       retries: 3
 
   ttkUi:
-    image: mojaloop/ml-testing-toolkit-ui:v15.1.1
+    image: mojaloop/ml-testing-toolkit-ui:v15.3.0
     ports:
       - "6060:6060"
     networks:
@@ -50,5 +50,4 @@ services:
     command:
       - sh
       - /usr/share/nginx/start.sh
-    profiles:
-      - debug
+

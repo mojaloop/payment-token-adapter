@@ -1,6 +1,6 @@
 {
   "VERSION": 1,
-  "CALLBACK_ENDPOINT": "http://ttksim2-sdk-api-svc:4001",
+  "CALLBACK_ENDPOINT": "http://paymentAdapter:3000",
   "MONITORING_LOG_INCLUDE_PAYLOAD": true,
   "CALLBACK_RESOURCE_ENDPOINTS": {
     "enabled": false,
