@@ -8,7 +8,7 @@ services:
   paymentAdapter:
     image: payment-token-adapter:local
     build:
-      context: ../../..
+      context: ../..
     networks:
       - mojaloop-net
     environment:

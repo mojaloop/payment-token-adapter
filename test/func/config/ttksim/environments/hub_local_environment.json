@@ -1,0 +1,13 @@
+{
+    "inputValues": {
+        "FSPID": "senderfsp",
+        "MSISDN_1": "1987654321",
+        "MSISDN_1_FIRST_NAME": "ReceiverFirst",
+        "MSISDN_1_LAST_NAME": "ReceiverLast",
+        "CURRENCY1": "USD",
+        "CURRENCY2": "MXN",
+        "AMOUNT1": "100",
+        "AMOUNT2": "150",
+        "BACKEND_ENDPOINT": "http://fx-converter:4001"
+    }
+}
