@@ -5,12 +5,12 @@
 [![NPM Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/@mojaloop/fx-converter-template.svg?style=flat)](https://www.npmjs.com/package/@mojaloop/fx-converter-template)
 [![CircleCI](https://circleci.com/gh/mojaloop/fx-converter-template.svg?style=svg)](https://circleci.com/gh/mojaloop/fx-converter-template)
 
-## Overview
+# Overview
 An adpater that facilitates payment token mapping between a Mojaloop Connector (SDK Scheme Adapter) and a  Core Banking system Connector to support G2P payments
 
 > This project is still in development
 
-## Running the project
+# Running the project
 
 To run the project clone the repository into your local machine 
 
@@ -25,34 +25,34 @@ Change directory into the project folder
 cd payment-token-adapter
 ```
 
-## Set node version
+# Set node version
 
 ```bash
 nvm use
 ```
 
-## Install dependencies
+# Install dependencies
 
 ```bash
     npm install
 ```
 
-## Build 
+# Build 
 ```bash
 npm run build
 ```
 
-## Run 
+# Run 
 ```bash
 npm run start
 ```
 
-## Test
+# Test
 ```bash
 npm run test:unit
 ```
 
-## Build and Run
+# Build and Run
 ```bash
 npm run start:build
 ```
