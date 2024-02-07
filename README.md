@@ -1,6 +1,5 @@
 # Payment Token Adapter
 
-[![Git Commit](https://img.shields.io/github/last-commit/mojaloop/fx-converter-template.svg?style=flat)](https://github.com/mojaloop/fx-converter-template/commits/master)
 [![Git Releases](https://img.shields.io/github/release/mojaloop/fx-converter-template.svg?style=flat)](https://github.com/mojaloop/fx-converter-template/releases)
 [![Npm Version](https://img.shields.io/npm/v/@mojaloop/fx-converter-template.svg?style=flat)](https://www.npmjs.com/package/@mojaloop/fx-converter-template)
 [![NPM Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/@mojaloop/fx-converter-template.svg?style=flat)](https://www.npmjs.com/package/@mojaloop/fx-converter-template)
