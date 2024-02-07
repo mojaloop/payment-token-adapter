@@ -1,0 +1,54 @@
+version: "3.8"
+networks:
+  mojaloop-net:
+    name: mojaloop-net
+
+
+services:
+  paymentAdapter:
+    image: payment-token-adapter:local
+    build:
+      context: ../../..
+    networks:
+      - mojaloop-net
+    environment:
+      - SERVER_HOST=paymentAdapter
+    ports:
+      - "3000:3000"
+
+  ttkBackend:
+    networks:
+      - mojaloop-net
+    ## TODO: Change the following version to standard version
+    image: mojaloop/ml-testing-toolkit:v15.6.3
+    # image: mojaloop/ml-testing-toolkit:v16.1.0-snapshot.3
+    user: root
+    volumes:
+      - "./config/ttksim/spec_files:/opt/app/spec_files"
+      - "./config/ttksim/environments:/opt/app/examples/environments"
+    ports:
+      - "4040:4040"
+      - "5050:5050"
+    environment:
+      - AUTH_ENABLED=FALSE
+    command: npm start
+    healthcheck:
+      test: ["CMD-SHELL", "nc localhost 4040"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  ttkUi:
+    image: mojaloop/ml-testing-toolkit-ui:v15.1.1
+    ports:
+      - "6060:6060"
+    networks:
+      - mojaloop-net
+    environment:
+      - API_BASE_URL=http://localhost:5050
+      - AUTH_ENABLED=FALSE
+    command:
+      - sh
+      - /usr/share/nginx/start.sh
+    profiles:
+      - debug
