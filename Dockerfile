@@ -26,7 +26,7 @@ COPY package.json package-lock.json* /opt/app/
 RUN npm ci --production
 
 ## Copy of dist directory from builder
-COPY --from=builder /opt/app/dist ./dist
+COPY --from=builder /opt/app/dist/src ./dist/
 
 ## Expose any application ports
 # EXPOSE <PORT>
