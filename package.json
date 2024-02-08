@@ -1,6 +1,6 @@
 {
   "name": "@mojaloop/payment-token-adapter",
-  "version": "1.1.0",
+  "version": "0.0.1",
   "description": "An adapter that facilitates payment token mapping between a Mojaloop Connector (SDK Scheme Adapter) and a Core Banking system Connector to support G2P payments",
   "main": "dist/index.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "@types/hapi": "^18.0.14",
     "@types/hapi__vision": "^5.5.7",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.16",
+    "@types/node": "^20.11.17",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "eslint": "^8.56.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
