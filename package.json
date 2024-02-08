@@ -19,7 +19,9 @@
     "start:dev": "ts-node -r tsconfig-paths/register -P ./tsconfig.json src/index.ts",
     "dev": "nodemon --watch './src/**/*.ts' --exec 'ts-node' src/index.ts",
     "dep:check": "npx --no-install ncu -e 2",
-    "dep:update": "npx --no-install ncu -u"
+    "dep:update": "npx --no-install ncu -u",
+    "release": "npx standard-version --no-verify --releaseCommitMessageFormat 'ci(release): {{currentTag}} [skip ci]'",
+    "snapshot": "npx standard-version --no-verify --skip.changelog --prerelease snapshot --releaseCommitMessageFormat 'ci(snapshot): {{currentTag}}'"
   },
   "repository": {
     "type": "git",
