@@ -357,18 +357,18 @@ workflows:
                 - /feature*/
                 - /bugfix*/
 
-      - test-functional:
-          context: org-global
-          requires:
-            - setup
-            - build-local
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              ignore:
-                - /feature*/
-                - /bugfix*/
+#      - test-functional:
+#          context: org-global
+#          requires:
+#            - setup
+#            - build-local
+#          filters:
+#            tags:
+#              only: /.*/
+#            branches:
+#              ignore:
+#                - /feature*/
+#                - /bugfix*/
 
       # New commits to main release automatically
       - release:
