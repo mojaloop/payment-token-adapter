@@ -1,7 +1,7 @@
 {
   "name": "@mojaloop/payment-token-adapter",
   "version": "1.0.0",
-  "description": "An adpater that facilitates payment token mapping between a Mojaloop Connector (SDK Scheme Adapter) and a Core Banking system Connector to support G2P payments",
+  "description": "An adapter that facilitates payment token mapping between a Mojaloop Connector (SDK Scheme Adapter) and a Core Banking system Connector to support G2P payments",
   "main": "dist/index.js",
   "scripts": {
     "test:unit": "jest --detectOpenHandles",
@@ -12,6 +12,8 @@
     "lint": "npm run build && npx eslint ./src",
     "lint:fix": "npm run build && npx eslint ./src --fix",
     "build": "tsc",
+    "build:docker": "docker build -t payment-token-adapter:local .",
+    "start:docker": "npm run build:docker && docker run -p 127.0.0.1:3000:3000/tcp payment-token-adapter:local",
     "watch": "tsc -w",
     "start": "npm run start:no-build",
     "start:no-build": "node dist/index.js",

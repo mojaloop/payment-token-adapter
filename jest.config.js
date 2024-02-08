@@ -7,6 +7,7 @@ module.exports = {
     passWithNoTests: true,
     collectCoverage: true,
     collectCoverageFrom: ["**/src/**/*.ts"],
+    coveragePathIgnorePatterns:["dist"],
     coverageReporters: ["text", ["json", {file: "integration-final.json"}]],
     coverageDirectory: "./coverage/",
     clearMocks: true,
