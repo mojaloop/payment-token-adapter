@@ -39,6 +39,11 @@ export class Aggregate{
         this.aliasMappingRepo = aliasMappingRepo;
     }
 
+    async init(){
+        await this.aliasMappingRepo.init();
+        return Promise.resolve();
+    }
+
     async createMapping(tokenMapping: IPaymentTokenMapping){
         console.log(tokenMapping);
         await this.aliasMappingRepo.storeMapping(tokenMapping);
@@ -50,6 +55,7 @@ export class Aggregate{
     }
 
     async destroy (){
+        await this.aliasMappingRepo.destroy();
         return Promise.resolve();
     }
 }
