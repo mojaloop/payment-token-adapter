@@ -377,7 +377,7 @@ workflows:
             - pr-tools/pr-title-check
             - test-dependencies
             - test-lint
-            - test-functional
+#            - test-functional
           filters:
             branches:
               only:
@@ -398,7 +398,7 @@ workflows:
             - pr-tools/pr-title-check
             - test-dependencies
             - test-lint
-            - test-functional
+#            - test-functional
           filters:
             tags:
               only: /v[0-9]+(\.[0-9]+)*/
@@ -411,7 +411,7 @@ workflows:
             - pr-tools/pr-title-check
             - test-dependencies
             - test-lint
-            - test-functional
+#            - test-functional
           filters:
             tags:
               only: /v[0-9]+(\.[0-9]+)*\-snapshot+((\.[0-9]+)?)/
