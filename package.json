@@ -35,6 +35,8 @@
   },
   "homepage": "https://github.com/mojaloop/payment-token-adapter#readme",
   "devDependencies": {
+    "@commitlint/cli": "^18.6.0",
+    "@commitlint/config-conventional": "^18.6.0",
     "@jest/globals": "^29.7.0",
     "@types/hapi": "^18.0.14",
     "@types/hapi__vision": "^5.5.7",
