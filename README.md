@@ -1,9 +1,9 @@
 # Payment Token Adapter
 
-[![Git Releases](https://img.shields.io/github/release/mojaloop/fx-converter-template.svg?style=flat)](https://github.com/mojaloop/fx-converter-template/releases)
-[![Npm Version](https://img.shields.io/npm/v/@mojaloop/fx-converter-template.svg?style=flat)](https://www.npmjs.com/package/@mojaloop/fx-converter-template)
-[![NPM Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/@mojaloop/fx-converter-template.svg?style=flat)](https://www.npmjs.com/package/@mojaloop/fx-converter-template)
-[![CircleCI](https://circleci.com/gh/mojaloop/fx-converter-template.svg?style=svg)](https://circleci.com/gh/mojaloop/fx-converter-template)
+[![Git Releases](https://img.shields.io/github/release/mojaloop/payment-token-adapter.svg?style=flat)](https://github.com/mojaloop/payment-token-adapter/releases)
+[![Npm Version](https://img.shields.io/npm/v/@mojaloop/payment-token-adapter.svg?style=flat)](https://www.npmjs.com/package/@mojaloop/payment-token-adapter)
+[![NPM Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/@mojaloop/payment-token-adapter.svg?style=flat)](https://www.npmjs.com/package/@mojaloop/payment-token-adapter)
+[![CircleCI](https://circleci.com/gh/mojaloop/payment-token-adapter.svg?style=svg)](https://circleci.com/gh/mojaloop/payment-token-adapter)
 
 # Overview
 An adpater that facilitates payment token mapping between a Mojaloop Connector (SDK Scheme Adapter) and a  Core Banking system Connector to support G2P payments
