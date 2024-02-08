@@ -1,16 +1,17 @@
 {
   "include": [
-    "./src"
+    "./src",
+    "test"
   ],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "test",
+    "*.test.ts",
     "lib",
     "coverage"
   ],
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
     // prevents this tsconfig from compiling any files
     "target": "ES2022",

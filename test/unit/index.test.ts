@@ -25,8 +25,7 @@
  --------------
  ******/
 
-import {afterAll, beforeAll, describe, expect, test} from "@jest/globals";
-// @ts-ignore
+
 import {Service} from "../../src/token-adapter-svc";
 
 

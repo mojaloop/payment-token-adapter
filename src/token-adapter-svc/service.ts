@@ -52,6 +52,7 @@ export class Service {
          this.tokenMappingStorageRepo = aliasMappingStorageRepo;
 
          this.tokenAdapterAggregate = new Aggregate(this.tokenMappingStorageRepo);
+         await this.tokenAdapterAggregate.init();
          // start server
          await this.setUpAndStartHapiServer();
     }
@@ -76,7 +77,7 @@ export class Service {
    }
 
    static async stop(){
-        await this.tokenMappingStorageRepo.destroy();
+        // destroy aggregate and application
         await this.tokenAdapterAggregate.destroy();
         await this.app.stop({timeout:60});
 
