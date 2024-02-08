@@ -1,0 +1,87 @@
+{
+  "options": {},
+  "name": "payment-token-adapter-happy-path",
+  "test_cases": [
+    {
+      "id": 1,
+      "name": "Register Payment Token Happy Path",
+      "fileInfo": {
+        "path": "payment-token-adapter-happy-path.json"
+      },
+      "meta": {
+        "info": "Register Payment Token Happy Path"
+      },
+      "requests": [
+        {
+          "id": 1,
+          "description": "register token",
+          "apiVersion": {
+            "minorVersion": 0,
+            "majorVersion": 1,
+            "type": "payment-token-adapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/payment-token-adapter_1.0/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/payment-token-adapter_1.0/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/payment-token-adapter_1.0/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/payment-token-adapter_1.0/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/payment-token-adapter_1.0/trigger_templates"
+          },
+          "operationPath": "/tokens",
+          "path": "/tokens",
+          "method": "post",
+          "url": null,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "payeeId": "256781666410",
+            "payeeIdType": "MSISDN",
+            "paymentToken": "CM2903E3E0WE"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code must be 200",
+                "exec": [
+                  "expect(response.status).to.equal(200)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 2,
+          "description": "get parties",
+          "apiVersion": {
+            "minorVersion": 0,
+            "majorVersion": 1,
+            "type": "payment-token-adapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/payment-token-adapter_1.0/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/payment-token-adapter_1.0/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/payment-token-adapter_1.0/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/payment-token-adapter_1.0/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/payment-token-adapter_1.0/trigger_templates"
+          },
+          "operationPath": "/parties/ALIAS/CM2903E3E0WE",
+          "path": "/parties/ALIAS/CM2903E3E0WE",
+          "method": "get",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Check that the returned object contains the created number for the payment token",
+                "exec": [
+                  "expect(response.body.payeeId).to.equal(\"256781666410\")"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

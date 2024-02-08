@@ -73,6 +73,20 @@
       "hostnames": [],
       "prefix": "/sdk-out",
       "asynchronous": true
+    },
+    {
+      "type": "sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets",
+      "version": "2.1",
+      "folderPath": "sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets_2.1",
+      "asynchronous": false,
+      "additionalApi": true
+    },
+    {
+      "type": "payment-token-adapter",
+      "version": "1.0",
+      "folderPath": "payment-token-adapter_1.0",
+      "asynchronous": false,
+      "additionalApi": true
     }
   ]
 }
