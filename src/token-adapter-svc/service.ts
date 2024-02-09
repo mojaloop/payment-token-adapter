@@ -40,7 +40,7 @@ import {SDKRoutes} from "./sdkRoutes";
 const CORE_CONNECTOR_SERVER_PORT = process.env["SERVER_PORT"] || 3000;
 const SDK_SERVER_PORT = process.env["SERVER_PORT"] || 3001;
 const SERVER_HOST = process.env["SERVER_HOST"] || "0.0.0.0";
-const CORE_CONNECTOR_URL = process.env["CORE_CONNECTOR_URL"] || "http://localhost:4040"
+const CORE_CONNECTOR_URL = process.env["CORE_CONNECTOR_URL"] || "http://localhost:4040";
 
 export class Service {
     static tokenMappingStorageRepo: ITokenMappingStorageRepo;
@@ -84,7 +84,7 @@ export class Service {
            this.sdkServer = new Server({
                port: SDK_SERVER_PORT,
                host: SERVER_HOST
-           })
+           });
 
 
            const coreConnectorRoutes = new CoreConnectorRoutes(this.coreConnectorAggregate);

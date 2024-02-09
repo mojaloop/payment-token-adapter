@@ -33,7 +33,7 @@ import {IHttpClient, ITokenMappingStorageRepo, PayeeIdType} from "./interfaces";
 export class SDKAggregate{
 
     private aliasMappingRepo: ITokenMappingStorageRepo;
-    private httpClient: IHttpClient
+    private httpClient: IHttpClient;
     private httpTimeOutMs: number;
     private readonly CORE_CONNECTOR_URL: string;
 

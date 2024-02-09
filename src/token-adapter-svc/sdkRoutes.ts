@@ -63,7 +63,7 @@ export class SDKRoutes implements IRoutes {
         const result = await this.sdkAggregate.getParties(ID,Type);
 
         if(!result){
-            return h.response({statusCode:"3204",message:"Party not found"})
+            return h.response({statusCode:"3204",message:"Party not found"});
         }else if(result == "Substitution"){
             return h.response().code(200);
         }else{
