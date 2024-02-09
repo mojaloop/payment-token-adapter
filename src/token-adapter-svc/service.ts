@@ -28,49 +28,76 @@
 "use strict";
 
 
-import {ITokenMappingStorageRepo} from "interfaces";
-import {MemoryTokenMappingStorageRepo} from "../implementations";
-import {Aggregate} from "../domain";
+import {IHttpClient, ITokenMappingStorageRepo} from "domain/interfaces";
+import {FetchHttpClient, MemoryTokenMappingStorageRepo} from "../implementations";
+import {CoreConnectorAggregate, SDKAggregate} from "../domain";
 import {Server} from "@hapi/hapi";
 import process from "process";
-import {TokenAdapterRoutes} from "./routes";
+import {CoreConnectorRoutes} from "./coreConnectorRoutes";
+import {SDKRoutes} from "./sdkRoutes";
 
 
-const SERVER_PORT = process.env["SERVER_PORT"] || 3000;
+const CORE_CONNECTOR_SERVER_PORT = process.env["SERVER_PORT"] || 3000;
+const SDK_SERVER_PORT = process.env["SERVER_PORT"] || 3001;
 const SERVER_HOST = process.env["SERVER_HOST"] || "0.0.0.0";
+const CORE_CONNECTOR_URL = process.env["CORE_CONNECTOR_URL"] || "http://localhost:4040"
 
 export class Service {
     static tokenMappingStorageRepo: ITokenMappingStorageRepo;
-    static tokenAdapterAggregate: Aggregate;
-    static app: Server;
+    static coreConnectorAggregate: CoreConnectorAggregate;
+    static sdkAggregate: SDKAggregate;
+    static coreConnectorServer: Server;
+    static sdkServer: Server;
+    static httpClient: IHttpClient;
 
-    static async start(aliasMappingStorageRepo?: ITokenMappingStorageRepo){
+    static async start(aliasMappingStorageRepo?: ITokenMappingStorageRepo, httpClient?: IHttpClient){
          if(!aliasMappingStorageRepo){
           aliasMappingStorageRepo = new MemoryTokenMappingStorageRepo();
           await aliasMappingStorageRepo.init();
          }
          this.tokenMappingStorageRepo = aliasMappingStorageRepo;
 
-         this.tokenAdapterAggregate = new Aggregate(this.tokenMappingStorageRepo);
-         await this.tokenAdapterAggregate.init();
+         if(!httpClient){
+             httpClient = new FetchHttpClient();
+             await httpClient?.init();
+         }
+         this.httpClient = httpClient;
+
+         this.coreConnectorAggregate = new CoreConnectorAggregate(this.tokenMappingStorageRepo);
+         this.sdkAggregate = new SDKAggregate(this.tokenMappingStorageRepo,this.httpClient,CORE_CONNECTOR_URL);
+
+         await this.coreConnectorAggregate.init();
+         await this.sdkAggregate.init();
+
          // start server
-         await this.setUpAndStartHapiServer();
+         await this.setUpAndStartServers();
     }
 
-   static async setUpAndStartHapiServer():Promise<void>{
+   static async setUpAndStartServers():Promise<void>{
        return new Promise<void>(resolve => {
            // Start Hapi Server
-           this.app = new Server({
-               port: SERVER_PORT,
+           this.coreConnectorServer = new Server({
+               port: CORE_CONNECTOR_SERVER_PORT,
                host: SERVER_HOST
            });
 
-           const tokenAdapterRoutes = new TokenAdapterRoutes(this.tokenAdapterAggregate);
+           this.sdkServer = new Server({
+               port: SDK_SERVER_PORT,
+               host: SERVER_HOST
+           })
 
-           this.app.route(tokenAdapterRoutes.getRoutes());
 
-           this.app.start();
-           console.log('Server running on %s', this.app.info.uri);
+           const coreConnectorRoutes = new CoreConnectorRoutes(this.coreConnectorAggregate);
+           const sdkRoutes = new SDKRoutes(this.sdkAggregate);
+
+           this.coreConnectorServer.route(coreConnectorRoutes.getRoutes());
+           this.sdkServer.route(sdkRoutes.getRoutes());
+
+           this.coreConnectorServer.start();
+           console.log('Core Connector Server running on %s', this.coreConnectorServer.info.uri);
+
+           this.sdkServer.start();
+           console.log('SDK Server running on %s', this.sdkServer.info.uri);
 
            resolve();
        });
@@ -78,8 +105,10 @@ export class Service {
 
    static async stop(){
         // destroy aggregate and application
-        await this.tokenAdapterAggregate.destroy();
-        await this.app.stop({timeout:60});
+        await this.coreConnectorAggregate.destroy();
+        await this.sdkAggregate.destroy();
+        await this.coreConnectorServer.stop({timeout:60});
+        await this.sdkServer.stop({timeout:60});
 
    }
 
@@ -104,7 +133,7 @@ process.on("SIGINT", _handle_int_and_term_signals.bind(this));
 //catches program termination event
 process.on("SIGTERM", _handle_int_and_term_signals.bind(this));
 
-//do something when app is closing
+//do something when coreConnectorServer is closing
 process.on("exit", /* istanbul ignore next */async () => {
     console.log("Service - exiting...");
 });

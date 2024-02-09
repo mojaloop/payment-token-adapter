@@ -28,7 +28,7 @@
 
 
 import {Service} from "../../src/token-adapter-svc";
-
+import {expect} from "@jest/globals";
 
 describe("token-adapter-svc test suite",()=>{
 
@@ -86,7 +86,38 @@ describe("token-adapter-svc test suite",()=>{
              payeeId:"256781666410",
              payeeIdType:"DEVICE"
          });
+     });
 
 
+     test("GET: token-adapter-svc: sdk inbound: /parties with type ALIAS. TokenRepo should be read", async ()=>{
+         // arrange
+         const ID = "CM2903E3E0WE";
+         const Type = "ALIAS";
+
+         const headers = new Headers();
+         headers.append("Content-Type","application/json")
+         const reqInit: RequestInit = {
+             method: "POST",
+             body: JSON.stringify({
+                 paymentToken:"CM2903E3E0WE",
+                 payeeId:"256781666410",
+                 payeeIdType:"DEVICE"
+             }),
+             headers: headers
+         }
+
+         let res = await fetch('http://0.0.0.0:3000/tokens',reqInit);
+
+         const getReqInit: RequestInit = {
+             method:"GET"
+         };
+
+         jest.spyOn(Service.tokenMappingStorageRepo,"getMapping");
+
+         // act
+         await fetch(`http://0.0.0.0:3001/parties/${Type}/${ID}`,getReqInit);
+
+         //assert
+         expect(Service.tokenMappingStorageRepo.getMapping).toHaveBeenCalled();
      });
 });

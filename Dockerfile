@@ -3,7 +3,7 @@ FROM node:lts-alpine as builder
 
 RUN apk add --no-cache git python3 build-base
 
-## Create app directory
+## Create coreConnectorServer directory
 WORKDIR /opt/app
 
 ## Copy basic files for installing dependencies
@@ -12,7 +12,7 @@ COPY src /opt/app/src
 
 RUN npm ci
 
-## Build the app
+## Build the coreConnectorServer
 RUN npm run build
 
 ## *Application*

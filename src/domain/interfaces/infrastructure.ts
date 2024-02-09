@@ -39,5 +39,5 @@ export interface ITokenMappingStorageRepo {
 export interface IHttpClient{
  init(): Promise<void>;
  destroy(): Promise<void>;
- send(url:string,payload:unknown, timeout_ms:number, method: string):Promise<void>;
+ send(url:string, payload:unknown | undefined , timeout_ms:number, method:string):Promise<void>;
 }

@@ -27,8 +27,8 @@
 
 "use strict";
 
-import {ITokenMappingStorageRepo} from "interfaces";
-import {IPaymentTokenMapping} from "interfaces";
+import {IHttpClient, ITokenMappingStorageRepo} from "domain/interfaces";
+import {IPaymentTokenMapping} from "domain/interfaces";
 
 export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo{
     private mappings = new Map<string, IPaymentTokenMapping>;
@@ -39,7 +39,6 @@ export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo{
 
     getMapping(mappingID: string): Promise<IPaymentTokenMapping | undefined> {
         // in the aggregate make sure to check if the returned mapping is defined
-        console.log(this.mappings);
         return Promise.resolve(this.mappings.get(mappingID));
     }
 
@@ -50,6 +49,22 @@ export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo{
     storeMapping(tokenMapping: IPaymentTokenMapping): Promise<void> {
         this.mappings.set(tokenMapping.paymentToken,tokenMapping);
         return Promise.resolve();
+    }
+
+}
+
+export class FetchHttpClient implements IHttpClient{
+    destroy(): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+    init(): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+    send(url: string, payload: unknown | undefined, timeout_ms: number, method: string): Promise<void> {
+        console.log(`Request sent to: ${url} method: ${method}`);
+        return Promise.resolve(undefined);
     }
 
 }

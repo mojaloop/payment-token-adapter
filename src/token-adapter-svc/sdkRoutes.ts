@@ -27,35 +27,48 @@
 
 "use strict";
 
+import {IRoutes, SDKAggregate} from "../domain";
+import {ServerRoute} from "hapi";
+import {ReqRefDefaults} from "@hapi/hapi";
 
-import {ITokenMappingStorageRepo, IPaymentTokenMapping} from "interfaces";
+export class SDKRoutes implements IRoutes {
+    //@ts-expect-error ReqRefDefaults not found
+    private readonly routes: ServerRoute<ReqRefDefaults>[] = [];
+    private readonly sdkAggregate: SDKAggregate;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class Aggregate{
+    constructor(sdkAggregate: SDKAggregate) {
+        this.sdkAggregate = sdkAggregate;
 
-    private aliasMappingRepo: ITokenMappingStorageRepo;
-
-    constructor(aliasMappingRepo: ITokenMappingStorageRepo) {
-        this.aliasMappingRepo = aliasMappingRepo;
+        // get parties
+        this.getParties = this.getParties.bind(this);
+        this.routes.push({
+            method:"GET",
+            path:"/parties/{Type}/{ID}",
+            handler: this.getParties
+        });
     }
 
-    async init(){
-        await this.aliasMappingRepo.init();
-        return Promise.resolve();
+    //@ts-expect-error ReqRefDefaults not found
+    getRoutes(): ServerRoute<ReqRefDefaults>[] {
+        return this.routes;
     }
 
-    async createMapping(tokenMapping: IPaymentTokenMapping){
-        console.log(tokenMapping);
-        await this.aliasMappingRepo.storeMapping(tokenMapping);
+    //@ts-expect-error h has no type
+    private async getParties(request, h){
+        const params = request.params;
+
+        const ID = params["ID"];
+        const Type = params["Type"];
+
+        const result = await this.sdkAggregate.getParties(ID,Type);
+
+        if(!result){
+            return h.response({statusCode:"3204",message:"Party not found"})
+        }else if(result == "Substitution"){
+            return h.response().code(200);
+        }else{
+            return h.response().code(200);
+        }
     }
 
-    async getMapping(paymentToken: string):Promise<IPaymentTokenMapping | undefined> {
-        console.log(paymentToken);
-        return await this.aliasMappingRepo.getMapping(paymentToken);
-    }
-
-    async destroy (){
-        await this.aliasMappingRepo.destroy();
-        return Promise.resolve();
-    }
 }

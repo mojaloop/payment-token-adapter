@@ -24,8 +24,8 @@ services:
     # image: mojaloop/ml-testing-toolkit:v16.1.0-snapshot.3
     user: root
     volumes:
-      - "./config/ttksim/spec_files:/opt/app/spec_files"
-      - "./config/ttksim/environments:/opt/app/examples/environments"
+      - "./config/ttksim/spec_files:/opt/coreConnectorServer/spec_files"
+      - "./config/ttksim/environments:/opt/coreConnectorServer/examples/environments"
     ports:
       - "4040:4040"
       - "5050:5050"

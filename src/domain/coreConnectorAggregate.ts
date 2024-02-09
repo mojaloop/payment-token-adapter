@@ -27,19 +27,36 @@
 
 "use strict";
 
-export interface IPaymentTokenMapping {
-    paymentToken: string;
-    payeeId: string;
-    payeeIdType: PayeeIdType
-}
 
-export enum PayeeIdType {
-    MSISDN = "MSISDN",
-    IBAN = "IBAN",
-    ACCOUNT_NO = "ACCOUNT_NO",
-    EMAIL = "EMAIL",
-    PERSONAL_ID = "PERSONAL_ID",
-    BUSINESS = "BUSINESS",
-    DEVICE = "DEVICE",
-    ACCOUNT_ID = "ACCOUNT_ID",
+import {ITokenMappingStorageRepo, IPaymentTokenMapping} from "domain/interfaces";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export class CoreConnectorAggregate {
+
+    private aliasMappingRepo: ITokenMappingStorageRepo;
+
+
+    constructor(aliasMappingRepo: ITokenMappingStorageRepo) {
+        this.aliasMappingRepo = aliasMappingRepo;
+    }
+
+    async init(){
+        await this.aliasMappingRepo.init();
+        return Promise.resolve();
+    }
+
+    async createMapping(tokenMapping: IPaymentTokenMapping){
+        console.log(tokenMapping);
+        await this.aliasMappingRepo.storeMapping(tokenMapping);
+    }
+
+    async getMapping(paymentToken: string):Promise<IPaymentTokenMapping | undefined> {
+        console.log(paymentToken);
+        return await this.aliasMappingRepo.getMapping(paymentToken);
+    }
+
+    async destroy (){
+        await this.aliasMappingRepo.destroy();
+        return Promise.resolve();
+    }
 }
