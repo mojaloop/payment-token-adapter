@@ -29,16 +29,16 @@
 
 
 import {ServerRoute} from "hapi";
-import {CoreConnectorAggregate, IRoutes} from "../domain";
+import {ExternalPortalAggregate, IRoutes} from "../domain";
 import {ReqRefDefaults} from "@hapi/hapi";
 import {PayeeIdType} from '../domain/interfaces';
 
-export class CoreConnectorRoutes implements  IRoutes {
+export class ExternalPortalRoutes implements  IRoutes {
     //@ts-expect-error ReqRefDefaults not found
     private readonly routes: ServerRoute<ReqRefDefaults>[] = [];
-    private readonly coreConnectorAggregate: CoreConnectorAggregate;
+    private readonly coreConnectorAggregate: ExternalPortalAggregate;
 
-    constructor(tokenAggregate: CoreConnectorAggregate) {
+    constructor(tokenAggregate: ExternalPortalAggregate) {
 
         this.coreConnectorAggregate = tokenAggregate;
 

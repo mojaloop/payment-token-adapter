@@ -31,7 +31,7 @@
 import {ITokenMappingStorageRepo, IPaymentTokenMapping} from "domain/interfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class CoreConnectorAggregate {
+export class ExternalPortalAggregate {
 
     private aliasMappingRepo: ITokenMappingStorageRepo;
 

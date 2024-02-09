@@ -29,7 +29,7 @@
 
 
 
-export * from "./coreConnectorAggregate";
+export * from "./externalPortalAggregate";
 export * from "./sdkAggregate";
 export * from "./interfaces/index";
 

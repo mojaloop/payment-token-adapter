@@ -30,23 +30,23 @@
 
 import {IHttpClient, ITokenMappingStorageRepo} from "domain/interfaces";
 import {FetchHttpClient, MemoryTokenMappingStorageRepo} from "../implementations";
-import {CoreConnectorAggregate, SDKAggregate} from "../domain";
+import {ExternalPortalAggregate, SDKAggregate} from "../domain";
 import {Server} from "@hapi/hapi";
 import process from "process";
-import {CoreConnectorRoutes} from "./coreConnectorRoutes";
+import {ExternalPortalRoutes} from "./externalPortalRoutes";
 import {SDKRoutes} from "./sdkRoutes";
 
 
-const CORE_CONNECTOR_SERVER_PORT = process.env["SERVER_PORT"] || 3000;
+const EXTERNAL_PORTAL_SERVER_PORT = process.env["SERVER_PORT"] || 3000;
 const SDK_SERVER_PORT = process.env["SERVER_PORT"] || 3001;
 const SERVER_HOST = process.env["SERVER_HOST"] || "0.0.0.0";
 const CORE_CONNECTOR_URL = process.env["CORE_CONNECTOR_URL"] || "http://localhost:4040";
 
 export class Service {
     static tokenMappingStorageRepo: ITokenMappingStorageRepo;
-    static coreConnectorAggregate: CoreConnectorAggregate;
+    static externalPortalAggregate: ExternalPortalAggregate;
     static sdkAggregate: SDKAggregate;
-    static coreConnectorServer: Server;
+    static externalPortalServer: Server;
     static sdkServer: Server;
     static httpClient: IHttpClient;
 
@@ -63,10 +63,10 @@ export class Service {
          }
          this.httpClient = httpClient;
 
-         this.coreConnectorAggregate = new CoreConnectorAggregate(this.tokenMappingStorageRepo);
+         this.externalPortalAggregate = new ExternalPortalAggregate(this.tokenMappingStorageRepo);
          this.sdkAggregate = new SDKAggregate(this.tokenMappingStorageRepo,this.httpClient,CORE_CONNECTOR_URL);
 
-         await this.coreConnectorAggregate.init();
+         await this.externalPortalAggregate.init();
          await this.sdkAggregate.init();
 
          // start server
@@ -76,8 +76,8 @@ export class Service {
    static async setUpAndStartServers():Promise<void>{
        return new Promise<void>(resolve => {
            // Start Hapi Server
-           this.coreConnectorServer = new Server({
-               port: CORE_CONNECTOR_SERVER_PORT,
+           this.externalPortalServer = new Server({
+               port: EXTERNAL_PORTAL_SERVER_PORT,
                host: SERVER_HOST
            });
 
@@ -87,14 +87,14 @@ export class Service {
            });
 
 
-           const coreConnectorRoutes = new CoreConnectorRoutes(this.coreConnectorAggregate);
+           const externalPortalRoutes = new ExternalPortalRoutes(this.externalPortalAggregate);
            const sdkRoutes = new SDKRoutes(this.sdkAggregate);
 
-           this.coreConnectorServer.route(coreConnectorRoutes.getRoutes());
+           this.externalPortalServer.route(externalPortalRoutes.getRoutes());
            this.sdkServer.route(sdkRoutes.getRoutes());
 
-           this.coreConnectorServer.start();
-           console.log('Core Connector Server running on %s', this.coreConnectorServer.info.uri);
+           this.externalPortalServer.start();
+           console.log('External Portal Server running on %s', this.externalPortalServer.info.uri);
 
            this.sdkServer.start();
            console.log('SDK Server running on %s', this.sdkServer.info.uri);
@@ -105,9 +105,9 @@ export class Service {
 
    static async stop(){
         // destroy aggregate and application
-        await this.coreConnectorAggregate.destroy();
+        await this.externalPortalAggregate.destroy();
         await this.sdkAggregate.destroy();
-        await this.coreConnectorServer.stop({timeout:60});
+        await this.externalPortalServer.stop({timeout:60});
         await this.sdkServer.stop({timeout:60});
 
    }
@@ -133,7 +133,7 @@ process.on("SIGINT", _handle_int_and_term_signals.bind(this));
 //catches program termination event
 process.on("SIGTERM", _handle_int_and_term_signals.bind(this));
 
-//do something when coreConnectorServer is closing
+//do something when externalPortalServer is closing
 process.on("exit", /* istanbul ignore next */async () => {
     console.log("Service - exiting...");
 });
