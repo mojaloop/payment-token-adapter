@@ -169,6 +169,21 @@ jobs:
           name: Execute dependency tests
           command: npm run dep:check
 
+  test-unit:
+    executor: default-docker
+    steps:
+      - run:
+          name: Install general dependencies
+          command: *defaults_Dependencies
+      - checkout
+      - run:
+          <<: *defaults_configure_nvm
+      - restore_cache:
+          key: dependency-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: Execute Unit Tests
+          command: npm run test:unit
+
   test-lint:
     executor: default-docker
     steps:
@@ -345,6 +360,19 @@ workflows:
               ignore:
                 - /feature*/
                 - /bugfix*/
+
+      - test-unit:
+          context: org-global
+          requires:
+            - setup
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore:
+                - /feature*/
+                - /bugfix*/
+
       - test-lint:
           context: org-global
           requires:
