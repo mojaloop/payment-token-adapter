@@ -1,6 +1,6 @@
 {
   "VERSION": 1,
-  "CALLBACK_ENDPOINT": "http://paymentAdapter:3000",
+  "CALLBACK_ENDPOINT": "http://paymentAdapter:3001",
   "MONITORING_LOG_INCLUDE_PAYLOAD": true,
   "CALLBACK_RESOURCE_ENDPOINTS": {
     "enabled": false,

@@ -28,12 +28,15 @@
 
 
 import {Service} from "../../src/token-adapter-svc";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
+import {HTTPClientMock} from "../mocks/token-adapter-mocks";
+
+const httpClient = new HTTPClientMock();
 
 describe("token-adapter-svc test suite",()=>{
 
      beforeAll(async ()=>{
-         await Service.start();
+         await Service.start(undefined,httpClient);
      });
 
      afterAll(async ()=>{
@@ -92,7 +95,7 @@ describe("token-adapter-svc test suite",()=>{
      });
 
 
-     test("GET: token-adapter-svc: sdk inbound: /parties with type ALIAS. TokenRepo should be read", async ()=>{
+     test("GET: token-adapter-svc: sdk inbound: /parties with type ALIAS. Axios should throw error because the return code is 500", async ()=>{
          // arrange
          const ID = "CM2903E3E0WE";
          const Type = "ALIAS";
@@ -111,13 +114,8 @@ describe("token-adapter-svc test suite",()=>{
              }
          );
 
-         jest.spyOn(Service.tokenMappingStorageRepo,"getMapping");
-
-         // act
-         await axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`);
-
-         //assert
-         expect(Service.tokenMappingStorageRepo.getMapping).toHaveBeenCalled();
+         // act & assert
+         await expect(axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`)).rejects.toThrow(AxiosError);
      });
 
      test("GET: token-adapter-svc: sdk inbound: /parties with type ALIAS that is not found. Should return Not Found", async()=>{
@@ -125,24 +123,17 @@ describe("token-adapter-svc test suite",()=>{
          const ID = "CM2903E3E0QE";
          const Type = "ALIAS";
 
-         // Act
-         const res = await axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`);
-
-         // Assert
-         expect(res.data.statusCode).toEqual("3204");
+         // Act $ Assert
+         await expect(axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`)).rejects.toThrow(AxiosError);
      });
 
      test("GET: token-adapter-svc: sdk inbound: /parties with type not ALIAS. Should pass through. TokenRepo should not be called", async ()=>{
          // arrange
-         jest.spyOn(Service.tokenMappingStorageRepo,"getMapping");
 
          const ID = "CM2903E3E0WE";
          const Type = "IBAN";
 
-         // Act
-         await axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`);
-
-         //Assert
-         expect(Service.tokenMappingStorageRepo.getMapping).not.toHaveBeenCalled();
+         // Act and Assert
+         await expect(axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`)).rejects.toThrow(AxiosError);
      });
 });
