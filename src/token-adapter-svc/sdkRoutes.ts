@@ -60,14 +60,17 @@ export class SDKRoutes implements IRoutes {
         const ID = params["ID"];
         const Type = params["Type"];
 
+        if(!ID || !Type){
+            return h.response({statusCode:3107, message:"Missing mandatory extension parameter"}).code(400);
+        }
         const result = await this.sdkAggregate.getParties(ID,Type);
 
         if(!result){
-            return h.response({statusCode:"3204",message:"Party not found"});
-        }else if(result == "Substitution"){
-            return h.response().code(200);
+            return h.response({statusCode:3204,message:"Party not found"}).code(404);
+        }else if(typeof result == "string"){
+            return h.response({statusCode:2001,message:"Internal server error"}).code(500);
         }else{
-            return h.response().code(200);
+            return h.response(result.payload).code(200);
         }
     }
 

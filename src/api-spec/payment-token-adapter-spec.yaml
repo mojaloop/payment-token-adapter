@@ -1,22 +1,21 @@
 openapi: 3.0.3
 info:
-  title: payment-token-adapter
-  version: 1.0.0
-  contact: {}
-servers:
-  - url: http://localhost
+  title: Payment Token Adapter API
+  version: 0.0.1
+  description: >
+    API Specification for the Payment Token Adapter
+    
+    This API is to be implemented by the DFSP
+  license:
+    name: Apache License Version 2.0, January 2004
+    url: http://www.apache.org/licenses/
+
 paths:
   /tokens:
     post:
-      summary: register-token
-      description: register-token
+      summary: Register new Payment Token.
+      description: Register new Payment Token for mapping with a Payee ID
       operationId: registerToken
-      parameters:
-        - name: ''
-          in: header
-          schema:
-            type: string
-            example: ''
       requestBody:
         content:
           application/json:
@@ -25,7 +24,7 @@ paths:
               properties:
                 payeeId:
                   type: string
-                  example: '256781666410'
+                  example: '256781466410'
                 payeeIdType:
                   type: string
                   example: MSISDN
@@ -35,17 +34,28 @@ paths:
             examples:
               register-token:
                 value:
-                  payeeId: '256781666410'
+                  payeeId: '256784666410'
                   payeeIdType: MSISDN
                   paymentToken: CM2903E3E0WE
       responses:
         '200':
-          description: ''
-  /parties/ALIAS/CM2903E3E0WE:
+          description: 'Successful storage of the Payment Token Mapping'
+  /parties/{IdType}/{ID}:
     get:
-      summary: getMapping
-      description: getMapping
-      operationId: getmapping
+      summary: Get Parties in Discovery
+      description: SDK Scheme Adpater Get Parties in Discovery
+      operationId: getParties
+      parameters:
+        - name: IdType
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ID
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: ''

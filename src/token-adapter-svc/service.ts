@@ -29,7 +29,7 @@
 
 
 import {IHttpClient, ITokenMappingStorageRepo} from "domain/interfaces";
-import {FetchHttpClient, MemoryTokenMappingStorageRepo} from "../implementations";
+import {AxiosHttpClient, MemoryTokenMappingStorageRepo} from "../implementations";
 import {ExternalPortalAggregate, SDKAggregate} from "../domain";
 import {Server} from "@hapi/hapi";
 import process from "process";
@@ -58,7 +58,7 @@ export class Service {
          this.tokenMappingStorageRepo = aliasMappingStorageRepo;
 
          if(!httpClient){
-             httpClient = new FetchHttpClient();
+             httpClient = new AxiosHttpClient();
              await httpClient?.init();
          }
          this.httpClient = httpClient;
@@ -107,6 +107,7 @@ export class Service {
         // destroy aggregate and application
         await this.externalPortalAggregate.destroy();
         await this.sdkAggregate.destroy();
+        await this.httpClient.destroy();
         await this.externalPortalServer.stop({timeout:60});
         await this.sdkServer.stop({timeout:60});
 

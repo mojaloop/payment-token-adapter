@@ -27,8 +27,9 @@
 
 "use strict";
 
-import {IHttpClient, ITokenMappingStorageRepo} from "domain/interfaces";
+import {IHttpClient, IHttpResponseData, ITokenMappingStorageRepo} from "domain/interfaces";
 import {IPaymentTokenMapping} from "domain/interfaces";
+import axios from "axios";
 
 export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo{
     private mappings = new Map<string, IPaymentTokenMapping>;
@@ -53,18 +54,29 @@ export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo{
 
 }
 
-export class FetchHttpClient implements IHttpClient{
-    destroy(): Promise<void> {
+export class AxiosHttpClient implements IHttpClient{
+    async destroy(): Promise<void> {
         return Promise.resolve(undefined);
     }
 
-    init(): Promise<void> {
+    async init(): Promise<void> {
         return Promise.resolve(undefined);
     }
 
-    send(url: string, payload: unknown | undefined, timeout_ms: number, method: string): Promise<void> {
-        console.log(`Request sent to: ${url} method: ${method}`);
-        return Promise.resolve(undefined);
+    async send(url: string, payload: unknown | undefined, timeout_ms: number, method: string, headers: unknown | undefined): Promise<IHttpResponseData | undefined> {
+        try{
+            const res = await axios.request({
+                url:url,
+                method:method,
+                data: payload ? payload : undefined,
+                timeout: timeout_ms,
+                headers: headers ? headers : undefined
+            });
+            return Promise.resolve({payload:res.data});
+        }catch (e: unknown) {
+            console.error(e);
+            return ;
+        }
     }
 
 }

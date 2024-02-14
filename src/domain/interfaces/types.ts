@@ -36,6 +36,10 @@ export interface IPaymentTokenMapping {
     payeeIdType: PayeeIdType
 }
 
+export interface IHttpResponseData {
+    payload : unknown
+}
+
 export enum PayeeIdType {
     MSISDN = "MSISDN",
     IBAN = "IBAN",
