@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/mojaloop/payment-token-adapter/compare/v0.0.1...v0.0.2) (2024-02-15)
+
+
+### Features
+
+* added get Parties functionality and seperated core connetor server from sdk server ([9c3df17](https://github.com/mojaloop/payment-token-adapter/commit/9c3df17c3e88a4fee014dd6329aefe9524289cd8))
+* added get Parties functionality and seperated core connetor server from sdk server ([56ef3bb](https://github.com/mojaloop/payment-token-adapter/commit/56ef3bb17ae9e9a67de5aad3d1c8f4572c31ad3a))
+* added new tests cases and files to support both unit and functional tests ([164f1cd](https://github.com/mojaloop/payment-token-adapter/commit/164f1cde696d152f1fb8c72bfe51c0ad230f93ee))
+* completed implementation GET /parties/{Type}/{ID} in discovery phase ([3f41bae](https://github.com/mojaloop/payment-token-adapter/commit/3f41bae7c34b1c6f7d9ba6ef8a92ca9df9362832))
+
+
+### Bug Fixes
+
+* changed core connector naming to external portal ([91f3f8e](https://github.com/mojaloop/payment-token-adapter/commit/91f3f8ee2a598db10367a3bca8240dcadd01afa2))
+* changed npm run start script to use correct file path ([c53fc20](https://github.com/mojaloop/payment-token-adapter/commit/c53fc204b5f497652f3b0b6b4987b11b2784309c))
+* fix start command in package.json ([167e5be](https://github.com/mojaloop/payment-token-adapter/commit/167e5bed7bffc2a70d2c52529fae3ffce2cddeed))
+* naming in dockerfile ([c87b1a2](https://github.com/mojaloop/payment-token-adapter/commit/c87b1a2d5ccec2b742806e47dd8595c23cd9941a))
+* naming in service.ts ([e4ad38e](https://github.com/mojaloop/payment-token-adapter/commit/e4ad38ed7690398ce83f8e8df63e827712810e86))
+* removed test folder from ts compiler scope ([3e8e00f](https://github.com/mojaloop/payment-token-adapter/commit/3e8e00f9173fdcd1a2f2cb1f2cea60d48104bb44))
+* removed test folder from ts compiler scope ([f7a504c](https://github.com/mojaloop/payment-token-adapter/commit/f7a504c58d9b39e24d5df77889a9cba9fa67526c))
+* replaced fetch calls with axios to make the pipeline run successfull and added unit tests ([2919cb0](https://github.com/mojaloop/payment-token-adapter/commit/2919cb0afec8f6fdd7707d3df49bed073adc05b2))
+* upgrade packages to fix failing ci jobs ([3419c3c](https://github.com/mojaloop/payment-token-adapter/commit/3419c3c988f42bae2cc40771808cb0ce55afa69e))
+
 ### 0.0.1 (2024-02-08)
 
 
