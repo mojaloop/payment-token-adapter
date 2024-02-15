@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 /*****
  License
  --------------
@@ -23,39 +24,25 @@
  - Okello Ivan Elijah <elijahokello90@gmail.com>
 
  --------------
- ******/
+ *******/
 
 "use strict";
 
 
-import {ITokenMappingStorageRepo, IPaymentTokenMapping} from "interfaces";
+import {IHttpClient, IHttpResponseData} from "../../src/domain";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class Aggregate{
-
-    private aliasMappingRepo: ITokenMappingStorageRepo;
-
-    constructor(aliasMappingRepo: ITokenMappingStorageRepo) {
-        this.aliasMappingRepo = aliasMappingRepo;
+export class HTTPClientMock implements IHttpClient {
+    async destroy(): Promise<void> {
+        return Promise.resolve(undefined);
     }
 
-    async init(){
-        await this.aliasMappingRepo.init();
-        return Promise.resolve();
+    async init(): Promise<void> {
+        return Promise.resolve(undefined);
     }
 
-    async createMapping(tokenMapping: IPaymentTokenMapping){
-        console.log(tokenMapping);
-        await this.aliasMappingRepo.storeMapping(tokenMapping);
+    async send(url: string, payload: unknown | undefined, timeout_ms: number, method: string, headers: unknown | undefined): Promise<IHttpResponseData | undefined> {
+        console.log(`Request sent to ${url}. Method: ${method}`);
+        return Promise.resolve(undefined);
     }
 
-    async getMapping(paymentToken: string):Promise<IPaymentTokenMapping | undefined> {
-        console.log(paymentToken);
-        return await this.aliasMappingRepo.getMapping(paymentToken);
-    }
-
-    async destroy (){
-        await this.aliasMappingRepo.destroy();
-        return Promise.resolve();
-    }
 }

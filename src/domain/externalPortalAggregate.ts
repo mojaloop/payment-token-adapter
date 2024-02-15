@@ -28,8 +28,35 @@
 "use strict";
 
 
+import {ITokenMappingStorageRepo, IPaymentTokenMapping} from "domain/interfaces";
 
-export * from "./externalPortalAggregate";
-export * from "./sdkAggregate";
-export * from "./interfaces/index";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export class ExternalPortalAggregate {
 
+    private aliasMappingRepo: ITokenMappingStorageRepo;
+
+
+    constructor(aliasMappingRepo: ITokenMappingStorageRepo) {
+        this.aliasMappingRepo = aliasMappingRepo;
+    }
+
+    async init(){
+        await this.aliasMappingRepo.init();
+        return Promise.resolve();
+    }
+
+    async createMapping(tokenMapping: IPaymentTokenMapping){
+        console.log(tokenMapping);
+        await this.aliasMappingRepo.storeMapping(tokenMapping);
+    }
+
+    async getMapping(paymentToken: string):Promise<IPaymentTokenMapping | undefined> {
+        console.log(paymentToken);
+        return await this.aliasMappingRepo.getMapping(paymentToken);
+    }
+
+    async destroy (){
+        await this.aliasMappingRepo.destroy();
+        return Promise.resolve();
+    }
+}

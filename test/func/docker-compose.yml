@@ -13,10 +13,12 @@ services:
       - mojaloop-net
     environment:
       - SERVER_HOST=paymentAdapter
+      - CORE_CONNECTOR_URL=http://coreConnectorTtkBackend:4040
     ports:
       - "3000:3000"
+      - "3001:3001"
 
-  ttkBackend:
+  coreConnectorTtkBackend:
     networks:
       - mojaloop-net
     ## TODO: Change the following version to standard version
@@ -38,7 +40,7 @@ services:
       timeout: 10s
       retries: 3
 
-  ttkUi:
+  coreConnectorTtkUi:
     image: mojaloop/ml-testing-toolkit-ui:v15.3.0
     ports:
       - "6060:6060"
@@ -46,6 +48,42 @@ services:
       - mojaloop-net
     environment:
       - API_BASE_URL=http://localhost:5050
+      - AUTH_ENABLED=FALSE
+    command:
+      - sh
+      - /usr/share/nginx/start.sh
+
+
+  sdkAdapterTtkBackend:
+    networks:
+      - mojaloop-net
+    ## TODO: Change the following version to standard version
+    image: mojaloop/ml-testing-toolkit:v15.6.3
+    # image: mojaloop/ml-testing-toolkit:v16.1.0-snapshot.3
+    user: root
+    volumes:
+      - "./config/ttksim/spec_files:/opt/app/spec_files"
+      - "./config/ttksim/environments:/opt/app/examples/environments"
+    ports:
+      - "4041:4040"
+      - "5051:5050"
+    environment:
+      - AUTH_ENABLED=FALSE
+    command: npm start
+    healthcheck:
+      test: [ "CMD-SHELL", "nc localhost 4040" ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  sdkAdapterTtkUi:
+    image: mojaloop/ml-testing-toolkit-ui:v15.3.0
+    ports:
+      - "6061:6060"
+    networks:
+      - mojaloop-net
+    environment:
+      - API_BASE_URL=http://localhost:5051
       - AUTH_ENABLED=FALSE
     command:
       - sh

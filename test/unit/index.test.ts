@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 /*****
  License
  --------------
@@ -27,12 +28,15 @@
 
 
 import {Service} from "../../src/token-adapter-svc";
+import axios, {AxiosError} from "axios";
+import {HTTPClientMock} from "../mocks/token-adapter-mocks";
 
+const httpClient = new HTTPClientMock();
 
 describe("token-adapter-svc test suite",()=>{
 
      beforeAll(async ()=>{
-         await Service.start();
+         await Service.start(undefined,httpClient);
      });
 
      afterAll(async ()=>{
@@ -40,52 +44,96 @@ describe("token-adapter-svc test suite",()=>{
      });
 
      test("POST - token-adapter-svc: registerToken", async ()=>{
-         const headers = new Headers();
-         headers.append("Content-Type","application/json")
-         const reqInit: RequestInit = {
-             method: "POST",
-             body: JSON.stringify({
+         // Arrange
+         jest.spyOn(Service.tokenMappingStorageRepo,"storeMapping");
+
+         //Act
+         const res = await axios.post(
+             'http://0.0.0.0:3000/tokens',
+             {
                  paymentToken:"CM2903E3E0WE",
                  payeeId:"256781666410",
                  payeeIdType:"DEVICE"
-             }),
-             headers: headers
-         }
+             },
+             {
+                 "headers":{
+                     "Content-Type":"application/json"
+                 }
+             }
+         );
 
-         let res = await fetch('http://0.0.0.0:3000/tokens',reqInit);
+         //Assert
+         expect(Service.tokenMappingStorageRepo.storeMapping).toHaveBeenCalled();
      });
 
      test("GET - token-adapter-svc: get token Mapping should return a mapping for an existent token mapping", async ()=>{
         // Arrange
-         const headers = new Headers();
-         headers.append("Content-Type","application/json");
-         const reqInit: RequestInit = {
-             method: "POST",
-             body: JSON.stringify({
+         await axios.post(
+             'http://0.0.0.0:3000/tokens',
+             {
                  paymentToken:"CM2903E3E0WE",
                  payeeId:"256781666410",
                  payeeIdType:"DEVICE"
-             }),
-             headers: headers
-         }
-
-         let res = await fetch('http://0.0.0.0:3000/tokens',reqInit);
+             },
+             {
+                 "headers":{
+                     "Content-Type":"application/json"
+                 }
+             }
+         );
 
          // Act
-         const getReqInit: RequestInit = {
-             method:"GET"
-         }
+         const res = await axios.get(
+             "http://0.0.0.0:3000/parties/ALIAS/CM2903E3E0WE"
+         );
 
-         res = await fetch("http://0.0.0.0:3000/parties/ALIAS/CM2903E3E0WE",getReqInit);
-
-         const data = await res.json();
-
-         expect(data).toEqual({
+         expect(res.data).toEqual({
              paymentToken:"CM2903E3E0WE",
              payeeId:"256781666410",
              payeeIdType:"DEVICE"
          });
+     });
 
 
+     test("GET: token-adapter-svc: sdk inbound: /parties with type ALIAS. Axios should throw error because the return code is 500", async ()=>{
+         // arrange
+         const ID = "CM2903E3E0WE";
+         const Type = "ALIAS";
+
+         await axios.post(
+             'http://0.0.0.0:3000/tokens',
+             {
+                 paymentToken:"CM2903E3E0WE",
+                 payeeId:"256781666410",
+                 payeeIdType:"DEVICE"
+             },
+             {
+                 "headers":{
+                     "Content-Type":"application/json"
+                 }
+             }
+         );
+
+         // act & assert
+         await expect(axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`)).rejects.toThrow(AxiosError);
+     });
+
+     test("GET: token-adapter-svc: sdk inbound: /parties with type ALIAS that is not found. Should return Not Found", async()=>{
+         // Arrange
+         const ID = "CM2903E3E0QE";
+         const Type = "ALIAS";
+
+         // Act $ Assert
+         await expect(axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`)).rejects.toThrow(AxiosError);
+     });
+
+     test("GET: token-adapter-svc: sdk inbound: /parties with type not ALIAS. Should pass through. TokenRepo should not be called", async ()=>{
+         // arrange
+
+         const ID = "CM2903E3E0WE";
+         const Type = "IBAN";
+
+         // Act and Assert
+         await expect(axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`)).rejects.toThrow(AxiosError);
      });
 });

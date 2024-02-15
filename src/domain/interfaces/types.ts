@@ -27,10 +27,17 @@
 
 "use strict";
 
+import {ServerRoute} from "hapi";
+import {ReqRefDefaults} from "@hapi/hapi";
+
 export interface IPaymentTokenMapping {
     paymentToken: string;
     payeeId: string;
     payeeIdType: PayeeIdType
+}
+
+export interface IHttpResponseData {
+    payload : unknown
 }
 
 export enum PayeeIdType {
@@ -42,4 +49,10 @@ export enum PayeeIdType {
     BUSINESS = "BUSINESS",
     DEVICE = "DEVICE",
     ACCOUNT_ID = "ACCOUNT_ID",
+    ALIAS = "ALIAS"
+}
+
+export interface IRoutes{
+    //@ts-expect-error ReqRefDefaults not found
+    getRoutes(): ServerRoute<ReqRefDefaults>[]
 }

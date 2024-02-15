@@ -28,49 +28,76 @@
 "use strict";
 
 
-import {ITokenMappingStorageRepo} from "interfaces";
-import {MemoryTokenMappingStorageRepo} from "../implementations";
-import {Aggregate} from "../domain";
+import {IHttpClient, ITokenMappingStorageRepo} from "domain/interfaces";
+import {AxiosHttpClient, MemoryTokenMappingStorageRepo} from "../implementations";
+import {ExternalPortalAggregate, SDKAggregate} from "../domain";
 import {Server} from "@hapi/hapi";
 import process from "process";
-import {TokenAdapterRoutes} from "./routes";
+import {ExternalPortalRoutes} from "./externalPortalRoutes";
+import {SDKRoutes} from "./sdkRoutes";
 
 
-const SERVER_PORT = process.env["SERVER_PORT"] || 3000;
+const EXTERNAL_PORTAL_SERVER_PORT = process.env["SERVER_PORT"] || 3000;
+const SDK_SERVER_PORT = process.env["SERVER_PORT"] || 3001;
 const SERVER_HOST = process.env["SERVER_HOST"] || "0.0.0.0";
+const CORE_CONNECTOR_URL = process.env["CORE_CONNECTOR_URL"] || "http://localhost:4040";
 
 export class Service {
     static tokenMappingStorageRepo: ITokenMappingStorageRepo;
-    static tokenAdapterAggregate: Aggregate;
-    static app: Server;
+    static externalPortalAggregate: ExternalPortalAggregate;
+    static sdkAggregate: SDKAggregate;
+    static externalPortalServer: Server;
+    static sdkServer: Server;
+    static httpClient: IHttpClient;
 
-    static async start(aliasMappingStorageRepo?: ITokenMappingStorageRepo){
+    static async start(aliasMappingStorageRepo?: ITokenMappingStorageRepo, httpClient?: IHttpClient){
          if(!aliasMappingStorageRepo){
           aliasMappingStorageRepo = new MemoryTokenMappingStorageRepo();
           await aliasMappingStorageRepo.init();
          }
          this.tokenMappingStorageRepo = aliasMappingStorageRepo;
 
-         this.tokenAdapterAggregate = new Aggregate(this.tokenMappingStorageRepo);
-         await this.tokenAdapterAggregate.init();
+         if(!httpClient){
+             httpClient = new AxiosHttpClient();
+             await httpClient?.init();
+         }
+         this.httpClient = httpClient;
+
+         this.externalPortalAggregate = new ExternalPortalAggregate(this.tokenMappingStorageRepo);
+         this.sdkAggregate = new SDKAggregate(this.tokenMappingStorageRepo,this.httpClient,CORE_CONNECTOR_URL);
+
+         await this.externalPortalAggregate.init();
+         await this.sdkAggregate.init();
+
          // start server
-         await this.setUpAndStartHapiServer();
+         await this.setUpAndStartServers();
     }
 
-   static async setUpAndStartHapiServer():Promise<void>{
+   static async setUpAndStartServers():Promise<void>{
        return new Promise<void>(resolve => {
            // Start Hapi Server
-           this.app = new Server({
-               port: SERVER_PORT,
+           this.externalPortalServer = new Server({
+               port: EXTERNAL_PORTAL_SERVER_PORT,
                host: SERVER_HOST
            });
 
-           const tokenAdapterRoutes = new TokenAdapterRoutes(this.tokenAdapterAggregate);
+           this.sdkServer = new Server({
+               port: SDK_SERVER_PORT,
+               host: SERVER_HOST
+           });
 
-           this.app.route(tokenAdapterRoutes.getRoutes());
 
-           this.app.start();
-           console.log('Server running on %s', this.app.info.uri);
+           const externalPortalRoutes = new ExternalPortalRoutes(this.externalPortalAggregate);
+           const sdkRoutes = new SDKRoutes(this.sdkAggregate);
+
+           this.externalPortalServer.route(externalPortalRoutes.getRoutes());
+           this.sdkServer.route(sdkRoutes.getRoutes());
+
+           this.externalPortalServer.start();
+           console.log('External Portal Server running on %s', this.externalPortalServer.info.uri);
+
+           this.sdkServer.start();
+           console.log('SDK Server running on %s', this.sdkServer.info.uri);
 
            resolve();
        });
@@ -78,8 +105,11 @@ export class Service {
 
    static async stop(){
         // destroy aggregate and application
-        await this.tokenAdapterAggregate.destroy();
-        await this.app.stop({timeout:60});
+        await this.externalPortalAggregate.destroy();
+        await this.sdkAggregate.destroy();
+        await this.httpClient.destroy();
+        await this.externalPortalServer.stop({timeout:60});
+        await this.sdkServer.stop({timeout:60});
 
    }
 

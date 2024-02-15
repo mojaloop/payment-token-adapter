@@ -61,12 +61,6 @@
   },
   "API_DEFINITIONS": [
     {
-      "type": "mojaloop_simulator_inbound",
-      "version": "1.4",
-      "folderPath": "mojaloop_simulator_sim_1.4",
-      "asynchronous": true
-    },
-    {
       "type": "scheme_adapter_outbound",
       "version": "1.0",
       "folderPath": "mojaloop_sdk_outbound_scheme_adapter_1.0",
@@ -85,6 +79,13 @@
       "type": "payment-token-adapter",
       "version": "1.0",
       "folderPath": "payment-token-adapter_1.0",
+      "asynchronous": false,
+      "additionalApi": true
+    },
+    {
+      "type": "payment-token-adapter-spec",
+      "version": "0.1",
+      "folderPath": "payment-token-adapter-spec_0.1",
       "asynchronous": false,
       "additionalApi": true
     }

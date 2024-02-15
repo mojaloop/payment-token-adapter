@@ -4,7 +4,7 @@
   "test_cases": [
     {
       "id": 1,
-      "name": "Register Payment Token Happy Path",
+      "name": "External Portal Tests",
       "fileInfo": {
         "path": "payment-token-adapter-happy-path.json"
       },
@@ -53,29 +53,33 @@
         },
         {
           "id": 2,
-          "description": "get parties",
+          "description": "Get Parties in Discovery",
           "apiVersion": {
-            "minorVersion": 0,
-            "majorVersion": 1,
-            "type": "payment-token-adapter",
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "payment-token-adapter-spec",
             "asynchronous": false,
             "additionalApi": true,
-            "specFile": "spec_files/api_definitions/payment-token-adapter_1.0/api_spec.yaml",
-            "callbackMapFile": "spec_files/api_definitions/payment-token-adapter_1.0/callback_map.json",
-            "responseMapFile": "spec_files/api_definitions/payment-token-adapter_1.0/response_map.json",
-            "jsfRefFile": "spec_files/api_definitions/payment-token-adapter_1.0/mockRef.json",
-            "triggerTemplatesFolder": "spec_files/api_definitions/payment-token-adapter_1.0/trigger_templates"
+            "specFile": "spec_files/api_definitions/payment-token-adapter-spec_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/payment-token-adapter-spec_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/payment-token-adapter-spec_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/payment-token-adapter-spec_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/payment-token-adapter-spec_0.1/trigger_templates"
           },
-          "operationPath": "/parties/ALIAS/CM2903E3E0WE",
+          "operationPath": "/parties/{IdType}/{ID}",
           "path": "/parties/ALIAS/CM2903E3E0WE",
           "method": "get",
+          "params": {
+            "IdType": "ALIAS",
+            "ID": "CM2903E3E0WE"
+          },
           "tests": {
             "assertions": [
               {
                 "id": 1,
-                "description": "Check that the returned object contains the created number for the payment token",
+                "description": "Check that the response is 200",
                 "exec": [
-                  "expect(response.body.payeeId).to.equal(\"256781666410\")"
+                  "expect(response.status).to.equal(200)"
                 ]
               }
             ]

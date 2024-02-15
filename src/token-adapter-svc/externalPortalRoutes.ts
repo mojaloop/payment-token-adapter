@@ -29,18 +29,18 @@
 
 
 import {ServerRoute} from "hapi";
-import {Aggregate} from "../domain";
+import {ExternalPortalAggregate, IRoutes} from "../domain";
 import {ReqRefDefaults} from "@hapi/hapi";
-import {PayeeIdType} from '../interfaces';
+import {PayeeIdType} from '../domain/interfaces';
 
-export class TokenAdapterRoutes {
+export class ExternalPortalRoutes implements  IRoutes {
     //@ts-expect-error ReqRefDefaults not found
     private readonly routes: ServerRoute<ReqRefDefaults>[] = [];
-    private readonly tokenAggregate: Aggregate;
+    private readonly coreConnectorAggregate: ExternalPortalAggregate;
 
-    constructor(tokenAggregate: Aggregate) {
+    constructor(tokenAggregate: ExternalPortalAggregate) {
 
-        this.tokenAggregate = tokenAggregate;
+        this.coreConnectorAggregate = tokenAggregate;
 
         // register token
         this.registerTokenMapping = this.registerTokenMapping.bind(this);
@@ -67,7 +67,7 @@ export class TokenAdapterRoutes {
     private async registerTokenMapping(request, h){
         console.log("Received request");
         const payload = request.payload;
-        await this.tokenAggregate.createMapping(
+        await this.coreConnectorAggregate.createMapping(
             {
                 paymentToken: payload.paymentToken,
                 payeeIdType:
@@ -87,13 +87,14 @@ export class TokenAdapterRoutes {
 
     //@ts-expect-error h has no type
     private async getTokenMapping(request, h){
+        // this function is for testing not part of the api spec
         const params = request.params;
 
         if(!params.payeeId){
             h.response("Bad Request. Please specify Payment Token").code(400);
         }
 
-        const tokenMapping = await this.tokenAggregate.getMapping(params.payeeId);
+        const tokenMapping = await this.coreConnectorAggregate.getMapping(params.payeeId);
         if(!tokenMapping){
             return h.response({
                 "statusCode":"4001",
@@ -104,3 +105,4 @@ export class TokenAdapterRoutes {
         }
     }
 }
+
