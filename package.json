@@ -16,7 +16,7 @@
     "start:docker": "npm run build:docker && docker run -p 127.0.0.1:3000:3000/tcp payment-token-adapter:local",
     "watch": "tsc -w",
     "start": "npm run start:no-build",
-    "start:no-build": "node dist/src/index.js",
+    "start:no-build": "node dist/index.js",
     "start:build": "npm run build && npm run start:no-build",
     "start:dev": "ts-node -r tsconfig-paths/register -P ./tsconfig.json src/index.ts",
     "dev": "nodemon --watch './src/**/*.ts' --exec 'ts-node' src/index.ts",
