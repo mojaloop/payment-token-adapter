@@ -134,7 +134,7 @@ process.on("SIGINT", _handle_int_and_term_signals.bind(this));
 //catches program termination event
 process.on("SIGTERM", _handle_int_and_term_signals.bind(this));
 
-//do something when externalPortalServer is closing
+//do something when app is closing
 process.on("exit", /* istanbul ignore next */async () => {
     console.log("Service - exiting...");
 });
