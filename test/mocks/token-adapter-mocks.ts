@@ -24,7 +24,7 @@
  - Okello Ivan Elijah <elijahokello90@gmail.com>
 
  --------------
- ******/
+ *******/
 
 "use strict";
 
