@@ -27,7 +27,7 @@
 
 "use strict";
 
-import {IRoutes, SDKAggregate} from "../domain";
+import {IQuoteRequestData, IRoutes, SDKAggregate} from "../domain";
 import {ServerRoute} from "hapi";
 import {ReqRefDefaults} from "@hapi/hapi";
 
@@ -38,6 +38,14 @@ export class SDKRoutes implements IRoutes {
 
     constructor(sdkAggregate: SDKAggregate) {
         this.sdkAggregate = sdkAggregate;
+
+        // post quotes
+        this.postQuotes = this.postQuotes.bind(this);
+        this.routes.push({
+            method:'POST',
+            path:'/quoterequests',
+            handler: this.postQuotes
+        });
 
         // get parties
         this.getParties = this.getParties.bind(this);
@@ -65,6 +73,25 @@ export class SDKRoutes implements IRoutes {
         }
         const result = await this.sdkAggregate.getParties(ID,Type);
 
+        if(!result){
+            return h.response({statusCode:3204,message:"Party not found"}).code(404);
+        }else if(typeof result == "string"){
+            return h.response({statusCode:2001,message:"Internal server error"}).code(500);
+        }else{
+            return h.response(result.payload).code(200);
+        }
+    }
+
+    //@ts-expect-error h has no type
+    private async postQuotes(request, h){
+
+        const payload: IQuoteRequestData = request.payload as IQuoteRequestData;
+
+        if(!payload.from){
+            return h.response("Bad Request: Payload missing crucial info").code(400);
+        }
+
+        const result = await this.sdkAggregate.postQuotes(payload);
         if(!result){
             return h.response({statusCode:3204,message:"Party not found"}).code(404);
         }else if(typeof result == "string"){

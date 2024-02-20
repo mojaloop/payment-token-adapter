@@ -136,4 +136,85 @@ describe("token-adapter-svc test suite",()=>{
          // Act and Assert
          await expect(axios.get(`http://0.0.0.0:3001/parties/${Type}/${ID}`)).rejects.toThrow(AxiosError);
      });
+
+     // test("POST: token-adapter-svc: sdk inbound: /quoterequests ", async ()=>{
+     //    await axios.post(
+     //        `http://0.0.0.0:3001/quoterequests`,
+     //        {
+     //            "homeR2PTransactionId": "string",
+     //            "amount": "19287029",
+     //            "amountType": "SEND",
+     //            "currency": "AED",
+     //            "expiration": "9708-02-29T07:05:45.071-07:21",
+     //            "extensionList": [
+     //                {
+     //                    "key": "string",
+     //                    "value": "string"
+     //                }
+     //            ],
+     //            "feesAmount": "9290.12",
+     //            "feesCurrency": "AED",
+     //            "from": {
+     //                "dateOfBirth": "8726-10-30",
+     //                "displayName": "string",
+     //                "extensionList": [
+     //                    {
+     //                        "key": "string",
+     //                        "value": "string"
+     //                    }
+     //                ],
+     //                "firstName": "string",
+     //                "fspId": "string",
+     //                "idSubValue": "string",
+     //                "idType": "MSISDN",
+     //                "idValue": "string",
+     //                "lastName": "string",
+     //                "merchantClassificationCode": "string",
+     //                "middleName": "string",
+     //                "type": "CONSUMER",
+     //                "supportedCurrencies": [
+     //                    "AED"
+     //                ],
+     //                "kycInformation": "string"
+     //            },
+     //            "geoCode": {
+     //                "latitude": "90.0",
+     //                "longitude": "14"
+     //            },
+     //            "initiator": "PAYER",
+     //            "initiatorType": "CONSUMER",
+     //            "note": "string",
+     //            "quoteId": "d4e9bac6-933b-23c9-b036-a3e1212411fc",
+     //            "subScenario": "string",
+     //            "to": {
+     //                "dateOfBirth": "9763-02-10",
+     //                "displayName": "string",
+     //                "extensionList": [
+     //                    {
+     //                        "key": "string",
+     //                        "value": "string"
+     //                    }
+     //                ],
+     //                "firstName": "string",
+     //                "fspId": "string",
+     //                "idSubValue": "string",
+     //                "idType": "MSISDN",
+     //                "idValue": "string",
+     //                "lastName": "string",
+     //                "merchantClassificationCode": "string",
+     //                "middleName": "string",
+     //                "type": "CONSUMER",
+     //                "supportedCurrencies": [
+     //                    "AED"
+     //                ],
+     //                "kycInformation": "string"
+     //            },
+     //            "transactionId": "24357052-5d7b-136b-9002-9d911e960d47",
+     //            "transactionType": "TRANSFER",
+     //            "transactionRequestId": "b4689b65-f27d-1f8d-b012-4ef3e5f5039a",
+     //            "converter": "string",
+     //            "currencyConversion": "string"
+     //        }
+     //    )
+     // });
 });

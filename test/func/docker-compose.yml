@@ -5,18 +5,18 @@ networks:
 
 
 services:
-  paymentAdapter:
-    image: payment-token-adapter:local
-    build:
-      context: ../..
-    networks:
-      - mojaloop-net
-    environment:
-      - SERVER_HOST=paymentAdapter
-      - CORE_CONNECTOR_URL=http://coreConnectorTtkBackend:4040
-    ports:
-      - "3000:3000"
-      - "3001:3001"
+#  paymentAdapter:
+#    image: payment-token-adapter:local
+#    build:
+#      context: ../..
+#    networks:
+#      - mojaloop-net
+#    environment:
+#      - SERVER_HOST=paymentAdapter
+#      - CORE_CONNECTOR_URL=http://coreConnectorTtkBackend:4040
+#    ports:
+#      - "3000:3000"
+#      - "3001:3001"
 
   coreConnectorTtkBackend:
     networks:

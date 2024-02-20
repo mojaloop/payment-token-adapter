@@ -27,7 +27,7 @@
 
 "use strict";
 
-import {IHttpClient, IHttpResponseData, ITokenMappingStorageRepo} from "domain/interfaces";
+import {IHttpClient, IHttpResponse, ITokenMappingStorageRepo} from "domain/interfaces";
 import {IPaymentTokenMapping} from "domain/interfaces";
 import axios from "axios";
 
@@ -63,7 +63,7 @@ export class AxiosHttpClient implements IHttpClient{
         return Promise.resolve(undefined);
     }
 
-    async send(url: string, payload: unknown | undefined, timeout_ms: number, method: string, headers: unknown | undefined): Promise<IHttpResponseData | undefined> {
+    async send(url: string, payload: unknown | undefined, timeout_ms: number, method: string, headers: unknown | undefined): Promise<IHttpResponse | undefined> {
         try{
             const res = await axios.request({
                 url:url,
