@@ -170,7 +170,7 @@ jobs:
           command: npm run dep:check
 
   test-unit:
-    executor: default-docker
+    executor: default-machine
     steps:
       - checkout
       - attach_workspace:
