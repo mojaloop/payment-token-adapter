@@ -5,19 +5,6 @@ networks:
 
 
 services:
-  paymentAdapter:
-    image: payment-token-adapter:local
-    build:
-      context: ../..
-    networks:
-      - mojaloop-net
-    environment:
-      - SERVER_HOST=paymentAdapter
-      - CORE_CONNECTOR_URL=http://TtkBackend:4040
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-
   TtkBackend:
     networks:
       - mojaloop-net
@@ -39,16 +26,3 @@ services:
       interval: 5s
       timeout: 10s
       retries: 3
-
-  TtkUi:
-    image: mojaloop/ml-testing-toolkit-ui:v15.3.0
-    ports:
-      - "6060:6060"
-    networks:
-      - mojaloop-net
-    environment:
-      - API_BASE_URL=http://localhost:5050
-      - AUTH_ENABLED=FALSE
-    command:
-      - sh
-      - /usr/share/nginx/start.sh

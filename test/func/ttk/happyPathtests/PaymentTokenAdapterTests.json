@@ -1,0 +1,921 @@
+{
+  "options": {},
+  "name": "token-adapter-tests",
+  "test_cases": [
+    {
+      "id": 1,
+      "name": "Payment Token Adapter Test Cases",
+      "fileInfo": {
+        "path": "token-adapter-tests.json"
+      },
+      "meta": {
+        "info": "Register Payment Token Happy Path"
+      },
+      "requests": [
+        {
+          "id": 12,
+          "description": "Post /tokens",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/tokens",
+          "path": "/tokens",
+          "method": "post",
+          "url": "http://paymentAdapter:3000",
+          "body": {
+            "payeeId": "256781466410",
+            "payeeIdType": "MSISDN",
+            "paymentToken": "CM2903E3E0WE"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that response status is 200",
+                "exec": [
+                  "expect(response.status).to.equal(200)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 13,
+          "description": "Get /parties/{Type}/{ID} Type ALIAS",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/parties/{IdType}/{ID}",
+          "path": "/parties/ALIAS/CM2903E3E0WE",
+          "method": "get",
+          "params": {
+            "IdType": "ALIAS",
+            "ID": "CM2903E3E0WE"
+          },
+          "url": "http://paymentAdapter:3001",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 200",
+                "exec": [
+                  "expect(response.status).to.equal(200)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 14,
+          "description": "Get /parties/{Type}/{ID} Type not ALIAS",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/parties/{IdType}/{ID}",
+          "path": "/parties/MSISDN/25689934343",
+          "method": "get",
+          "params": {
+            "IdType": "MSISDN",
+            "ID": "25689934343"
+          },
+          "url": "http://paymentAdapter:3001",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 200",
+                "exec": [
+                  "expect(response.status).to.equal(200)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 15,
+          "description": "Get /parties/{Type}/{ID} ALIAS Not Found",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/parties/{IdType}/{ID}",
+          "path": "/parties/ALIAS/25689934343",
+          "method": "get",
+          "params": {
+            "IdType": "ALIAS",
+            "ID": "25689934343"
+          },
+          "url": "http://paymentAdapter:3001",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 404",
+                "exec": [
+                  "expect(response.status).to.equal(404)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 16,
+          "description": "POST /quoterequests Type ALIAS",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/quoterequests",
+          "path": "/quoterequests",
+          "method": "post",
+          "url": "http://paymentAdapter:3001",
+          "body": {
+            "homeR2PTransactionId": "string",
+            "amount": "19287029",
+            "amountType": "SEND",
+            "currency": "AED",
+            "expiration": "9708-02-29T07:05:45.071-07:21",
+            "extensionList": [
+              {
+                "key": "string",
+                "value": "string"
+              }
+            ],
+            "feesAmount": "9290.12",
+            "feesCurrency": "AED",
+            "from": {
+              "dateOfBirth": "8726-10-30",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "MSISDN",
+              "idValue": "string",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "AED"
+              ],
+              "kycInformation": "string"
+            },
+            "geoCode": {
+              "latitude": "90.0",
+              "longitude": "14"
+            },
+            "initiator": "PAYER",
+            "initiatorType": "CONSUMER",
+            "note": "string",
+            "quoteId": "d4e9bac6-933b-23c9-b036-a3e1212411fc",
+            "to": {
+              "dateOfBirth": "9763-02-10",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "ALIAS",
+              "idValue": "CM2903E3E0WE",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "AED"
+              ],
+              "kycInformation": "string"
+            },
+            "transactionId": "24357052-5d7b-136b-9002-9d911e960d47",
+            "transactionType": "TRANSFER",
+            "transactionRequestId": "b4689b65-f27d-1f8d-b012-4ef3e5f5039a",
+            "converter": "string",
+            "currencyConversion": "string"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 200",
+                "exec": [
+                  "expect(response.status).to.equal(200)"
+                ]
+              }
+            ]
+          },
+          "params": {
+            "IdType": "",
+            "ID": ""
+          }
+        },
+        {
+          "id": 17,
+          "description": "POST /quoterequests Type ALIAS Not found",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/quoterequests",
+          "path": "/quoterequests",
+          "method": "post",
+          "body": {
+            "homeR2PTransactionId": "string",
+            "amount": "19287029",
+            "amountType": "SEND",
+            "currency": "AED",
+            "expiration": "9708-02-29T07:05:45.071-07:21",
+            "extensionList": [
+              {
+                "key": "string",
+                "value": "string"
+              }
+            ],
+            "feesAmount": "9290.12",
+            "feesCurrency": "AED",
+            "from": {
+              "dateOfBirth": "8726-10-30",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "MSISDN",
+              "idValue": "string",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "AED"
+              ],
+              "kycInformation": "string"
+            },
+            "geoCode": {
+              "latitude": "90.0",
+              "longitude": "14"
+            },
+            "initiator": "PAYER",
+            "initiatorType": "CONSUMER",
+            "note": "string",
+            "quoteId": "d4e9bac6-933b-23c9-b036-a3e1212411fc",
+            "to": {
+              "dateOfBirth": "9763-02-10",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "ALIAS",
+              "idValue": "CM2903EBB0WE",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "AED"
+              ],
+              "kycInformation": "string"
+            },
+            "transactionId": "24357052-5d7b-136b-9002-9d911e960d47",
+            "transactionType": "TRANSFER",
+            "transactionRequestId": "b4689b65-f27d-1f8d-b012-4ef3e5f5039a",
+            "converter": "string",
+            "currencyConversion": "string"
+          },
+          "url": "http://paymentAdapter:3001",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 404",
+                "exec": [
+                  "expect(response.status).to.equal(404)"
+                ]
+              }
+            ]
+          },
+          "params": {
+            "IdType": "",
+            "ID": ""
+          }
+        },
+        {
+          "id": 18,
+          "description": "POST /quoterequests Type ALIAS",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/quoterequests",
+          "path": "/quoterequests",
+          "method": "post",
+          "body": {
+            "homeR2PTransactionId": "string",
+            "amount": "19287029",
+            "amountType": "SEND",
+            "currency": "AED",
+            "expiration": "9708-02-29T07:05:45.071-07:21",
+            "extensionList": [
+              {
+                "key": "string",
+                "value": "string"
+              }
+            ],
+            "feesAmount": "9290.12",
+            "feesCurrency": "AED",
+            "from": {
+              "dateOfBirth": "8726-10-30",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "MSISDN",
+              "idValue": "string",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "AED"
+              ],
+              "kycInformation": "string"
+            },
+            "geoCode": {
+              "latitude": "90.0",
+              "longitude": "14"
+            },
+            "initiator": "PAYER",
+            "initiatorType": "CONSUMER",
+            "note": "string",
+            "quoteId": "d4e9bac6-933b-23c9-b036-a3e1212411fc",
+            "to": {
+              "dateOfBirth": "9763-02-10",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "DEVICE",
+              "idValue": "SN92E232W2",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "AED"
+              ],
+              "kycInformation": "string"
+            },
+            "transactionId": "24357052-5d7b-136b-9002-9d911e960d47",
+            "transactionType": "TRANSFER",
+            "transactionRequestId": "b4689b65-f27d-1f8d-b012-4ef3e5f5039a",
+            "converter": "string",
+            "currencyConversion": "string"
+          },
+          "url": "http://paymentAdapter:3001",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 200",
+                "exec": [
+                  "expect(response.status).to.equal(200)"
+                ]
+              }
+            ]
+          },
+          "params": {
+            "IdType": "",
+            "ID": ""
+          }
+        },
+        {
+          "id": 19,
+          "description": "POST /transfers Type ALIAS",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/transfers",
+          "path": "/transfers",
+          "method": "post",
+          "body": {
+            "homeR2PTransactionId": "string",
+            "amount": "0.347",
+            "amountType": "SEND",
+            "currency": "AED",
+            "from": {
+              "dateOfBirth": "8477-05-21",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "ACCOUNT_NO",
+              "idValue": "string",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "AGENT",
+              "supportedCurrencies": [
+                "string"
+              ],
+              "kycInformation": "string"
+            },
+            "ilpPacket": {
+              "data": {
+                "amount": {
+                  "amount": "4000.2",
+                  "currency": "AED"
+                },
+                "payee": {
+                  "partyIdInfo": {
+                    "partyIdType": "ACCOUNT_ID",
+                    "partyIdentifier": "38928237283423"
+                  }
+                },
+                "payer": {
+                  "partyIdInfo": {
+                    "partyIdType": "EMAIL",
+                    "partyIdentifier": "ei@gmail.com"
+                  }
+                },
+                "quoteId": "00ace33f-1fea-4ccd-9479-7ef6e7e37c90",
+                "transactionId": "3b2d2778-9b3c-4f18-90f6-62b054625652",
+                "transactionType": {
+                  "initiator": "PAYER",
+                  "initiatorType": "DEVICE",
+                  "scenario": "TRANSFER",
+                  "subScenario": "MY_STRING_CONSTANT"
+                }
+              }
+            },
+            "note": "string",
+            "quote": {
+              "expiration": "3945-08-30T22:03:24.190Z",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "geoCode": {
+                "latitude": "34.2",
+                "longitude": "0.3432"
+              },
+              "payeeFspCommissionAmount": "72",
+              "payeeFspCommissionAmountCurrency": "AED",
+              "payeeFspFeeAmount": "0",
+              "payeeFspFeeAmountCurrency": "AED",
+              "payeeReceiveAmount": "0",
+              "payeeReceiveAmountCurrency": "AED",
+              "quoteId": "71cee55f-c58a-2a8e-8289-e18a2c80bf48",
+              "transactionId": "2861d780-60f5-5127-a73b-ab0617c00f72",
+              "transferAmount": "0.9",
+              "transferAmountCurrency": "AED"
+            },
+            "quoteRequestExtensions": [
+              {
+                "key": "string",
+                "value": "string"
+              }
+            ],
+            "subScenario": "MY_STRING",
+            "to": {
+              "dateOfBirth": "8477-05-21",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "ALIAS",
+              "idValue": "CM2903E3E0WE",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "string"
+              ],
+              "kycInformation": "string"
+            },
+            "transactionType": "TRANSFER",
+            "transferId": "3b2d2778-9b3c-4f18-90f6-62b054625652",
+            "transactionRequestId": "3b2d2778-9b3c-4f18-90f6-62b054625652"
+          },
+          "url": "http://paymentAdapter:3001",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 200",
+                "exec": [
+                  "expect(response.status).to.equal(200)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 20,
+          "description": "POST /transfers Type not ALIAS",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/transfers",
+          "path": "/transfers",
+          "method": "post",
+          "body": {
+            "homeR2PTransactionId": "string",
+            "amount": "0.347",
+            "amountType": "SEND",
+            "currency": "AED",
+            "from": {
+              "dateOfBirth": "8477-05-21",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "ACCOUNT_NO",
+              "idValue": "string",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "AGENT",
+              "supportedCurrencies": [
+                "string"
+              ],
+              "kycInformation": "string"
+            },
+            "ilpPacket": {
+              "data": {
+                "amount": {
+                  "amount": "4000.2",
+                  "currency": "AED"
+                },
+                "payee": {
+                  "partyIdInfo": {
+                    "partyIdType": "ACCOUNT_ID",
+                    "partyIdentifier": "38928237283423"
+                  }
+                },
+                "payer": {
+                  "partyIdInfo": {
+                    "partyIdType": "EMAIL",
+                    "partyIdentifier": "ei@gmail.com"
+                  }
+                },
+                "quoteId": "00ace33f-1fea-4ccd-9479-7ef6e7e37c90",
+                "transactionId": "3b2d2778-9b3c-4f18-90f6-62b054625652",
+                "transactionType": {
+                  "initiator": "PAYER",
+                  "initiatorType": "DEVICE",
+                  "scenario": "TRANSFER",
+                  "subScenario": "MY_STRING_CONSTANT"
+                }
+              }
+            },
+            "note": "string",
+            "quote": {
+              "expiration": "3945-08-30T22:03:24.190Z",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "geoCode": {
+                "latitude": "34.2",
+                "longitude": "0.3432"
+              },
+              "payeeFspCommissionAmount": "72",
+              "payeeFspCommissionAmountCurrency": "AED",
+              "payeeFspFeeAmount": "0",
+              "payeeFspFeeAmountCurrency": "AED",
+              "payeeReceiveAmount": "0",
+              "payeeReceiveAmountCurrency": "AED",
+              "quoteId": "71cee55f-c58a-2a8e-8289-e18a2c80bf48",
+              "transactionId": "2861d780-60f5-5127-a73b-ab0617c00f72",
+              "transferAmount": "0.9",
+              "transferAmountCurrency": "AED"
+            },
+            "quoteRequestExtensions": [
+              {
+                "key": "string",
+                "value": "string"
+              }
+            ],
+            "subScenario": "MY_STRING",
+            "to": {
+              "dateOfBirth": "8477-05-21",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "MSISDN",
+              "idValue": "25478234232",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "string"
+              ],
+              "kycInformation": "string"
+            },
+            "transactionType": "TRANSFER",
+            "transferId": "3b2d2778-9b3c-4f18-90f6-62b054625652",
+            "transactionRequestId": "3b2d2778-9b3c-4f18-90f6-62b054625652"
+          },
+          "url": "http://paymentAdapter:3001",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 200",
+                "exec": [
+                  "expect(response.status).to.equal(200)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 21,
+          "description": "POST /transfers Type ALIAS Not Found",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "PaymentTokenAdapter",
+            "asynchronous": false,
+            "additionalApi": true,
+            "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+          },
+          "operationPath": "/transfers",
+          "path": "/transfers",
+          "method": "post",
+          "body": {
+            "homeR2PTransactionId": "string",
+            "amount": "0.347",
+            "amountType": "SEND",
+            "currency": "AED",
+            "from": {
+              "dateOfBirth": "8477-05-21",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "ACCOUNT_NO",
+              "idValue": "string",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "AGENT",
+              "supportedCurrencies": [
+                "string"
+              ],
+              "kycInformation": "string"
+            },
+            "ilpPacket": {
+              "data": {
+                "amount": {
+                  "amount": "4000.2",
+                  "currency": "AED"
+                },
+                "payee": {
+                  "partyIdInfo": {
+                    "partyIdType": "ACCOUNT_ID",
+                    "partyIdentifier": "38928237283423"
+                  }
+                },
+                "payer": {
+                  "partyIdInfo": {
+                    "partyIdType": "EMAIL",
+                    "partyIdentifier": "ei@gmail.com"
+                  }
+                },
+                "quoteId": "00ace33f-1fea-4ccd-9479-7ef6e7e37c90",
+                "transactionId": "3b2d2778-9b3c-4f18-90f6-62b054625652",
+                "transactionType": {
+                  "initiator": "PAYER",
+                  "initiatorType": "DEVICE",
+                  "scenario": "TRANSFER",
+                  "subScenario": "MY_STRING_CONSTANT"
+                }
+              }
+            },
+            "note": "string",
+            "quote": {
+              "expiration": "3945-08-30T22:03:24.190Z",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "geoCode": {
+                "latitude": "34.2",
+                "longitude": "0.3432"
+              },
+              "payeeFspCommissionAmount": "72",
+              "payeeFspCommissionAmountCurrency": "AED",
+              "payeeFspFeeAmount": "0",
+              "payeeFspFeeAmountCurrency": "AED",
+              "payeeReceiveAmount": "0",
+              "payeeReceiveAmountCurrency": "AED",
+              "quoteId": "71cee55f-c58a-2a8e-8289-e18a2c80bf48",
+              "transactionId": "2861d780-60f5-5127-a73b-ab0617c00f72",
+              "transferAmount": "0.9",
+              "transferAmountCurrency": "AED"
+            },
+            "quoteRequestExtensions": [
+              {
+                "key": "string",
+                "value": "string"
+              }
+            ],
+            "subScenario": "MY_STRING",
+            "to": {
+              "dateOfBirth": "8477-05-21",
+              "displayName": "string",
+              "extensionList": [
+                {
+                  "key": "string",
+                  "value": "string"
+                }
+              ],
+              "firstName": "string",
+              "fspId": "string",
+              "idSubValue": "string",
+              "idType": "ALIAS",
+              "idValue": "CM2903E3EYYE",
+              "lastName": "string",
+              "merchantClassificationCode": "string",
+              "middleName": "string",
+              "type": "CONSUMER",
+              "supportedCurrencies": [
+                "string"
+              ],
+              "kycInformation": "string"
+            },
+            "transactionType": "TRANSFER",
+            "transferId": "3b2d2778-9b3c-4f18-90f6-62b054625652",
+            "transactionRequestId": "3b2d2778-9b3c-4f18-90f6-62b054625652"
+          },
+          "url": "http://paymentAdapter:3001",
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "check that status code is 404",
+                "exec": [
+                  "expect(response.status).to.equal(404)"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -45,7 +45,7 @@ paths:
   /parties/{IdType}/{ID}:
     get:
       summary: Get Parties in Discovery
-      description: SDK Scheme Adapter Get Parties in Discovery
+      description: SDK Scheme Adpater Get Parties in Discovery
       operationId: getParties
       parameters:
         - name: IdType

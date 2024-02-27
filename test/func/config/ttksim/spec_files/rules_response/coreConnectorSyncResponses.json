@@ -1,0 +1,186 @@
+[
+  {
+    "ruleId": 1,
+    "priority": 1,
+    "description": "GET /parties/{idType}/{idValue}",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 2,
+      "type": "sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets",
+      "asynchronous": false,
+      "additionalApi": true,
+      "specFile": "spec_files/api_definitions/sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets_2.1/api_spec.yaml",
+      "callbackMapFile": "spec_files/api_definitions/sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets_2.1/callback_map.json",
+      "responseMapFile": "spec_files/api_definitions/sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets_2.1/response_map.json",
+      "jsfRefFile": "spec_files/api_definitions/sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets_2.1/mockRef.json",
+      "triggerTemplatesFolder": "spec_files/api_definitions/sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets_2.1/trigger_templates"
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/parties/{idType}/{idValue}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "get"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "body": {
+          "dateOfBirth": "5236-12-31",
+          "displayName": "string",
+          "extensionList": [
+            {
+              "key": "string",
+              "value": "string"
+            }
+          ],
+          "firstName": "string",
+          "fspId": "string",
+          "idSubValue": "string",
+          "idType": "MSISDN",
+          "idValue": "string",
+          "lastName": "string",
+          "merchantClassificationCode": "string",
+          "middleName": "string",
+          "type": "CONSUMER",
+          "supportedCurrencies": [
+            "AED"
+          ],
+          "kycInformation": "{\n    \"metadata\": {\n        \"format\": \"JSON\",\n        \"version\": \"1.0\",\n        \"description\": \"Data containing KYC Information\"\n    },\n    \"data\": {\n        \"name\": \"John Doe\",\n        \"dob\": \"1980-05-15\",\n        \"gender\": \"Male\",\n        \"address\": \"123 Main Street, Anytown, USA\",\n        \"email\": \"johndoe@example.com\",\n        \"phone\": \"+1 555-123-4567\",\n        \"nationality\": \"US\",\n        \"passport_number\": \"AB1234567\",\n        \"issue_date\": \"2010-02-20\",\n        \"expiry_date\": \"2025-02-20\",\n        \"bank_account_number\": \"1234567890\",\n        \"bank_name\": \"Example Bank\",\n        \"employer\": \"ABC Company\",\n        \"occupation\": \"Software Engineer\",\n        \"income\": \"$80,000 per year\",\n        \"marital_status\": \"Single\",\n        \"dependents\": 0,\n        \"risk_level\": \"Low\"\n    }\n}"
+        },
+        "statusCode": "200",
+        "scripts": {
+          "scriptingEngine": "postman"
+        }
+      },
+      "type": "FIXED_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 2,
+    "priority": 1,
+    "description": "post /quoterequests",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "Payment Token Adapter API",
+      "asynchronous": false,
+      "additionalApi": true,
+      "specFile": "spec_files/api_definitions/Payment Token Adapter API_0.1/api_spec.yaml",
+      "callbackMapFile": "spec_files/api_definitions/Payment Token Adapter API_0.1/callback_map.json",
+      "responseMapFile": "spec_files/api_definitions/Payment Token Adapter API_0.1/response_map.json",
+      "jsfRefFile": "spec_files/api_definitions/Payment Token Adapter API_0.1/mockRef.json",
+      "triggerTemplatesFolder": "spec_files/api_definitions/Payment Token Adapter API_0.1/trigger_templates"
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/quoterequests"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "body": {
+          "expiration": "3945-08-30T22:03:24.190Z",
+          "extensionList": [
+            {
+              "key": "string",
+              "value": "string"
+            }
+          ],
+          "geoCode": {
+            "latitude": "string",
+            "longitude": "string"
+          },
+          "payeeFspCommissionAmount": "72",
+          "payeeFspCommissionAmountCurrency": "AED",
+          "payeeFspFeeAmount": "0",
+          "payeeFspFeeAmountCurrency": "AED",
+          "payeeReceiveAmount": "0",
+          "payeeReceiveAmountCurrency": "AED",
+          "quoteId": "71cee55f-c58a-2a8e-8289-e18a2c80bf48",
+          "transactionId": "2861d780-60f5-5127-a73b-ab0617c00f72",
+          "transferAmount": "0.9",
+          "transferAmountCurrency": "AED"
+        },
+        "statusCode": "200",
+        "scripts": {
+          "scriptingEngine": "postman"
+        }
+      },
+      "type": "FIXED_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 3,
+    "priority": 1,
+    "description": "Request to make a transfer",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "PaymentTokenAdapter",
+      "asynchronous": false,
+      "additionalApi": true,
+      "specFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/api_spec.yaml",
+      "callbackMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/callback_map.json",
+      "responseMapFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/response_map.json",
+      "jsfRefFile": "spec_files/api_definitions/PaymentTokenAdapter_0.1/mockRef.json",
+      "triggerTemplatesFolder": "spec_files/api_definitions/PaymentTokenAdapter_0.1/trigger_templates"
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/transfers"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "body": {
+          "completedTimestamp": "9763-03-30T22:07:56.036+03:40",
+          "fulfilment": "string",
+          "homeTransactionId": "string",
+          "transferState": "RECEIVED"
+        },
+        "statusCode": "200",
+        "scripts": {
+          "scriptingEngine": "postman"
+        }
+      },
+      "type": "FIXED_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  }
+]

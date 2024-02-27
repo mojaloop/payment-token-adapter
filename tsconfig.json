@@ -1,6 +1,6 @@
 {
   "include": [
-    "./src",
+    "src",
     "test"
   ],
   "exclude": [
@@ -12,6 +12,7 @@
   ],
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": ".",
     // prevents this tsconfig from compiling any files
     "target": "ES2022",
     "module": "commonjs",

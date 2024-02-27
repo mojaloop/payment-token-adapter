@@ -27,7 +27,7 @@
 
 "use strict";
 
-import {IQuoteRequestData, IRoutes, SDKAggregate} from "../domain";
+import {IQuoteRequestData, IRoutes, ITransferRequest, SDKAggregate} from "../domain";
 import {ServerRoute} from "hapi";
 import {ReqRefDefaults} from "@hapi/hapi";
 
@@ -39,6 +39,14 @@ export class SDKRoutes implements IRoutes {
     constructor(sdkAggregate: SDKAggregate) {
         this.sdkAggregate = sdkAggregate;
 
+        // get parties
+        this.getParties = this.getParties.bind(this);
+        this.routes.push({
+            method:"GET",
+            path:"/parties/{Type}/{ID}",
+            handler: this.getParties
+        });
+
         // post quotes
         this.postQuotes = this.postQuotes.bind(this);
         this.routes.push({
@@ -47,12 +55,11 @@ export class SDKRoutes implements IRoutes {
             handler: this.postQuotes
         });
 
-        // get parties
-        this.getParties = this.getParties.bind(this);
+        this.transfer = this.transfer.bind(this);
         this.routes.push({
-            method:"GET",
-            path:"/parties/{Type}/{ID}",
-            handler: this.getParties
+            method: 'POST',
+            path: '/transfers',
+            handler: this.transfer
         });
     }
 
@@ -63,6 +70,7 @@ export class SDKRoutes implements IRoutes {
 
     //@ts-expect-error h has no type
     private async getParties(request, h){
+        console.log("Received request: GET /parties");
         const params = request.params;
 
         const ID = params["ID"];
@@ -84,14 +92,35 @@ export class SDKRoutes implements IRoutes {
 
     //@ts-expect-error h has no type
     private async postQuotes(request, h){
+        console.log("Received request: POST /quoterequests");
 
         const payload: IQuoteRequestData = request.payload as IQuoteRequestData;
 
-        if(!payload.from){
+        if(!payload.to){
             return h.response("Bad Request: Payload missing crucial info").code(400);
         }
 
         const result = await this.sdkAggregate.postQuotes(payload);
+        if(!result){
+            return h.response({statusCode:3204,message:"Party not found"}).code(404);
+        }else if(typeof result == "string"){
+            return h.response({statusCode:2001,message:"Internal server error"}).code(500);
+        }else{
+            return h.response(result.payload).code(200);
+        }
+    }
+
+    //@ts-expect-error h has no type
+    private async transfer(request, h){
+        console.log("Received request: POST /transfers ");
+
+        const payload: ITransferRequest = request.payload as ITransferRequest;
+
+        if(!payload.to){
+            return h.response("Bad Request: Payload missing crucial info").code(400);
+        }
+
+        const result = await this.sdkAggregate.transfer(payload);
         if(!result){
             return h.response({statusCode:3204,message:"Party not found"}).code(404);
         }else if(typeof result == "string"){

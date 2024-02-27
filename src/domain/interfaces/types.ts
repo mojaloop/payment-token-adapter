@@ -37,7 +37,31 @@ export interface IPaymentTokenMapping {
 }
 
 export type IHttpResponse = {
-    payload : Payee | Quote
+    payload : Payee | Quote | Transfer
+}
+
+export type Transfer = {
+    completedTimestamp: string,
+    fulfilment: string,
+    homeTransactionId: string,
+    transferState: string
+}
+
+export type ITransferRequest = {
+    homeR2PTransactionId: string
+    amount: string,
+    amountType: string,
+    currency: string,
+    from: unknown,
+    ilpPacket: unknown,
+    note: string,
+    quote: Quote,
+    quoteRequestExtensions: string,
+    subScenario: string,
+    to: Payee,
+    transactionType: string,
+    transferId: string,
+    transactionRequestId: string
 }
 
 export type Quote = {
@@ -82,14 +106,14 @@ export type IQuoteRequestData = {
     extensionList: unknown,
     feesAmount: string,
     feesCurrency: string,
-    from: Payee,
+    from: unknown,
     geocode: unknown,
     initiator: string,
     initiatorType: string,
     note: string,
     quoteId: string,
     subScenario: string,
-    to: unknown,
+    to: Payee,
     transactionId: string,
     transactionIdType: string,
     transactionIdRequestId: string,

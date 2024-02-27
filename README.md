@@ -48,10 +48,23 @@ npm run start
 ```
 
 # Test
+Before you run unit tests, make sure to run the ttk backend using this command.
+
+```bash
+docker compose -f ./test/func/ttk-docker-compose.yml up -d
+```
+
+Then you can execute the unit tests
+
 ```bash
 npm run test:unit
 ```
 
+Then you can tear the ttk backend down using this command.
+
+```bash
+docker compose -f ./test/func/ttk-docker-compose.yml down 
+```
 # Build and Run
 ```bash
 npm run start:build

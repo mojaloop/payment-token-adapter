@@ -61,6 +61,12 @@
   },
   "API_DEFINITIONS": [
     {
+      "type": "mojaloop_simulator_inbound",
+      "version": "1.4",
+      "folderPath": "mojaloop_simulator_sim_1.4",
+      "asynchronous": true
+    },
+    {
       "type": "scheme_adapter_outbound",
       "version": "1.0",
       "folderPath": "mojaloop_sdk_outbound_scheme_adapter_1.0",
@@ -69,23 +75,23 @@
       "asynchronous": true
     },
     {
-      "type": "sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets",
-      "version": "2.1",
-      "folderPath": "sdk-scheme-adapter-backend-v2_1_0-openapi3-snippets_2.1",
-      "asynchronous": false,
-      "additionalApi": true
-    },
-    {
-      "type": "payment-token-adapter",
+      "type": "SDK Backend Outbound API",
       "version": "1.0",
-      "folderPath": "payment-token-adapter_1.0",
+      "folderPath": "SDK Backend Outbound API_1.0",
       "asynchronous": false,
       "additionalApi": true
     },
     {
-      "type": "payment-token-adapter-spec",
+      "type": "SDK Backend API",
+      "version": "1.0",
+      "folderPath": "SDK Backend API_1.0",
+      "asynchronous": false,
+      "additionalApi": true
+    },
+    {
+      "type": "PaymentTokenAdapter",
       "version": "0.1",
-      "folderPath": "payment-token-adapter-spec_0.1",
+      "folderPath": "PaymentTokenAdapter_0.1",
       "asynchronous": false,
       "additionalApi": true
     }

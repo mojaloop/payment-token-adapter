@@ -32,7 +32,7 @@ import {
     IHttpClient,
     IHttpResponse,
     IQuoteRequestData,
-    ITokenMappingStorageRepo, Payee,
+    ITokenMappingStorageRepo, ITransferRequest, Payee,
     PayeeIdType,
 } from "./interfaces";
 
@@ -98,14 +98,14 @@ export class SDKAggregate{
     }
 
     async postQuotes(payload: IQuoteRequestData): Promise<IHttpResponse |undefined | string >{
-        if(payload.from.idType == PayeeIdType.ALIAS){
-            const tokenMapping = await this.aliasMappingRepo.getMapping(payload.from.idValue);
+        if(payload.to.idType == PayeeIdType.ALIAS){
+            const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
             if(!tokenMapping){
                 return ;
             }
 
-            payload.from.idType = tokenMapping.payeeIdType;
-            payload.from.idValue = tokenMapping.payeeId;
+            payload.to.idType = tokenMapping.payeeIdType;
+            payload.to.idValue = tokenMapping.payeeId;
 
             const res = await this.httpClient.send(
                 `${this.CORE_CONNECTOR_URL}/quoterequests`,
@@ -124,6 +124,45 @@ export class SDKAggregate{
 
         const res = await this.httpClient.send(
             `${this.CORE_CONNECTOR_URL}/quoterequests`,
+            payload,
+            this.httpTimeOutMs,
+            "POST",
+            {
+                "Content-Type":"application/json"
+            }
+        );
+        if(!res){
+            return "Http Request Error";
+        }
+        return res;
+    }
+
+    async transfer(payload: ITransferRequest): Promise<IHttpResponse | undefined | string>{
+        if(payload.to.idType == PayeeIdType.ALIAS){
+            const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
+            if(!tokenMapping){
+                return;
+            }
+
+            payload.to.idType = tokenMapping.payeeIdType;
+            payload.to.idValue = tokenMapping.payeeId;
+
+            const res = await this.httpClient.send(
+                `${this.CORE_CONNECTOR_URL}/transfers`,
+                payload,
+                this.httpTimeOutMs,
+                "POST",
+                {
+                    "Content-Type":"application/json"
+                }
+            );
+            if(!res){
+                return "Http Request Error";
+            }
+            return res;
+        }
+        const res = await this.httpClient.send(
+            `${this.CORE_CONNECTOR_URL}/transfers`,
             payload,
             this.httpTimeOutMs,
             "POST",

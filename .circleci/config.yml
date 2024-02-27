@@ -181,8 +181,22 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run:
+          name: Start docker-compose TTK backend
+          command: |
+            cd test/func
+            docker-compose -f ./test/func/ttk-docker-compose.yml up -d
+      - run:
+          name: Wait for some time
+          command: |
+            sleep 10
+      - run:
           name: Execute Unit Tests
           command: npm run test:unit
+      - run:
+          name: Stop docker-compose TTK backend
+          command: |
+            cd test/func
+            docker-compose -f ./test/func/ttk-docker-compose.yml down
 
   test-lint:
     executor: default-docker
