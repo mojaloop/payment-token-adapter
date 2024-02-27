@@ -184,6 +184,11 @@ jobs:
           command: |
             sleep 10
       - run:
+          name: Install dependencies
+          command: |
+            nvm use
+            npm install
+      - run:
           name: Execute Unit Tests
           command: npm run test:unit
       - run:
