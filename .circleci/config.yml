@@ -172,14 +172,12 @@ jobs:
   test-unit:
     executor: default-docker
     steps:
-      - run:
-          name: Install general dependencies
-          command: *defaults_Dependencies
       - checkout
+      - attach_workspace:
+          at: /tmp
       - run:
-          <<: *defaults_configure_nvm
-      - restore_cache:
-          key: dependency-cache-{{ .Environment.CIRCLE_SHA1 }}
+          name: Load the pre-built docker local image from workspace
+          command: docker load -i /tmp/docker-image-local.tar
       - run:
           name: Start docker-compose TTK backend
           command: |
