@@ -82,7 +82,7 @@ export class SDKRoutes implements IRoutes {
         const result = await this.sdkAggregate.getParties(ID,Type);
 
         if(!result){
-            return h.response({statusCode:3204,message:"Party not found"}).code(404);
+            return h.response({statusCode:3204,message:"ALIAS not found"}).code(404);
         }else if(typeof result == "string"){
             return h.response({statusCode:2001,message:"Internal server error"}).code(500);
         }else{
@@ -102,7 +102,7 @@ export class SDKRoutes implements IRoutes {
 
         const result = await this.sdkAggregate.postQuotes(payload);
         if(!result){
-            return h.response({statusCode:3204,message:"Party not found"}).code(404);
+            return h.response({statusCode:3204,message:"ALIAS not found"}).code(404);
         }else if(typeof result == "string"){
             return h.response({statusCode:2001,message:"Internal server error"}).code(500);
         }else{
@@ -122,7 +122,7 @@ export class SDKRoutes implements IRoutes {
 
         const result = await this.sdkAggregate.transfer(payload);
         if(!result){
-            return h.response({statusCode:3204,message:"Party not found"}).code(404);
+            return h.response({statusCode:3204,message:"ALIAS not found"}).code(404);
         }else if(typeof result == "string"){
             return h.response({statusCode:2001,message:"Internal server error"}).code(500);
         }else{
