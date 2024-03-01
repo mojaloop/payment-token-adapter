@@ -169,7 +169,7 @@ jobs:
           name: Execute dependency tests
           command: npm run dep:check
 
-  test-unit:
+  test-func:
     executor: default-machine
     steps:
       - checkout
@@ -191,7 +191,7 @@ jobs:
             npm install
       - run:
           name: Execute Unit Tests
-          command: npm run test:unit
+          command: npm run test:functional
       - run:
           name: Stop docker-compose TTK backend
           command: |
@@ -374,7 +374,7 @@ workflows:
                 - /feature*/
                 - /bugfix*/
 
-      - test-unit:
+      - test-func:
           context: org-global
           requires:
             - setup
