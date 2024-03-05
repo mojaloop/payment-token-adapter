@@ -31,10 +31,10 @@
 import {
     IHttpClient,
     IHttpResponse,
-    IQuoteRequestData,
-    ITokenMappingStorageRepo, ITransferRequest, Payee,
+    ITokenMappingStorageRepo, Payee,
     PayeeIdType,
 } from "./interfaces";
+import {SDKSchemeAdapter} from "@mojaloop/api-snippets";
 
 export class SDKAggregate{
 
@@ -97,7 +97,7 @@ export class SDKAggregate{
         return res;
     }
 
-    async postQuotes(payload: IQuoteRequestData): Promise<IHttpResponse |undefined | string >{
+    async postQuotes(payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest ): Promise<IHttpResponse |undefined | string >{
         if(payload.to.idType == PayeeIdType.ALIAS){
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
             if(!tokenMapping){
@@ -137,7 +137,7 @@ export class SDKAggregate{
         return res;
     }
 
-    async transfer(payload: ITransferRequest): Promise<IHttpResponse | undefined | string>{
+    async transfer(payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest): Promise<IHttpResponse | undefined | string>{
         if(payload.to.idType == PayeeIdType.ALIAS){
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
             if(!tokenMapping){

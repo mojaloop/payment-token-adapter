@@ -3,7 +3,7 @@ info:
   title: Payment Token Adapter API
   version: 0.0.1
   description: >
-    API Specification for the Payment Token Adapter
+    API Specification for the Payment Token Adapter requests from the SDK Scheme Adapter
     
     This API is to be implemented by the DFSP
   license:
@@ -11,37 +11,6 @@ info:
     url: http://www.apache.org/licenses/
 
 paths:
-  /tokens:
-    post:
-      tags:
-        - Register Token
-      summary: Register new Payment Token.
-      description: Register new Payment Token for mapping with a Payee ID
-      operationId: registerToken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                payeeId:
-                  type: string
-                  example: '256781466410'
-                payeeIdType:
-                  type: string
-                  example: MSISDN
-                paymentToken:
-                  type: string
-                  example: CM2903E3E0WE
-            examples:
-              register-token:
-                value:
-                  payeeId: '256784666410'
-                  payeeIdType: MSISDN
-                  paymentToken: CM2903E3E0WE
-      responses:
-        '200':
-          description: 'Successful storage of the Payment Token Mapping'
   /parties/{IdType}/{ID}:
     get:
       summary: Get Parties in Discovery

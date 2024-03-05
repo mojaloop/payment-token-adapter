@@ -27,9 +27,10 @@
 
 "use strict";
 
-import {IQuoteRequestData, IRoutes, ITransferRequest, SDKAggregate} from "../domain";
+import {IRoutes, SDKAggregate} from "../domain";
 import {ServerRoute} from "hapi";
 import {ReqRefDefaults} from "@hapi/hapi";
+import {SDKSchemeAdapter} from "@mojaloop/api-snippets";
 
 export class SDKRoutes implements IRoutes {
     //@ts-expect-error ReqRefDefaults not found
@@ -94,7 +95,7 @@ export class SDKRoutes implements IRoutes {
     private async postQuotes(request, h){
         console.log("Received request: POST /quoterequests");
 
-        const payload: IQuoteRequestData = request.payload as IQuoteRequestData;
+        const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest = request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
 
         if(!payload.to){
             return h.response("Bad Request: Payload missing crucial info").code(400);
@@ -114,7 +115,7 @@ export class SDKRoutes implements IRoutes {
     private async transfer(request, h){
         console.log("Received request: POST /transfers ");
 
-        const payload: ITransferRequest = request.payload as ITransferRequest;
+        const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest = request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
 
         if(!payload.to){
             return h.response("Bad Request: Payload missing crucial info").code(400);

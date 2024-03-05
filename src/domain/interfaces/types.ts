@@ -47,23 +47,6 @@ export type Transfer = {
     transferState: string
 }
 
-export type ITransferRequest = {
-    homeR2PTransactionId: string
-    amount: string,
-    amountType: string,
-    currency: string,
-    from: unknown,
-    ilpPacket: unknown,
-    note: string,
-    quote: Quote,
-    quoteRequestExtensions: string,
-    subScenario: string,
-    to: Payee,
-    transactionType: string,
-    transferId: string,
-    transactionRequestId: string
-}
-
 export type Quote = {
     expiration: string,
     extensionList: unknown[],
@@ -95,30 +78,6 @@ export type Payee = {
     type: string,
     supportedCurrencies: string,
     kycInformation: string
-}
-
-export type IQuoteRequestData = {
-    homeR2PTransactionId: string,
-    amount : string,
-    amountType: string,
-    currency: string,
-    expiration: string,
-    extensionList: unknown,
-    feesAmount: string,
-    feesCurrency: string,
-    from: unknown,
-    geocode: unknown,
-    initiator: string,
-    initiatorType: string,
-    note: string,
-    quoteId: string,
-    subScenario: string,
-    to: Payee,
-    transactionId: string,
-    transactionIdType: string,
-    transactionIdRequestId: string,
-    converter: string,
-    currencyConversion: unknown
 }
 
 export enum PayeeIdType {
