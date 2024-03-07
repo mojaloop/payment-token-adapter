@@ -240,7 +240,7 @@ describe("token-adapter-svc test suite",()=>{
          jest.spyOn(Service.tokenMappingStorageRepo,"getMapping");
 
          // Act
-         await axios.post(
+         const res = await axios.post(
              `http://0.0.0.0:3001/quoterequests`,
              JSON.stringify(quote),
              {
@@ -249,6 +249,8 @@ describe("token-adapter-svc test suite",()=>{
                  }
              }
          );
+
+         console.log(res);
 
          //Assert
          expect(Service.tokenMappingStorageRepo.getMapping).toHaveBeenCalled();

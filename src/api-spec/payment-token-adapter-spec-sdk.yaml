@@ -90,6 +90,7 @@ paths:
         - Agreement
       summary: Get Quote
       description: 'Requests a quote for the specified transfer.'
+      operationId: postQuotes
       requestBody:
         content:
           application/json:
@@ -315,6 +316,7 @@ paths:
         - Transfer
       summary: Make Transfer
       description: Make transfer for quote
+      operationId: transfer
       requestBody:
         description: Make transfer for a quote
         content:
@@ -394,9 +396,25 @@ paths:
                             currency:
                               type: string
                         payee:
-                          type: string
+                          type: object
+                          properties:
+                            partyIdInfo:
+                              type: object
+                              properties:
+                                partyIdType:
+                                  type: string
+                                partyIdentifier:
+                                  type: string
                         payer:
-                          type: string
+                          type: object
+                          properties:
+                            partyIdInfo:
+                              type: object
+                              properties:
+                                partyIdType:
+                                  type: string
+                                partyIdentifier:
+                                  type: string
                         quoteId:
                           type: string
                         transactionId:

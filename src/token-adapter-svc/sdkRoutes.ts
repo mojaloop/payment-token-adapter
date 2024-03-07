@@ -30,6 +30,7 @@
 import {IRoutes, SDKAggregate} from "../domain";
 import {ServerRoute} from "hapi";
 import {ReqRefDefaults} from "@hapi/hapi";
+import OpenAPIBackend from 'openapi-backend';
 import {SDKSchemeAdapter} from "@mojaloop/api-snippets";
 
 export class SDKRoutes implements IRoutes {
@@ -40,28 +41,43 @@ export class SDKRoutes implements IRoutes {
     constructor(sdkAggregate: SDKAggregate) {
         this.sdkAggregate = sdkAggregate;
 
-        // get parties
-        this.getParties = this.getParties.bind(this);
-        this.routes.push({
-            method:"GET",
-            path:"/parties/{Type}/{ID}",
-            handler: this.getParties
+
+        // initialise openapi backend with validation
+        const api = new OpenAPIBackend({
+            definition:"./src/api-spec/payment-token-adapter-spec-sdk.yaml",
+            handlers:{
+                getParties: this.getParties.bind(this),
+                postQuotes: this.postQuotes.bind(this),
+                transfer: this.transfer.bind(this),
+                validationFail: async (context,req , h) =>
+                    h.response({ err: context.validation.errors }).code(400),
+                notFound: async (context, req, h) =>
+                    h.response({ context, err: 'not found' }).code(404),
+            },
         });
 
-        // post quotes
-        this.postQuotes = this.postQuotes.bind(this);
+        api.init();
+
+
         this.routes.push({
-            method:'POST',
-            path:'/quoterequests',
-            handler: this.postQuotes
+            method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+            path: '/{path*}',
+            //@ts-expect-error h has no type
+            handler: (req, h) =>
+                api.handleRequest(
+                    {
+                        method: req.method,
+                        path: req.path,
+                        body: req.payload,
+                        query: req.query,
+                        headers: req.headers,
+                    },
+                    req,
+                    h,
+                ),
         });
 
-        this.transfer = this.transfer.bind(this);
-        this.routes.push({
-            method: 'POST',
-            path: '/transfers',
-            handler: this.transfer
-        });
+
     }
 
     //@ts-expect-error ReqRefDefaults not found
@@ -70,12 +86,12 @@ export class SDKRoutes implements IRoutes {
     }
 
     //@ts-expect-error h has no type
-    private async getParties(request, h){
+    private async getParties(context, request: Hapi.Request, h: Hapi.ResponseToolkit){
         console.log("Received request: GET /parties");
-        const params = request.params;
+        const params = context.request.params;
 
         const ID = params["ID"];
-        const Type = params["Type"];
+        const Type = params["IdType"];
 
         if(!ID || !Type){
             return h.response({statusCode:3107, message:"Missing mandatory extension parameter"}).code(400);
@@ -92,7 +108,7 @@ export class SDKRoutes implements IRoutes {
     }
 
     //@ts-expect-error h has no type
-    private async postQuotes(request, h){
+    private async postQuotes(context, request: Hapi.Request, h: Hapi.ResponseToolkit){
         console.log("Received request: POST /quoterequests");
 
         const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest = request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
@@ -112,7 +128,7 @@ export class SDKRoutes implements IRoutes {
     }
 
     //@ts-expect-error h has no type
-    private async transfer(request, h){
+    private async transfer(context, request: Hapi.Request, h: Hapi.ResponseToolkit){
         console.log("Received request: POST /transfers ");
 
         const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest = request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;

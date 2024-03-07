@@ -32,6 +32,7 @@ import {ServerRoute} from "hapi";
 import {ExternalPortalAggregate, IRoutes} from "../domain";
 import {ReqRefDefaults} from "@hapi/hapi";
 import {PayeeIdType} from '../domain/interfaces';
+import OpenAPIBackend from "openapi-backend";
 
 export class ExternalPortalRoutes implements  IRoutes {
     //@ts-expect-error ReqRefDefaults not found
@@ -42,15 +43,40 @@ export class ExternalPortalRoutes implements  IRoutes {
 
         this.coreConnectorAggregate = tokenAggregate;
 
-        // register token
-        this.registerTokenMapping = this.registerTokenMapping.bind(this);
-        this.routes.push({
-            method: 'POST',
-            path: '/tokens',
-            handler: this.registerTokenMapping
+        // initialise openapi backend with validation
+        const api = new OpenAPIBackend({
+            definition: "./src/api-spec/payment-token-adapter-spec-externalPortal.yaml",
+            handlers: {
+                registerToken: this.registerTokenMapping.bind(this),
+                validationFail: async (context,req , h) =>
+                    h.response({ err: context.validation.errors }).code(400),
+                notFound: async (context, req, h) =>
+                    h.response({ context, err: 'not found' }).code(404),
+            }
         });
 
-        // get Token
+        api.init();
+
+        this.routes.push({
+            method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+            path: '/{path*}',
+            //@ts-expect-error h has no type
+            handler: (req, h) =>
+                api.handleRequest(
+                    {
+                        method: req.method,
+                        path: req.path,
+                        body: req.payload,
+                        query: req.query,
+                        headers: req.headers,
+                    },
+                    req,
+                    h,
+                ),
+        });
+
+        // get Token - this route was implemented for convenience.
+        // it was not part of the api specification for external portal server so it does not need validation
         this.getTokenMapping = this.getTokenMapping.bind(this);
         this.routes.push({
             method: 'GET',
@@ -64,7 +90,7 @@ export class ExternalPortalRoutes implements  IRoutes {
     }
 
     //@ts-expect-error h has no type
-    private async registerTokenMapping(request, h){
+    private async registerTokenMapping(context, request: Hapi.Request, h: Hapi.ResponseToolkit){
         console.log("Received request");
         const payload = request.payload;
         await this.coreConnectorAggregate.createMapping(
