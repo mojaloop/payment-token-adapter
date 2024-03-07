@@ -1,6 +1,6 @@
 {
   "name": "@mojaloop/payment-token-adapter",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "An adapter that facilitates payment token mapping between a Mojaloop Connector (SDK Scheme Adapter) and a Core Banking system Connector to support G2P payments",
   "main": "dist/index.js",
   "scripts": {
