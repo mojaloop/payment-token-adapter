@@ -69,3 +69,8 @@ docker compose -f ./test/func/ttk-docker-compose.yml down
 ```bash
 npm run start:build
 ```
+# Run with Docker
+
+```bash
+docker compose -f ./test/func/docker-compose.yml up -d
+```
