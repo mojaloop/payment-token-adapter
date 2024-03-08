@@ -74,3 +74,8 @@ npm run start:build
 ```bash
 docker compose -f ./test/func/docker-compose.yml up -d
 ```
+# Tear down Docker
+
+```bash
+docker compose -f ./test/func/docker-compose.yml down
+```
