@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/mojaloop/payment-token-adapter/compare/v0.0.2...v1.1.0) (2024-03-08)
+
+
+### Features
+
+* implemented /quoterequests function ([112cee4](https://github.com/mojaloop/payment-token-adapter/commit/112cee4eeb18fcdea691bef3f6b0ae76548056fc))
+* implemented /quoterequests function and /transfers ([7d432aa](https://github.com/mojaloop/payment-token-adapter/commit/7d432aa92909285502024170287603367f9997af))
+* implemented request schema validation ([e621bcb](https://github.com/mojaloop/payment-token-adapter/commit/e621bcb9c9e6f831742956a482c3869e5ec47a37))
+
+
+### Bug Fixes
+
+* changed script name in pre-commit file ([12d3156](https://github.com/mojaloop/payment-token-adapter/commit/12d3156fe127397b99ef91f5d6cddcbd1686877d))
+* make error messages more descriptive and clear ([97b8e34](https://github.com/mojaloop/payment-token-adapter/commit/97b8e3433e52889c62ecd6749d5fe85c5c2104ed))
+* split api specs and imported types from api-snippets ([e6b85ef](https://github.com/mojaloop/payment-token-adapter/commit/e6b85efb4b598c8402ede544f2aa70ad5650842c))
+
 ### [0.0.2](https://github.com/mojaloop/payment-token-adapter/compare/v0.0.1...v0.0.2) (2024-02-15)
 
 
