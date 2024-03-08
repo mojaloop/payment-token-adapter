@@ -9,7 +9,7 @@
     "coverage",
     "dist",
     "node_modules",
-    "test",
+    "src/test",
     "commitlint.config.js",
     "jest.bdd.config.js",
     "jest.config.js"

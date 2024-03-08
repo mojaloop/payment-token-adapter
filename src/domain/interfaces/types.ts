@@ -36,8 +36,48 @@ export interface IPaymentTokenMapping {
     payeeIdType: PayeeIdType
 }
 
-export interface IHttpResponseData {
-    payload : unknown
+export type IHttpResponse = {
+    payload : Payee | Quote | Transfer
+}
+
+export type Transfer = {
+    completedTimestamp: string,
+    fulfilment: string,
+    homeTransactionId: string,
+    transferState: string
+}
+
+export type Quote = {
+    expiration: string,
+    extensionList: unknown[],
+    geoCode: unknown,
+    payeeFspCommissionAmount: string,
+    payeeFspCommissionAmountCurrency: string,
+    payeeFspFeeAmount: string,
+    payeeFspFeeAmountCurrency: string,
+    payeeReceiveAmount: string,
+    payeeReceiveAmountCurrency: string,
+    quoteId: string,
+    transactionId: string,
+    transferAmount: string,
+    transferAmountCurrency: string
+}
+
+export type Payee = {
+    dateOfBirth: string,
+    displayName: string,
+    extensionList: unknown[],
+    firstName: string,
+    fspId: string,
+    idSubValue: string,
+    idType: string,
+    idValue: string,
+    lastName: string,
+    merchantClassificationCode: string,
+    middleName: string,
+    type: string,
+    supportedCurrencies: string,
+    kycInformation: string
 }
 
 export enum PayeeIdType {

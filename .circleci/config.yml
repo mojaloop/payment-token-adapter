@@ -169,20 +169,33 @@ jobs:
           name: Execute dependency tests
           command: npm run dep:check
 
-  test-unit:
-    executor: default-docker
+  test-func:
+    executor: default-machine
     steps:
-      - run:
-          name: Install general dependencies
-          command: *defaults_Dependencies
       - checkout
+      - attach_workspace:
+          at: /tmp
       - run:
-          <<: *defaults_configure_nvm
-      - restore_cache:
-          key: dependency-cache-{{ .Environment.CIRCLE_SHA1 }}
+          name: Start docker-compose TTK backend
+          command: |
+            docker-compose -f ./test/func/ttk-docker-compose.yml up -d
+      - run:
+          name: Wait for some time
+          command: |
+            sleep 10
+      - run:
+          name: Install dependencies
+          command: |
+            nvm install
+            nvm use
+            npm install
       - run:
           name: Execute Unit Tests
-          command: npm run test:unit
+          command: npm run test:functional
+      - run:
+          name: Stop docker-compose TTK backend
+          command: |
+            docker-compose -f ./test/func/ttk-docker-compose.yml down
 
   test-lint:
     executor: default-docker
@@ -361,7 +374,7 @@ workflows:
                 - /feature*/
                 - /bugfix*/
 
-      - test-unit:
+      - test-func:
           context: org-global
           requires:
             - setup

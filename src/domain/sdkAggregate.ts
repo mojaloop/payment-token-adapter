@@ -28,7 +28,13 @@
 "use strict";
 
 
-import {IHttpClient, IHttpResponseData, ITokenMappingStorageRepo, PayeeIdType} from "./interfaces";
+import {
+    IHttpClient,
+    IHttpResponse,
+    ITokenMappingStorageRepo, Payee,
+    PayeeIdType,
+} from "./interfaces";
+import {SDKSchemeAdapter} from "@mojaloop/api-snippets";
 
 export class SDKAggregate{
 
@@ -54,7 +60,7 @@ export class SDKAggregate{
     }
 
 
-    async getParties(ID: string, Type: string): Promise<IHttpResponseData | undefined | string >{
+    async getParties(ID: string, Type: string): Promise<IHttpResponse | undefined | string >{
 
         if(Type == PayeeIdType.ALIAS){
             const tokenMapping = await this.aliasMappingRepo.getMapping(ID);
@@ -72,6 +78,9 @@ export class SDKAggregate{
             if(!res){
                 return "Http Request Error";
             }
+            res.payload = res.payload as Payee;
+            res.payload.idValue = ID;
+            res.payload.idType = Type;
             return res;
         }
 
@@ -81,6 +90,85 @@ export class SDKAggregate{
             this.httpTimeOutMs,
             "GET",
             undefined
+        );
+        if(!res){
+            return "Http Request Error";
+        }
+        return res;
+    }
+
+    async postQuotes(payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest ): Promise<IHttpResponse |undefined | string >{
+        if(payload.to.idType == PayeeIdType.ALIAS){
+            const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
+            if(!tokenMapping){
+                return ;
+            }
+
+            payload.to.idType = tokenMapping.payeeIdType;
+            payload.to.idValue = tokenMapping.payeeId;
+
+            const res = await this.httpClient.send(
+                `${this.CORE_CONNECTOR_URL}/quoterequests`,
+                payload,
+                this.httpTimeOutMs,
+                "POST",
+                {
+                    "Content-Type":"application/json"
+                }
+            );
+            if(!res){
+                return "Http Request Error";
+            }
+            return res;
+        }
+
+        const res = await this.httpClient.send(
+            `${this.CORE_CONNECTOR_URL}/quoterequests`,
+            payload,
+            this.httpTimeOutMs,
+            "POST",
+            {
+                "Content-Type":"application/json"
+            }
+        );
+        if(!res){
+            return "Http Request Error";
+        }
+        return res;
+    }
+
+    async transfer(payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest): Promise<IHttpResponse | undefined | string>{
+        if(payload.to.idType == PayeeIdType.ALIAS){
+            const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
+            if(!tokenMapping){
+                return;
+            }
+
+            payload.to.idType = tokenMapping.payeeIdType;
+            payload.to.idValue = tokenMapping.payeeId;
+
+            const res = await this.httpClient.send(
+                `${this.CORE_CONNECTOR_URL}/transfers`,
+                payload,
+                this.httpTimeOutMs,
+                "POST",
+                {
+                    "Content-Type":"application/json"
+                }
+            );
+            if(!res){
+                return "Http Request Error";
+            }
+            return res;
+        }
+        const res = await this.httpClient.send(
+            `${this.CORE_CONNECTOR_URL}/transfers`,
+            payload,
+            this.httpTimeOutMs,
+            "POST",
+            {
+                "Content-Type":"application/json"
+            }
         );
         if(!res){
             return "Http Request Error";

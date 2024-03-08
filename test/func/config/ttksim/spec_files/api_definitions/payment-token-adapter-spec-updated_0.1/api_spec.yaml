@@ -1,0 +1,582 @@
+openapi: 3.0.3
+info:
+  title: Payment Token Adapter API
+  version: 0.0.1
+  description: >
+    API Specification for the Payment Token Adapter
+    
+    This API is to be implemented by the DFSP
+  license:
+    name: Apache License Version 2.0, January 2004
+    url: http://www.apache.org/licenses/
+
+paths:
+  /tokens:
+    post:
+      tags:
+        - Register Token
+      summary: Register new Payment Token.
+      description: Register new Payment Token for mapping with a Payee ID
+      operationId: registerToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payeeId:
+                  type: string
+                  example: '256781466410'
+                payeeIdType:
+                  type: string
+                  example: MSISDN
+                paymentToken:
+                  type: string
+                  example: CM2903E3E0WE
+            examples:
+              register-token:
+                value:
+                  payeeId: '256784666410'
+                  payeeIdType: MSISDN
+                  paymentToken: CM2903E3E0WE
+      responses:
+        '200':
+          description: 'Successful storage of the Payment Token Mapping'
+  /parties/{IdType}/{ID}:
+    get:
+      summary: Get Parties in Discovery
+      description: SDK Scheme Adpater Get Parties in Discovery
+      operationId: getParties
+      parameters:
+        - name: IdType
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dateOfBirth:
+                    type: string
+                    description: 'Date Of Birth'
+                  displayName:
+                    type: string
+                    description: 'Display Name'
+                  extensionList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                    description: "Extension List"
+                  firstName:
+                    type: string
+                    description: 'First Name'
+                  fspId:
+                    type: string
+                    description: 'FSP Id'
+                  idSubValue:
+                    type: string
+                    description: 'Id Sub Value'
+                  idType:
+                    type: string
+                    description: 'Type of Id'
+                  idValue:
+                    type: string
+                    description: 'ID Value'
+                  lastName:
+                    type: string
+                  merchantClassificationCode:
+                    type: string
+                  middleName:
+                    type: string
+                  type:
+                    type: string
+                  supportedCurrencies:
+                    type: array
+                    items:
+                      type: string
+                  kycInformation:
+                    type: string
+
+          description: 'Response containing details of the requested party'
+      tags:
+        - Discovery
+
+  /quoterequests:
+    post:
+      tags:
+        - Agreement
+      summary: Get Quote
+      description: 'Requests a quote for the specified transfer.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                homeR2PTransactionId:
+                  type: string
+                  example: "CMIRW349342343"
+                amount:
+                  type: string
+                  example: "63000"
+                amountType:
+                  type: string
+                  example: "SEND"
+                currency:
+                  type: string
+                  example: "AED"
+                expiration:
+                  type: string
+                  example: "9908-10-30T08:59:26.210+15:52"
+                extensionList:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+                feesAmount:
+                  type: string
+                  example: "0.3995"
+                feesCurrency:
+                  type: string
+                  example: "AED"
+                from:
+                  type: object
+                  properties:
+                    dateOfBirth:
+                      type: string
+                      example: "8477-05-21"
+                    displayName:
+                      type: string
+                    extensionList:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+                    firstName:
+                      type: string
+                      description: 'First Name'
+                    fspId:
+                      type: string
+                      description: 'FSP Id'
+                    idSubValue:
+                      type: string
+                      description: 'Id Sub Value'
+                    idType:
+                      type: string
+                      description: 'Type of Id'
+                    idValue:
+                      type: string
+                      description: 'ID Value'
+                    lastName:
+                      type: string
+                    merchantClassificationCode:
+                      type: string
+                    middleName:
+                      type: string
+                    type:
+                      type: string
+                    supportedCurrencies:
+                      type: array
+                      items:
+                        type: string
+                    kycInformation:
+                      type: string
+                geoCode:
+                  type: object
+                  properties:
+                    latitude:
+                      type: string
+                    longitude:
+                      type: string
+                initiator:
+                  type: string
+                  example: "PAYER"
+                initiatorType:
+                  type: string
+                  example: "CONSUMER"
+                note:
+                  type: string
+                quote:
+                  type: string
+                  example: "3cc5bf26-5462-34bb-b198-0b8f1569da4f"
+                subScenario:
+                  type: string
+                to:
+                  type: object
+                  properties:
+                    dateOfBirth:
+                      type: string
+                      example: "8477-05-21"
+                    displayName:
+                      type: string
+                    extensionList:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+                    firstName:
+                      type: string
+                      description: 'First Name'
+                    fspId:
+                      type: string
+                      description: 'FSP Id'
+                    idSubValue:
+                      type: string
+                      description: 'Id Sub Value'
+                    idType:
+                      type: string
+                      description: 'Type of Id'
+                    idValue:
+                      type: string
+                      description: 'ID Value'
+                    lastName:
+                      type: string
+                    merchantClassificationCode:
+                      type: string
+                    middleName:
+                      type: string
+                    type:
+                      type: string
+                    supportedCurrencies:
+                      type: array
+                      items:
+                        type: string
+                    kycInformation:
+                      type: string
+                transactionId:
+                  type: string
+                  example: "1eea8954-271b-2dcf-98d4-7cb8a426a279"
+                transactionType:
+                  type: string
+                  example: "TRANSFER"
+                transactionRequestId:
+                  type: string
+                  example: "d92692c2-86ba-13a2-b4d1-78a35bc92cf3"
+                converter:
+                  type: string
+                  example: "string"
+                currencyConversion:
+                  type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  expiration:
+                    type: string
+                    example: "3945-08-30T22:03:24.190Z"
+                  extensionList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                  geoCode:
+                    type: object
+                    properties:
+                      latitude:
+                        type: string
+                      longitude:
+                        type: string
+                  payeeFspCommissionAmount:
+                    type: string
+                    example: "72"
+                  payeeFspCommissionAmountCurrency:
+                    type: string
+                    example: "AED"
+                  payeeFspFeeAmount:
+                    type: string
+                    example: "0"
+                  payeeFspFeeAmountCurrency:
+                    type: string
+                    example: "AED"
+                  payeeReceiveAmount:
+                    type: string
+                    example: "0"
+                  payeeReceiveAmountCurrency:
+                    type: string
+                    example: "AED"
+                  quoteId:
+                    type: string
+                    example: "71cee55f-c58a-2a8e-8289-e18a2c80bf48"
+                  transactionId:
+                    type: string
+                    example: "2861d780-60f5-5127-a73b-ab0617c00f72"
+                  transferAmount:
+                    type: string
+                    example: "0.9"
+                  transferAmountCurrency:
+                    type: string
+                    example: "AED"
+          description: 'A response to the transfer quotation request.'
+  /transfers:
+    post:
+      tags:
+        - Transfer
+      summary: Make Transfer
+      description: Make transfer for quote
+      requestBody:
+        description: Make transfer for a quote
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                homeR2PTransactionId:
+                  type: string
+                  example: "string"
+                amount:
+                  type: string
+                  example: '0.347'
+                amountType:
+                  type: string
+                  example: 'SEND'
+                currency:
+                  type: string
+                  example: 'AED'
+                from:
+                  type: object
+                  properties:
+                    dateOfBirth:
+                      type: string
+                      example: "8477-05-21"
+                    displayName:
+                      type: string
+                    extensionList:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+                    firstName:
+                      type: string
+                      description: 'First Name'
+                    fspId:
+                      type: string
+                      description: 'FSP Id'
+                    idSubValue:
+                      type: string
+                      description: 'Id Sub Value'
+                    idType:
+                      type: string
+                      description: 'Type of Id'
+                    idValue:
+                      type: string
+                      description: 'ID Value'
+                    lastName:
+                      type: string
+                    merchantClassificationCode:
+                      type: string
+                    middleName:
+                      type: string
+                    type:
+                      type: string
+                    supportedCurrencies:
+                      type: array
+                      items:
+                        type: string
+                    kycInformation:
+                      type: string
+                ilpPacket:
+                  type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        amount:
+                          type: object
+                          properties:
+                            amount:
+                              type: string
+                            currency:
+                              type: string
+                        payee:
+                          type: string
+                        payer:
+                          type: string
+                        quoteId:
+                          type: string
+                        transactionId:
+                          type: string
+                        transactionType:
+                          type: object
+                          properties:
+                            initiator:
+                              type: string
+                            initiatorType:
+                              type: string
+                            scenario:
+                              type: string
+                            subScenario:
+                              type: string
+                note:
+                  type: string
+                quote:
+                  type: object
+                  properties:
+                    expiration:
+                      type: string
+                      example: "3945-08-30T22:03:24.190Z"
+                    extensionList:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+                    geoCode:
+                      type: object
+                      properties:
+                        latitude:
+                          type: string
+                        longitude:
+                          type: string
+                    payeeFspCommissionAmount:
+                      type: string
+                      example: "72"
+                    payeeFspCommissionAmountCurrency:
+                      type: string
+                      example: "AED"
+                    payeeFspFeeAmount:
+                      type: string
+                      example: "0"
+                    payeeFspFeeAmountCurrency:
+                      type: string
+                      example: "AED"
+                    payeeReceiveAmount:
+                      type: string
+                      example: "0"
+                    payeeReceiveAmountCurrency:
+                      type: string
+                      example: "AED"
+                    quoteId:
+                      type: string
+                      example: "71cee55f-c58a-2a8e-8289-e18a2c80bf48"
+                    transactionId:
+                      type: string
+                      example: "2861d780-60f5-5127-a73b-ab0617c00f72"
+                    transferAmount:
+                      type: string
+                      example: "0.9"
+                    transferAmountCurrency:
+                      type: string
+                      example: "AED"
+                quoteRequestExtensions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+                subScenario:
+                  type: string
+                to:
+                  type: object
+                  properties:
+                    dateOfBirth:
+                      type: string
+                      example: "8477-05-21"
+                    displayName:
+                      type: string
+                    extensionList:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+                    firstName:
+                      type: string
+                      description: 'First Name'
+                    fspId:
+                      type: string
+                      description: 'FSP Id'
+                    idSubValue:
+                      type: string
+                      description: 'Id Sub Value'
+                    idType:
+                      type: string
+                      description: 'Type of Id'
+                    idValue:
+                      type: string
+                      description: 'ID Value'
+                    lastName:
+                      type: string
+                    merchantClassificationCode:
+                      type: string
+                    middleName:
+                      type: string
+                    type:
+                      type: string
+                    supportedCurrencies:
+                      type: array
+                      items:
+                        type: string
+                    kycInformation:
+                      type: string
+                transactionType:
+                  type: string
+                transferId:
+                  type: string
+                transactionRequestId:
+                  type: string
+      responses:
+        '200':
+          description: Successful transfer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completedTimestamp:
+                    type: string
+                  fulfilment:
+                    type: string
+                  homeTransactionId:
+                    type: string
+                  transferState:
+                    type: string
+
+
+
+

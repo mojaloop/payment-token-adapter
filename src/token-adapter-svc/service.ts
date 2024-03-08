@@ -91,7 +91,22 @@ export class Service {
            const sdkRoutes = new SDKRoutes(this.sdkAggregate);
 
            this.externalPortalServer.route(externalPortalRoutes.getRoutes());
+           this.externalPortalServer.route({
+               method: '*',
+               path: '/{any*}',
+               handler: function (request, h) {
+                   return h.response('404 Error! Page Not Found!').code(404);
+               }
+           });
+
            this.sdkServer.route(sdkRoutes.getRoutes());
+           this.sdkServer.route({
+               method: '*',
+               path: '/{any*}',
+               handler: function (request, h) {
+                   return h.response('404 Error! Page Not Found!').code(404);
+               }
+           });
 
            this.externalPortalServer.start();
            console.log('External Portal Server running on %s', this.externalPortalServer.info.uri);

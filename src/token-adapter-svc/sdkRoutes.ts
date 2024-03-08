@@ -30,6 +30,8 @@
 import {IRoutes, SDKAggregate} from "../domain";
 import {ServerRoute} from "hapi";
 import {ReqRefDefaults} from "@hapi/hapi";
+import OpenAPIBackend from 'openapi-backend';
+import {SDKSchemeAdapter} from "@mojaloop/api-snippets";
 
 export class SDKRoutes implements IRoutes {
     //@ts-expect-error ReqRefDefaults not found
@@ -39,13 +41,43 @@ export class SDKRoutes implements IRoutes {
     constructor(sdkAggregate: SDKAggregate) {
         this.sdkAggregate = sdkAggregate;
 
-        // get parties
-        this.getParties = this.getParties.bind(this);
-        this.routes.push({
-            method:"GET",
-            path:"/parties/{Type}/{ID}",
-            handler: this.getParties
+
+        // initialise openapi backend with validation
+        const api = new OpenAPIBackend({
+            definition:"./src/api-spec/payment-token-adapter-spec-sdk.yaml",
+            handlers:{
+                getParties: this.getParties.bind(this),
+                postQuotes: this.postQuotes.bind(this),
+                transfer: this.transfer.bind(this),
+                validationFail: async (context,req , h) =>
+                    h.response({ err: context.validation.errors }).code(400),
+                notFound: async (context, req, h) =>
+                    h.response({ context, err: 'not found' }).code(404),
+            },
         });
+
+        api.init();
+
+
+        this.routes.push({
+            method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+            path: '/{path*}',
+            //@ts-expect-error h has no type
+            handler: (req, h) =>
+                api.handleRequest(
+                    {
+                        method: req.method,
+                        path: req.path,
+                        body: req.payload,
+                        query: req.query,
+                        headers: req.headers,
+                    },
+                    req,
+                    h,
+                ),
+        });
+
+
     }
 
     //@ts-expect-error ReqRefDefaults not found
@@ -54,11 +86,12 @@ export class SDKRoutes implements IRoutes {
     }
 
     //@ts-expect-error h has no type
-    private async getParties(request, h){
-        const params = request.params;
+    private async getParties(context, request: Hapi.Request, h: Hapi.ResponseToolkit){
+        console.log("Received request: GET /parties");
+        const params = context.request.params;
 
         const ID = params["ID"];
-        const Type = params["Type"];
+        const Type = params["IdType"];
 
         if(!ID || !Type){
             return h.response({statusCode:3107, message:"Missing mandatory extension parameter"}).code(400);
@@ -66,7 +99,47 @@ export class SDKRoutes implements IRoutes {
         const result = await this.sdkAggregate.getParties(ID,Type);
 
         if(!result){
-            return h.response({statusCode:3204,message:"Party not found"}).code(404);
+            return h.response({statusCode:3204,message:"ALIAS not found"}).code(404);
+        }else if(typeof result == "string"){
+            return h.response({statusCode:2001,message:"Internal server error"}).code(500);
+        }else{
+            return h.response(result.payload).code(200);
+        }
+    }
+
+    //@ts-expect-error h has no type
+    private async postQuotes(context, request: Hapi.Request, h: Hapi.ResponseToolkit){
+        console.log("Received request: POST /quoterequests");
+
+        const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest = request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
+
+        if(!payload.to){
+            return h.response("Bad Request: Payload missing crucial info").code(400);
+        }
+
+        const result = await this.sdkAggregate.postQuotes(payload);
+        if(!result){
+            return h.response({statusCode:3204,message:"ALIAS not found"}).code(404);
+        }else if(typeof result == "string"){
+            return h.response({statusCode:2001,message:"Internal server error"}).code(500);
+        }else{
+            return h.response(result.payload).code(200);
+        }
+    }
+
+    //@ts-expect-error h has no type
+    private async transfer(context, request: Hapi.Request, h: Hapi.ResponseToolkit){
+        console.log("Received request: POST /transfers ");
+
+        const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest = request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
+
+        if(!payload.to){
+            return h.response("Bad Request: Payload missing crucial info").code(400);
+        }
+
+        const result = await this.sdkAggregate.transfer(payload);
+        if(!result){
+            return h.response({statusCode:3204,message:"ALIAS not found"}).code(404);
         }else if(typeof result == "string"){
             return h.response({statusCode:2001,message:"Internal server error"}).code(500);
         }else{

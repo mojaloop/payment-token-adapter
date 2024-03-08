@@ -29,7 +29,7 @@
 "use strict";
 
 
-import {IHttpClient, IHttpResponseData} from "../../src/domain";
+import {IHttpClient, IHttpResponse} from "../../src/domain";
 
 export class HTTPClientMock implements IHttpClient {
     async destroy(): Promise<void> {
@@ -40,7 +40,7 @@ export class HTTPClientMock implements IHttpClient {
         return Promise.resolve(undefined);
     }
 
-    async send(url: string, payload: unknown | undefined, timeout_ms: number, method: string, headers: unknown | undefined): Promise<IHttpResponseData | undefined> {
+    async send(url: string, payload: unknown | undefined, timeout_ms: number, method: string, headers: unknown | undefined): Promise<IHttpResponse | undefined> {
         console.log(`Request sent to ${url}. Method: ${method}`);
         return Promise.resolve(undefined);
     }

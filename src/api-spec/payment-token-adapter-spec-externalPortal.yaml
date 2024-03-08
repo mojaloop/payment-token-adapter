@@ -3,7 +3,7 @@ info:
   title: Payment Token Adapter API
   version: 0.0.1
   description: >
-    API Specification for the Payment Token Adapter
+    API Specification for the Payment Token Adapter from the External Beneficiary Portal
     
     This API is to be implemented by the DFSP
   license:
@@ -13,6 +13,8 @@ info:
 paths:
   /tokens:
     post:
+      tags:
+        - Register Token
       summary: Register new Payment Token.
       description: Register new Payment Token for mapping with a Payee ID
       operationId: registerToken
@@ -40,24 +42,8 @@ paths:
       responses:
         '200':
           description: 'Successful storage of the Payment Token Mapping'
-  /parties/{IdType}/{ID}:
-    get:
-      summary: Get Parties in Discovery
-      description: SDK Scheme Adpater Get Parties in Discovery
-      operationId: getParties
-      parameters:
-        - name: IdType
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: ID
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-tags: []
+
+
+
+
 
