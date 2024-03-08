@@ -6,7 +6,7 @@ networks:
 
 services:
   paymentAdapter:
-    image: payment-token-adapter:local
+    image: payment-token-adapter
     build:
       context: ../..
     networks:
