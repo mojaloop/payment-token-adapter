@@ -25,19 +25,16 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
 
-import {ITokenMappingStorageRepo, IPaymentTokenMapping} from "domain/interfaces";
+import { ITokenMappingStorageRepo, IPaymentTokenMapping } from 'domain/interfaces';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class ExternalPortalAggregate {
+    // private aliasMappingRepo: ITokenMappingStorageRepo;
 
-    private aliasMappingRepo: ITokenMappingStorageRepo;
-
-
-    constructor(aliasMappingRepo: ITokenMappingStorageRepo) {
-        this.aliasMappingRepo = aliasMappingRepo;
+    constructor(private aliasMappingRepo: ITokenMappingStorageRepo) {
+        // this.aliasMappingRepo = aliasMappingRepo;
     }
 
     async init(){

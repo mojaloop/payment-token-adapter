@@ -25,10 +25,10 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
-import {ServerRoute} from "hapi";
-import {ReqRefDefaults} from "@hapi/hapi";
+import {ServerRoute} from 'hapi';
+import {ReqRefDefaults} from '@hapi/hapi';
 
 export interface IPaymentTokenMapping {
     paymentToken: string;
@@ -81,15 +81,15 @@ export type Payee = {
 }
 
 export enum PayeeIdType {
-    MSISDN = "MSISDN",
-    IBAN = "IBAN",
-    ACCOUNT_NO = "ACCOUNT_NO",
-    EMAIL = "EMAIL",
-    PERSONAL_ID = "PERSONAL_ID",
-    BUSINESS = "BUSINESS",
-    DEVICE = "DEVICE",
-    ACCOUNT_ID = "ACCOUNT_ID",
-    ALIAS = "ALIAS"
+    MSISDN = 'MSISDN',
+    IBAN = 'IBAN',
+    ACCOUNT_NO = 'ACCOUNT_NO',
+    EMAIL = 'EMAIL',
+    PERSONAL_ID = 'PERSONAL_ID',
+    BUSINESS = 'BUSINESS',
+    DEVICE = 'DEVICE',
+    ACCOUNT_ID = 'ACCOUNT_ID',
+    ALIAS = 'ALIAS'
 }
 
 export interface IRoutes{

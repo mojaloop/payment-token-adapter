@@ -1,3 +1,4 @@
+// todo: clarify, why do we need this file?
 {
   "extends": "./tsconfig.json",
   "include": [

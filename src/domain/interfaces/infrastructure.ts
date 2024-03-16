@@ -25,9 +25,9 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
-import {IHttpResponse, IPaymentTokenMapping} from "./types";
+import {IHttpResponse, IPaymentTokenMapping} from './types';
 
 export interface ITokenMappingStorageRepo {
     init(): Promise<void>;

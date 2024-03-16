@@ -25,9 +25,9 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
 
 
-export * from "./service";
+export * from './service';
 

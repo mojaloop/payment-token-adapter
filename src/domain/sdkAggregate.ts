@@ -25,22 +25,21 @@
  --------------
  ******/
 
-"use strict";
-
+'use strict';
 
 import {
     IHttpClient,
     IHttpResponse,
     ITokenMappingStorageRepo, Payee,
     PayeeIdType,
-} from "./interfaces";
-import {SDKSchemeAdapter} from "@mojaloop/api-snippets";
+} from './interfaces';
+import {SDKSchemeAdapter} from '@mojaloop/api-snippets';
 
 export class SDKAggregate{
 
     private aliasMappingRepo: ITokenMappingStorageRepo;
     private httpClient: IHttpClient;
-    private httpTimeOutMs: number;
+    private httpTimeOutMs: number = 5000; // todo: clarify, where do we set this value
     private readonly CORE_CONNECTOR_URL: string;
 
     constructor(aliasMappingRepo: ITokenMappingStorageRepo, httpClient: IHttpClient, CORE_CONNECTOR_URL: string) {
@@ -72,11 +71,11 @@ export class SDKAggregate{
                 `${this.CORE_CONNECTOR_URL}/parties/${tokenMapping.payeeIdType}/${tokenMapping.payeeId}`,
                 undefined,
                 this.httpTimeOutMs,
-                "GET",
+                'GET',
                 undefined
             );
             if(!res){
-                return "Http Request Error";
+                return 'Http Request Error';
             }
             res.payload = res.payload as Payee;
             res.payload.idValue = ID;
@@ -88,11 +87,11 @@ export class SDKAggregate{
             `${this.CORE_CONNECTOR_URL}/parties/${Type}/${ID}`,
             undefined,
             this.httpTimeOutMs,
-            "GET",
+            'GET',
             undefined
         );
         if(!res){
-            return "Http Request Error";
+            return 'Http Request Error';
         }
         return res;
     }
@@ -111,13 +110,13 @@ export class SDKAggregate{
                 `${this.CORE_CONNECTOR_URL}/quoterequests`,
                 payload,
                 this.httpTimeOutMs,
-                "POST",
+                'POST',
                 {
-                    "Content-Type":"application/json"
+                    'Content-Type':'application/json'
                 }
             );
             if(!res){
-                return "Http Request Error";
+                return 'Http Request Error';
             }
             return res;
         }
@@ -126,13 +125,13 @@ export class SDKAggregate{
             `${this.CORE_CONNECTOR_URL}/quoterequests`,
             payload,
             this.httpTimeOutMs,
-            "POST",
+            'POST',
             {
-                "Content-Type":"application/json"
+                'Content-Type':'application/json'
             }
         );
         if(!res){
-            return "Http Request Error";
+            return 'Http Request Error';
         }
         return res;
     }
@@ -151,13 +150,13 @@ export class SDKAggregate{
                 `${this.CORE_CONNECTOR_URL}/transfers`,
                 payload,
                 this.httpTimeOutMs,
-                "POST",
+                'POST',
                 {
-                    "Content-Type":"application/json"
+                    'Content-Type':'application/json'
                 }
             );
             if(!res){
-                return "Http Request Error";
+                return 'Http Request Error';
             }
             return res;
         }
@@ -165,13 +164,13 @@ export class SDKAggregate{
             `${this.CORE_CONNECTOR_URL}/transfers`,
             payload,
             this.httpTimeOutMs,
-            "POST",
+            'POST',
             {
-                "Content-Type":"application/json"
+                'Content-Type':'application/json'
             }
         );
         if(!res){
-            return "Http Request Error";
+            return 'Http Request Error';
         }
         return res;
     }
