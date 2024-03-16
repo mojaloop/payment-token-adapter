@@ -27,6 +27,4 @@
 
 'use strict';
 
-
-
 export * from './implementations';

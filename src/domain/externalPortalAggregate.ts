@@ -27,7 +27,6 @@
 
 'use strict';
 
-
 import { ITokenMappingStorageRepo, IPaymentTokenMapping } from 'domain/interfaces';
 
 export class ExternalPortalAggregate {
@@ -37,22 +36,22 @@ export class ExternalPortalAggregate {
         // this.aliasMappingRepo = aliasMappingRepo;
     }
 
-    async init(){
+    async init() {
         await this.aliasMappingRepo.init();
         return Promise.resolve();
     }
 
-    async createMapping(tokenMapping: IPaymentTokenMapping){
+    async createMapping(tokenMapping: IPaymentTokenMapping) {
         console.log(tokenMapping);
         await this.aliasMappingRepo.storeMapping(tokenMapping);
     }
 
-    async getMapping(paymentToken: string):Promise<IPaymentTokenMapping | undefined> {
+    async getMapping(paymentToken: string): Promise<IPaymentTokenMapping | undefined> {
         console.log(paymentToken);
         return await this.aliasMappingRepo.getMapping(paymentToken);
     }
 
-    async destroy (){
+    async destroy() {
         await this.aliasMappingRepo.destroy();
         return Promise.resolve();
     }

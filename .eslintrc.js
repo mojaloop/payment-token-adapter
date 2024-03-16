@@ -17,9 +17,7 @@ module.exports = {
         semi: ['error'],
         indent: ['error', 4, { SwitchCase: 1 }],
         quotes: ['error', 'single', { allowTemplateLiterals: false }],
-        // 'quote-props': ['error', 'as-needed'],
-        // 'keyword-spacing': ['error', { before: true, after: true }],
-        // 'space-before-blocks': ['error', 'always'],
+        'quote-props': ['error', 'as-needed'],
     },
     overrides: [
         {
@@ -32,17 +30,4 @@ module.exports = {
         jest: true,
     },
     ignorePatterns: ['test/**'], // todo: enable eslint for tests
-    // "overrides":[
-    //     {
-    //         "files":[
-    //             "**/*.test.ts",
-    //             "test/**/*.ts"
-    //         ],
-    //         "rules":{
-    //             "@typescript-eslint/explicit-function-return-type":[
-    //                 "off"
-    //             ]
-    //         }
-    //     }
-    // ]
 };

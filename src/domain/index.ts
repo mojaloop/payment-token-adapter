@@ -27,9 +27,6 @@
 
 'use strict';
 
-
-
 export * from './externalPortalAggregate';
 export * from './sdkAggregate';
 export * from './interfaces/index';
-

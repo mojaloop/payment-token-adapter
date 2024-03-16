@@ -27,16 +27,10 @@
 
 'use strict';
 
-import {
-    IHttpClient,
-    IHttpResponse,
-    ITokenMappingStorageRepo, Payee,
-    PayeeIdType,
-} from './interfaces';
-import {SDKSchemeAdapter} from '@mojaloop/api-snippets';
+import { IHttpClient, IHttpResponse, ITokenMappingStorageRepo, Payee, PayeeIdType } from './interfaces';
+import { SDKSchemeAdapter } from '@mojaloop/api-snippets';
 
-export class SDKAggregate{
-
+export class SDKAggregate {
     private aliasMappingRepo: ITokenMappingStorageRepo;
     private httpClient: IHttpClient;
     private httpTimeOutMs: number = 5000; // todo: clarify, where do we set this value
@@ -48,23 +42,21 @@ export class SDKAggregate{
         this.CORE_CONNECTOR_URL = CORE_CONNECTOR_URL;
     }
 
-    async init(){
+    async init() {
         await this.aliasMappingRepo.init();
         return Promise.resolve();
     }
 
-    async destroy(){
+    async destroy() {
         await this.aliasMappingRepo.destroy();
         return Promise.resolve();
     }
 
-
-    async getParties(ID: string, Type: string): Promise<IHttpResponse | undefined | string >{
-
-        if(Type == PayeeIdType.ALIAS){
+    async getParties(ID: string, Type: string): Promise<IHttpResponse | undefined | string> {
+        if (Type == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(ID);
-            if(!tokenMapping){
-                return ;
+            if (!tokenMapping) {
+                return;
             }
 
             const res = await this.httpClient.send(
@@ -72,9 +64,9 @@ export class SDKAggregate{
                 undefined,
                 this.httpTimeOutMs,
                 'GET',
-                undefined
+                undefined,
             );
-            if(!res){
+            if (!res) {
                 return 'Http Request Error';
             }
             res.payload = res.payload as Payee;
@@ -88,19 +80,21 @@ export class SDKAggregate{
             undefined,
             this.httpTimeOutMs,
             'GET',
-            undefined
+            undefined,
         );
-        if(!res){
+        if (!res) {
             return 'Http Request Error';
         }
         return res;
     }
 
-    async postQuotes(payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest ): Promise<IHttpResponse |undefined | string >{
-        if(payload.to.idType == PayeeIdType.ALIAS){
+    async postQuotes(
+        payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest,
+    ): Promise<IHttpResponse | undefined | string> {
+        if (payload.to.idType == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
-            if(!tokenMapping){
-                return ;
+            if (!tokenMapping) {
+                return;
             }
 
             payload.to.idType = tokenMapping.payeeIdType;
@@ -112,10 +106,10 @@ export class SDKAggregate{
                 this.httpTimeOutMs,
                 'POST',
                 {
-                    'Content-Type':'application/json'
-                }
+                    'Content-Type': 'application/json',
+                },
             );
-            if(!res){
+            if (!res) {
                 return 'Http Request Error';
             }
             return res;
@@ -127,17 +121,19 @@ export class SDKAggregate{
             this.httpTimeOutMs,
             'POST',
             {
-                'Content-Type':'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
         );
-        if(!res){
+        if (!res) {
             return 'Http Request Error';
         }
         return res;
     }
 
-    async transfer(payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest): Promise<IHttpResponse | undefined | string>{
-        if(payload.to.idType == PayeeIdType.ALIAS){
+    async transfer(
+        payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest,
+    ): Promise<IHttpResponse | undefined | string> {
+        if (payload.to.idType == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
             if (!tokenMapping) {
                 return;
@@ -152,10 +148,10 @@ export class SDKAggregate{
                 this.httpTimeOutMs,
                 'POST',
                 {
-                    'Content-Type':'application/json'
-                }
+                    'Content-Type': 'application/json',
+                },
             );
-            if(!res){
+            if (!res) {
                 return 'Http Request Error';
             }
             return res;
@@ -166,10 +162,10 @@ export class SDKAggregate{
             this.httpTimeOutMs,
             'POST',
             {
-                'Content-Type':'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
         );
-        if(!res){
+        if (!res) {
             return 'Http Request Error';
         }
         return res;

@@ -27,58 +27,58 @@
 
 'use strict';
 
-import {ServerRoute} from 'hapi';
-import {ReqRefDefaults} from '@hapi/hapi';
+import { ServerRoute } from 'hapi';
+import { ReqRefDefaults } from '@hapi/hapi';
 
 export interface IPaymentTokenMapping {
     paymentToken: string;
     payeeId: string;
-    payeeIdType: PayeeIdType
+    payeeIdType: PayeeIdType;
 }
 
 export type IHttpResponse = {
-    payload : Payee | Quote | Transfer
-}
+    payload: Payee | Quote | Transfer;
+};
 
 export type Transfer = {
-    completedTimestamp: string,
-    fulfilment: string,
-    homeTransactionId: string,
-    transferState: string
-}
+    completedTimestamp: string;
+    fulfilment: string;
+    homeTransactionId: string;
+    transferState: string;
+};
 
 export type Quote = {
-    expiration: string,
-    extensionList: unknown[],
-    geoCode: unknown,
-    payeeFspCommissionAmount: string,
-    payeeFspCommissionAmountCurrency: string,
-    payeeFspFeeAmount: string,
-    payeeFspFeeAmountCurrency: string,
-    payeeReceiveAmount: string,
-    payeeReceiveAmountCurrency: string,
-    quoteId: string,
-    transactionId: string,
-    transferAmount: string,
-    transferAmountCurrency: string
-}
+    expiration: string;
+    extensionList: unknown[];
+    geoCode: unknown;
+    payeeFspCommissionAmount: string;
+    payeeFspCommissionAmountCurrency: string;
+    payeeFspFeeAmount: string;
+    payeeFspFeeAmountCurrency: string;
+    payeeReceiveAmount: string;
+    payeeReceiveAmountCurrency: string;
+    quoteId: string;
+    transactionId: string;
+    transferAmount: string;
+    transferAmountCurrency: string;
+};
 
 export type Payee = {
-    dateOfBirth: string,
-    displayName: string,
-    extensionList: unknown[],
-    firstName: string,
-    fspId: string,
-    idSubValue: string,
-    idType: string,
-    idValue: string,
-    lastName: string,
-    merchantClassificationCode: string,
-    middleName: string,
-    type: string,
-    supportedCurrencies: string,
-    kycInformation: string
-}
+    dateOfBirth: string;
+    displayName: string;
+    extensionList: unknown[];
+    firstName: string;
+    fspId: string;
+    idSubValue: string;
+    idType: string;
+    idValue: string;
+    lastName: string;
+    merchantClassificationCode: string;
+    middleName: string;
+    type: string;
+    supportedCurrencies: string;
+    kycInformation: string;
+};
 
 export enum PayeeIdType {
     MSISDN = 'MSISDN',
@@ -89,10 +89,10 @@ export enum PayeeIdType {
     BUSINESS = 'BUSINESS',
     DEVICE = 'DEVICE',
     ACCOUNT_ID = 'ACCOUNT_ID',
-    ALIAS = 'ALIAS'
+    ALIAS = 'ALIAS',
 }
 
-export interface IRoutes{
+export interface IRoutes {
     //@ts-expect-error ReqRefDefaults not found
-    getRoutes(): ServerRoute<ReqRefDefaults>[]
+    getRoutes(): ServerRoute<ReqRefDefaults>[];
 }

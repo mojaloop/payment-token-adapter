@@ -27,20 +27,18 @@
 
 'use strict';
 
-
-import {ServerRoute} from 'hapi';
-import {ExternalPortalAggregate, IRoutes} from '../domain';
-import {ReqRefDefaults} from '@hapi/hapi';
-import {PayeeIdType} from '../domain/interfaces';
+import { ServerRoute } from 'hapi';
+import { ExternalPortalAggregate, IRoutes } from '../domain';
+import { ReqRefDefaults } from '@hapi/hapi';
+import { PayeeIdType } from '../domain/interfaces';
 import OpenAPIBackend from 'openapi-backend';
 
-export class ExternalPortalRoutes implements  IRoutes {
+export class ExternalPortalRoutes implements IRoutes {
     //@ts-expect-error ReqRefDefaults not found
     private readonly routes: ServerRoute<ReqRefDefaults>[] = [];
     private readonly coreConnectorAggregate: ExternalPortalAggregate;
 
     constructor(tokenAggregate: ExternalPortalAggregate) {
-
         this.coreConnectorAggregate = tokenAggregate;
 
         // initialise openapi backend with validation
@@ -48,11 +46,9 @@ export class ExternalPortalRoutes implements  IRoutes {
             definition: './src/api-spec/payment-token-adapter-spec-externalPortal.yaml',
             handlers: {
                 registerToken: this.registerTokenMapping.bind(this),
-                validationFail: async (context,req , h) =>
-                    h.response({ err: context.validation.errors }).code(400),
-                notFound: async (context, req, h) =>
-                    h.response({ context, err: 'not found' }).code(404),
-            }
+                validationFail: async (context, req, h) => h.response({ err: context.validation.errors }).code(400),
+                notFound: async (context, req, h) => h.response({ context, err: 'not found' }).code(404),
+            },
         });
 
         api.init();
@@ -81,54 +77,61 @@ export class ExternalPortalRoutes implements  IRoutes {
         this.routes.push({
             method: 'GET',
             path: '/parties/{payeeIdType}/{payeeId}',
-            handler: this.getTokenMapping
+            handler: this.getTokenMapping,
         });
     }
 
-    getRoutes(){
+    getRoutes() {
         return this.routes;
     }
 
     //@ts-expect-error h has no type
-    private async registerTokenMapping(context, request: Hapi.Request, h: Hapi.ResponseToolkit){
+    private async registerTokenMapping(context, request: Hapi.Request, h: Hapi.ResponseToolkit) {
         console.log('Received request');
         const payload = request.payload;
-        await this.coreConnectorAggregate.createMapping(
-            {
-                paymentToken: payload.paymentToken,
-                payeeIdType:
-                     payload.payeeIdType == 'IBAN' ? PayeeIdType.IBAN
-                         : payload.payeeIdType == 'MSISDN' ? PayeeIdType.MSISDN
-                             : payload.payeeIdType == 'ACCOUNT_NO' ? PayeeIdType.ACCOUNT_NO
-                                 : payload.payeeIdType == 'EMAIL' ? PayeeIdType.EMAIL
-                                     : payload.payeeIdType == 'PERSONAL_ID' ? PayeeIdType.PERSONAL_ID
-                                         : payload.payeeIdType == 'BUSINESS' ? PayeeIdType.BUSINESS
-                                             : payload.payeeIdType == 'DEVICE' ? PayeeIdType.DEVICE
-                                                 : PayeeIdType.ACCOUNT_ID ,
-                payeeId: payload.payeeId
-            }
-        );
+        await this.coreConnectorAggregate.createMapping({
+            paymentToken: payload.paymentToken,
+            // todo: refactor it!
+            payeeIdType:
+                payload.payeeIdType == 'IBAN'
+                    ? PayeeIdType.IBAN
+                    : payload.payeeIdType == 'MSISDN'
+                        ? PayeeIdType.MSISDN
+                        : payload.payeeIdType == 'ACCOUNT_NO'
+                            ? PayeeIdType.ACCOUNT_NO
+                            : payload.payeeIdType == 'EMAIL'
+                                ? PayeeIdType.EMAIL
+                                : payload.payeeIdType == 'PERSONAL_ID'
+                                    ? PayeeIdType.PERSONAL_ID
+                                    : payload.payeeIdType == 'BUSINESS'
+                                        ? PayeeIdType.BUSINESS
+                                        : payload.payeeIdType == 'DEVICE'
+                                            ? PayeeIdType.DEVICE
+                                            : PayeeIdType.ACCOUNT_ID,
+            payeeId: payload.payeeId,
+        });
         return h.response('OK').code(200);
     }
 
     //@ts-expect-error h has no type
-    private async getTokenMapping(request, h){
+    private async getTokenMapping(request, h) {
         // this function is for testing not part of the api spec
         const params = request.params;
 
-        if(!params.payeeId){
+        if (!params.payeeId) {
             h.response('Bad Request. Please specify Payment Token').code(400);
         }
 
         const tokenMapping = await this.coreConnectorAggregate.getMapping(params.payeeId);
-        if(!tokenMapping){
-            return h.response({
-                statusCode:'4001',
-                message:'Party Not Found'
-            }).code(404);
-        }else{
+        if (!tokenMapping) {
+            return h
+                .response({
+                    statusCode: '4001',
+                    message: 'Party Not Found',
+                })
+                .code(404);
+        } else {
             return h.response(tokenMapping).code(200);
         }
     }
 }
-
