@@ -1,7 +1,8 @@
 module.exports = {
     extends: [
         'eslint:recommended',
-        'plugin:@typescript-eslint/recommended'
+        'plugin:@typescript-eslint/recommended',
+        'prettier',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -16,7 +17,9 @@ module.exports = {
         semi: ['error'],
         indent: ['error', 4, { SwitchCase: 1 }],
         quotes: ['error', 'single', { allowTemplateLiterals: false }],
-        'quote-props': ['error', 'as-needed']
+        // 'quote-props': ['error', 'as-needed'],
+        // 'keyword-spacing': ['error', { before: true, after: true }],
+        // 'space-before-blocks': ['error', 'always'],
     },
     overrides: [
         {

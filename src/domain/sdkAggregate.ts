@@ -139,7 +139,7 @@ export class SDKAggregate{
     async transfer(payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest): Promise<IHttpResponse | undefined | string>{
         if(payload.to.idType == PayeeIdType.ALIAS){
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
-            if(!tokenMapping){
+            if (!tokenMapping) {
                 return;
             }
 
