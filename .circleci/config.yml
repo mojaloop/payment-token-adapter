@@ -77,13 +77,13 @@ defaults_configure_nvm: &defaults_configure_nvm
 executors:
   default-docker:
     working_directory: &WORKING_DIR /home/circleci/project
-    shell: "/bin/sh -leo pipefail" ## Ref: https://circleci.com/docs/env-vars/#alpine-linux
+#    shell: "/bin/sh -leo pipefail" ## Ref: https://circleci.com/docs/env-vars/#alpine-linux
     docker:
       - image: node:lts-alpine # Ref: https://hub.docker.com/_/node?tab=tags&page=1&name=alpine
 
   default-machine:
     working_directory: *WORKING_DIR
-    shell: "/bin/sh -leo pipefail"
+#    shell: "/bin/sh -leo pipefail"
     machine:
       image: ubuntu-2204:2023.04.2 # Ref: https://circleci.com/developer/machine/image/ubuntu-2204
 
