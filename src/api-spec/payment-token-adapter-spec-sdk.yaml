@@ -27,6 +27,16 @@ paths:
           required: true
           schema:
             type: string
+#            enum:
+#              - MSISDN
+#              - ACCOUNT_NO
+#              - EMAIL
+#              - PERSONAL_ID
+#              - BUSINESS
+#              - DEVICE
+#              - ACCOUNT_ID
+#              - IBAN
+#              - ALIAS
       responses:
         '200':
           content:

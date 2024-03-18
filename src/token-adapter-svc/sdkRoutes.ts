@@ -87,9 +87,6 @@ export class SDKRoutes implements IRoutes {
         const ID = params['ID'];
         const Type = params['IdType'];
 
-        if (!ID || !Type) {
-            return h.response({ statusCode: 3107, message: 'Missing mandatory extension parameter' }).code(400);
-        }
         const result = await this.sdkAggregate.getParties(ID, Type);
 
         if (!result) {
@@ -97,7 +94,7 @@ export class SDKRoutes implements IRoutes {
         } else if (typeof result == 'string') {
             return h.response({ statusCode: 2001, message: 'Internal server error' }).code(500);
         } else {
-            return h.response(result.payload).code(200);
+            return h.response(result).code(200);
         }
     }
 
@@ -118,7 +115,7 @@ export class SDKRoutes implements IRoutes {
         } else if (typeof result == 'string') {
             return h.response({ statusCode: 2001, message: 'Internal server error' }).code(500);
         } else {
-            return h.response(result.payload).code(200);
+            return h.response(result).code(200);
         }
     }
 
@@ -139,7 +136,7 @@ export class SDKRoutes implements IRoutes {
         } else if (typeof result == 'string') {
             return h.response({ statusCode: 2001, message: 'Internal server error' }).code(500);
         } else {
-            return h.response(result.payload).code(200);
+            return h.response(result).code(200);
         }
     }
 }

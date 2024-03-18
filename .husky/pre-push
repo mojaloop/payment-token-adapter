@@ -2,5 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npm run dep:check
-# todo: run unit tests
-npm run test:functional
+npm run test:unit
+#npm run test:functional

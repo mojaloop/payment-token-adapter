@@ -27,14 +27,10 @@
 
 'use strict';
 
-import { ITokenMappingStorageRepo, IPaymentTokenMapping } from 'domain/interfaces';
+import { ITokenMappingStorageRepo, IPaymentTokenMapping } from '../domain/interfaces';
 
 export class ExternalPortalAggregate {
-    // private aliasMappingRepo: ITokenMappingStorageRepo;
-
-    constructor(private aliasMappingRepo: ITokenMappingStorageRepo) {
-        // this.aliasMappingRepo = aliasMappingRepo;
-    }
+    constructor(private aliasMappingRepo: ITokenMappingStorageRepo) {}
 
     async init() {
         await this.aliasMappingRepo.init();

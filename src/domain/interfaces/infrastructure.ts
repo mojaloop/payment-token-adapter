@@ -27,7 +27,7 @@
 
 'use strict';
 
-import { IHttpResponse, IPaymentTokenMapping } from './types';
+import { IPaymentTokenMapping } from './types';
 
 export interface ITokenMappingStorageRepo {
     init(): Promise<void>;
@@ -36,14 +36,3 @@ export interface ITokenMappingStorageRepo {
     getMapping(mappingID: string): Promise<IPaymentTokenMapping | undefined>;
 }
 
-export interface IHttpClient {
-    init(): Promise<void>;
-    destroy(): Promise<void>;
-    send(
-        url: string,
-        payload: unknown | undefined,
-        timeout_ms: number,
-        method: string,
-        headers: unknown | undefined,
-    ): Promise<IHttpResponse | undefined>;
-}
