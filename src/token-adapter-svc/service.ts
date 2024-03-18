@@ -30,6 +30,7 @@
 import process from 'node:process';
 import { Server } from '@hapi/hapi';
 import { DefaultLogger } from '@mojaloop/logging-bc-client-lib';
+// todo: during this logger installation we have long process of reify:node-rdkafka. Think, which another logger we can use
 
 import { ITokenMappingStorageRepo } from '../domain/interfaces';
 import { MemoryTokenMappingStorageRepo } from '../implementations';
@@ -37,8 +38,8 @@ import { ExternalPortalAggregate, SDKAggregate, sdkClientFactory } from '../doma
 import { ExternalPortalRoutes } from './externalPortalRoutes';
 import { SDKRoutes } from './sdkRoutes';
 
-const EXTERNAL_PORTAL_SERVER_PORT = process.env['SERVER_PORT'] || 3000;
-const SDK_SERVER_PORT = process.env['SERVER_PORT'] || 3001;
+const EXTERNAL_PORTAL_SERVER_PORT = process.env['EXTERNAL_PORTAL_SERVER_PORT'] || 3000;
+const SDK_SERVER_PORT = process.env['SDK_SERVER_PORT'] || 3001;
 const SERVER_HOST = process.env['SERVER_HOST'] || '0.0.0.0';
 const CORE_CONNECTOR_URL = process.env['CORE_CONNECTOR_URL'] || 'http://localhost:4040';
 
