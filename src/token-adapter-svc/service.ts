@@ -38,6 +38,7 @@ import { ExternalPortalAggregate, SDKAggregate, sdkClientFactory } from '../doma
 import { ExternalPortalRoutes } from './externalPortalRoutes';
 import { SDKRoutes } from './sdkRoutes';
 
+// todo: use convict to deal with env vars;  make some envs required
 const EXTERNAL_PORTAL_SERVER_PORT = process.env['EXTERNAL_PORTAL_SERVER_PORT'] || 3000;
 const SDK_SERVER_PORT = process.env['SDK_SERVER_PORT'] || 3001;
 const SERVER_HOST = process.env['SERVER_HOST'] || '0.0.0.0';

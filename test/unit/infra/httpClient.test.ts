@@ -42,6 +42,7 @@ describe('HttpClient Tests', () => {
         try {
             await http.get('XXX');
             throw new Error('should fail before');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             expect(err.message).toBe('Request failed with status code 404');
             expect(err).toBeInstanceOf(AxiosError);

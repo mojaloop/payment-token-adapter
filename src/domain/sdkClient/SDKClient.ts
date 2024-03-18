@@ -74,9 +74,9 @@ export class SDKClient implements ISDKBackendClient {
         }
     }
 
-    private handleError(err: any, url: string): null {
+    private handleError(err: unknown, url: string): null {
         // todo: improve error handling (check error type and fields)
-        this.logger.error(`error while sending request to ${url}: ${err?.message}`, err);
+        this.logger.error(`error while sending request to ${url}: ${(err as Error)?.message}`, err);
         return null;
     }
 }
