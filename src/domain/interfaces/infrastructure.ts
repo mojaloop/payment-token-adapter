@@ -37,6 +37,7 @@ export interface ITokenMappingStorageRepo {
     getMapping(mappingID: string): Promise<IPaymentTokenMapping | undefined>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type TLogMethod = (message: string, meta?: any) => void;
 // todo: - think, if message should be only string
 //       - how to pass Error object

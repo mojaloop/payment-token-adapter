@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 // todo: fix all TS issues in this file (central-services-logger exports Winston interface, but implements it badly!)
 
