@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ILogger } from '@mojaloop/logging-bc-public-types-lib';
+import { ILogger } from '../../domain';
 import {
     IHttpClient,
     THttpClientDeps,
@@ -14,7 +14,7 @@ export class HttpClient implements IHttpClient {
 
     constructor(deps: THttpClientDeps) {
         this.axios = axios.create(deps.options);
-        this.logger = deps.logger.createChild(this.constructor.name);
+        this.logger = deps.logger.child({ context: this.constructor.name });
     }
 
     async get<R = unknown>(url: string, options?: THttpRequestOptions): Promise<THttpResponse<R>> {

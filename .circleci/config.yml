@@ -261,6 +261,7 @@ jobs:
           command: |
             gh release create "v${RELEASE_TAG}" --title "v${RELEASE_TAG} Release" --draft=false --notes "${RELEASE_CHANGES}" ./CHANGELOG.md
 
+
   publish:
     executor: default-machine
     steps:

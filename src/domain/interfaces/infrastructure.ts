@@ -28,6 +28,7 @@
 'use strict';
 
 import { IPaymentTokenMapping } from './types';
+import { TJson } from '../../infra';
 
 export interface ITokenMappingStorageRepo {
     init(): Promise<void>;
@@ -36,3 +37,18 @@ export interface ITokenMappingStorageRepo {
     getMapping(mappingID: string): Promise<IPaymentTokenMapping | undefined>;
 }
 
+export type TLogMethod = (message: string, meta?: any) => void;
+// todo: - think, if message should be only string
+//       - how to pass Error object
+//       - what type meta should have?
+
+export interface ILogger { // based on @mojaloop/central-services-logger impl.
+    error: TLogMethod;
+    warn: TLogMethod;
+    trace: TLogMethod;
+    info: TLogMethod;
+    verbose: TLogMethod;
+    debug: TLogMethod;
+    silly: TLogMethod;
+    child(context?: TJson): ILogger;
+}

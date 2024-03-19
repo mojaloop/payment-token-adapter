@@ -71,9 +71,9 @@
   },
   "dependencies": {
     "@hapi/hapi": "^21.3.6",
-    "@mojaloop/logging-bc-client-lib": "^0.5.6",
-    "@mojaloop/logging-bc-public-types-lib": "^0.5.4",
+    "@mojaloop/central-services-logger": "^11.3.0",
     "axios": "^1.6.8",
+    "fast-safe-stringify": "^2.1.1",
     "openapi-backend": "^5.10.6",
     "tslib": "^2.6.2"
   },

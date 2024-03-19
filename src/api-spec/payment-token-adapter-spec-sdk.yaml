@@ -22,11 +22,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: ID
-          in: path
-          required: true
-          schema:
-            type: string
 #            enum:
 #              - MSISDN
 #              - ACCOUNT_NO
@@ -37,6 +32,11 @@ paths:
 #              - ACCOUNT_ID
 #              - IBAN
 #              - ALIAS
+        - name: ID
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           content:

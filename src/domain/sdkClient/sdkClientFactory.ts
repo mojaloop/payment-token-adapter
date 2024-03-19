@@ -1,5 +1,4 @@
-import { DefaultLogger } from '@mojaloop/logging-bc-client-lib';
-import { httpClientFactory as createHttpClient } from '../../infra';
+import { httpClientFactory as createHttpClient, loggerFactory } from '../../infra';
 import { ISDKBackendClient } from '../interfaces';
 import { SDKClient, TSDKClientFactoryDeps } from './SDKClient';
 
@@ -8,7 +7,7 @@ export type TSDKClientFactory = (deps: TSDKClientFactoryDeps) => ISDKBackendClie
 export const sdkClientFactory: TSDKClientFactory = ({
     coreConnectorUrl,
     httpClientFactory = createHttpClient,
-    logger = new DefaultLogger('PTA', 'sdkClient', ''),
+    logger = loggerFactory({ context: 'sdkClient' }),
 } : TSDKClientFactoryDeps) => {
     return new SDKClient({ coreConnectorUrl, httpClientFactory, logger });
 };

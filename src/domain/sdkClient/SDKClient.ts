@@ -1,8 +1,7 @@
-import { ILogger } from '@mojaloop/logging-bc-public-types-lib';
 import { IHttpClient, THttpClientFactory } from '../../infra';
-
 import {
     ISDKBackendClient,
+    ILogger,
     TQuoteRequest,
     TTransferRequest,
     TLookupPartyInfoResponse,
@@ -35,7 +34,7 @@ export class SDKClient implements ISDKBackendClient {
     private readonly coreConnectorUrl: string; // think, if we can make it as BaseUrl of httpClient
 
     constructor(deps: TSDKClientDeps) {
-        const logger = deps.logger.createChild(this.constructor.name);
+        const logger = deps.logger.child({ context: this.constructor.name });
         this.logger = logger;
         this.http = deps.httpClientFactory({ logger });
         this.coreConnectorUrl = deps.coreConnectorUrl;
@@ -76,7 +75,7 @@ export class SDKClient implements ISDKBackendClient {
 
     private handleError(err: unknown, url: string): null {
         // todo: improve error handling (check error type and fields)
-        this.logger.error(`error while sending request to ${url}: ${(err as Error)?.message}`, err);
+        this.logger.error(`error while sending request to ${url}: ${(err as Error)?.stack}`);
         return null;
     }
 }

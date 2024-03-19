@@ -29,8 +29,7 @@
 
 import process from 'node:process';
 import { Server } from '@hapi/hapi';
-import { DefaultLogger } from '@mojaloop/logging-bc-client-lib';
-// todo: during this logger installation we have long process of reify:node-rdkafka. Think, which another logger we can use
+import { loggerFactory } from '../infra';
 
 import { ITokenMappingStorageRepo } from '../domain/interfaces';
 import { MemoryTokenMappingStorageRepo } from '../implementations';
@@ -44,7 +43,7 @@ const SDK_SERVER_PORT = process.env['SDK_SERVER_PORT'] || 3001;
 const SERVER_HOST = process.env['SERVER_HOST'] || '0.0.0.0';
 const CORE_CONNECTOR_URL = process.env['CORE_CONNECTOR_URL'] || 'http://localhost:4040';
 
-const logger = new DefaultLogger('PTA', 'PTA', '');
+const logger = loggerFactory({ context: 'PTA' });
 
 export class Service {
     static tokenMappingStorageRepo: ITokenMappingStorageRepo;
@@ -152,6 +151,6 @@ process.on('exit', async () => {
 
 /* istanbul ignore next */
 process.on('uncaughtException',(err: Error) => {
-    logger.fatal(`UncaughtException: ${err?.message}`, err);
+    logger.error(`UncaughtException: ${err?.message}`, err);
     process.exit(999);
 });

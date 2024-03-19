@@ -1,5 +1,5 @@
 import { CreateAxiosDefaults } from 'axios';
-import { DefaultLogger } from '@mojaloop/logging-bc-client-lib';
+import { loggerFactory } from '../Logger';
 import { HttpClient } from './HttpClient';
 import { THttpClientFactory, THttpClientFactoryDeps } from './types';
 
@@ -16,7 +16,7 @@ export const defaultHttpOptions: CreateAxiosDefaults = Object.freeze({
 
 export const httpClientFactory: THttpClientFactory = ({
     options = defaultHttpOptions,
-    logger = new DefaultLogger('PTA', 'http', '')
+    logger = loggerFactory({ context: 'http' })
 }: THttpClientFactoryDeps = {}) => {
     return new HttpClient({ options, logger });
 };

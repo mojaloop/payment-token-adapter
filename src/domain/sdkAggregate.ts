@@ -27,10 +27,10 @@
 
 'use strict';
 
-import { ILogger } from '@mojaloop/logging-bc-public-types-lib';
 import {
     ISDKBackendClient,
     ITokenMappingStorageRepo,
+    ILogger,
     PayeeIdType,
     TQuoteRequest,
     TTransferRequest,
@@ -55,6 +55,7 @@ export class SDKAggregate {
         await this.aliasMappingRepo.destroy();
         return true;
     }
+
 
     // todo: avoid returning string
     async getParties(ID: string, Type: string): Promise<TLookupPartyInfoResponse | string> {
@@ -127,4 +128,5 @@ export class SDKAggregate {
         }
         return res;
     }
+
 }

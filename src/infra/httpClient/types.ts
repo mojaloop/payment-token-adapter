@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, CreateAxiosDefaults } from 'axios';
-import { ILogger } from '@mojaloop/logging-bc-public-types-lib';
+import { ILogger } from '../../domain';
 
 export type TJson =
   | string
@@ -17,8 +17,8 @@ export type THttpResponse<R> = {
 }
 
 export type THttpClientDeps = {
-  options: CreateAxiosDefaults, // think, if it should be THttpRequestOptions
-  logger: ILogger
+  options: CreateAxiosDefaults; // think, if it should be THttpRequestOptions
+  logger: ILogger;
 };
 
 // todo: think, if we need to return statusCode
