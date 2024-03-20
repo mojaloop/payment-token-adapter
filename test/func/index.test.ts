@@ -30,9 +30,6 @@
 
 import {Service} from "../../src/token-adapter-svc";
 import axios, {AxiosError} from "axios";
-import {HTTPClientMock} from "../mocks/token-adapter-mocks";
-
-const httpClient = new HTTPClientMock();
 
 describe("token-adapter-svc test suite",()=>{
 

@@ -25,11 +25,9 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
-
-
-export * from "./externalPortalAggregate";
-export * from "./sdkAggregate";
-export * from "./interfaces/index";
-
+export * from './externalPortalAggregate';
+export * from './sdkAggregate';
+export * from './sdkClient';
+export * from './interfaces/index';

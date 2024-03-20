@@ -25,8 +25,6 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
-
-
-export * from "./implementations";
+export * from './implementations';

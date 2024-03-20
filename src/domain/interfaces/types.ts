@@ -25,74 +25,84 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
-import {ServerRoute} from "hapi";
-import {ReqRefDefaults} from "@hapi/hapi";
+import { ServerRoute } from 'hapi';
+import { ReqRefDefaults } from '@hapi/hapi';
+import {SDKSchemeAdapter} from '@mojaloop/api-snippets';
 
 export interface IPaymentTokenMapping {
     paymentToken: string;
     payeeId: string;
-    payeeIdType: PayeeIdType
-}
-
-export type IHttpResponse = {
-    payload : Payee | Quote | Transfer
+    payeeIdType: PayeeIdType;
 }
 
 export type Transfer = {
-    completedTimestamp: string,
-    fulfilment: string,
-    homeTransactionId: string,
-    transferState: string
-}
+    completedTimestamp: string;
+    fulfilment: string;
+    homeTransactionId: string;
+    transferState: string;
+};
 
 export type Quote = {
-    expiration: string,
-    extensionList: unknown[],
-    geoCode: unknown,
-    payeeFspCommissionAmount: string,
-    payeeFspCommissionAmountCurrency: string,
-    payeeFspFeeAmount: string,
-    payeeFspFeeAmountCurrency: string,
-    payeeReceiveAmount: string,
-    payeeReceiveAmountCurrency: string,
-    quoteId: string,
-    transactionId: string,
-    transferAmount: string,
-    transferAmountCurrency: string
-}
+    expiration: string;
+    extensionList: unknown[];
+    geoCode: unknown;
+    payeeFspCommissionAmount: string;
+    payeeFspCommissionAmountCurrency: string;
+    payeeFspFeeAmount: string;
+    payeeFspFeeAmountCurrency: string;
+    payeeReceiveAmount: string;
+    payeeReceiveAmountCurrency: string;
+    quoteId: string;
+    transactionId: string;
+    transferAmount: string;
+    transferAmountCurrency: string;
+};
 
+// todo: rename to Party
 export type Payee = {
-    dateOfBirth: string,
-    displayName: string,
-    extensionList: unknown[],
-    firstName: string,
-    fspId: string,
-    idSubValue: string,
-    idType: string,
-    idValue: string,
-    lastName: string,
-    merchantClassificationCode: string,
-    middleName: string,
-    type: string,
-    supportedCurrencies: string,
-    kycInformation: string
-}
+    dateOfBirth: string;
+    displayName: string;
+    extensionList: unknown[];
+    firstName: string;
+    fspId: string;
+    idSubValue: string;
+    idType: string;
+    idValue: string;
+    lastName: string;
+    merchantClassificationCode: string;
+    middleName: string;
+    type: string;
+    supportedCurrencies: string;
+    kycInformation: string;
+};
 
 export enum PayeeIdType {
-    MSISDN = "MSISDN",
-    IBAN = "IBAN",
-    ACCOUNT_NO = "ACCOUNT_NO",
-    EMAIL = "EMAIL",
-    PERSONAL_ID = "PERSONAL_ID",
-    BUSINESS = "BUSINESS",
-    DEVICE = "DEVICE",
-    ACCOUNT_ID = "ACCOUNT_ID",
-    ALIAS = "ALIAS"
+    MSISDN = 'MSISDN',
+    IBAN = 'IBAN',
+    ACCOUNT_NO = 'ACCOUNT_NO',
+    EMAIL = 'EMAIL',
+    PERSONAL_ID = 'PERSONAL_ID',
+    BUSINESS = 'BUSINESS',
+    DEVICE = 'DEVICE',
+    ACCOUNT_ID = 'ACCOUNT_ID',
+    ALIAS = 'ALIAS',
 }
 
-export interface IRoutes{
+export interface IRoutes {
     //@ts-expect-error ReqRefDefaults not found
-    getRoutes(): ServerRoute<ReqRefDefaults>[]
+    getRoutes(): ServerRoute<ReqRefDefaults>[];
 }
+
+export type TQuoteRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
+
+export type TTransferRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
+
+export interface ISDKBackendClient {
+  lookupPartyInfo(idType: string, id: string): Promise<Payee | null>;
+  // todo: make idType as PayeeIdType
+  calculateQuote(payload: TQuoteRequest): Promise<Quote | null>;
+  createTransfer(payload: TTransferRequest): Promise<Transfer | null>; // or performTransfer?
+}
+

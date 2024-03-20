@@ -25,38 +25,33 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
+import { ITokenMappingStorageRepo, IPaymentTokenMapping, ILogger } from './interfaces';
 
-import {ITokenMappingStorageRepo, IPaymentTokenMapping} from "domain/interfaces";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class ExternalPortalAggregate {
+    constructor(
+      private readonly aliasMappingRepo: ITokenMappingStorageRepo,
+      private readonly logger: ILogger,
+    ) {}
 
-    private aliasMappingRepo: ITokenMappingStorageRepo;
-
-
-    constructor(aliasMappingRepo: ITokenMappingStorageRepo) {
-        this.aliasMappingRepo = aliasMappingRepo;
-    }
-
-    async init(){
+    async init() {
         await this.aliasMappingRepo.init();
-        return Promise.resolve();
+        return true;
     }
 
-    async createMapping(tokenMapping: IPaymentTokenMapping){
-        console.log(tokenMapping);
+    async createMapping(tokenMapping: IPaymentTokenMapping) {
+        this.logger.info('creating tokenMapping', { tokenMapping });
         await this.aliasMappingRepo.storeMapping(tokenMapping);
     }
 
-    async getMapping(paymentToken: string):Promise<IPaymentTokenMapping | undefined> {
-        console.log(paymentToken);
+    async getMapping(paymentToken: string): Promise<IPaymentTokenMapping | undefined> {
+        this.logger.info('getting tokenMapping by paymentToken', { paymentToken });
         return await this.aliasMappingRepo.getMapping(paymentToken);
     }
 
-    async destroy (){
+    async destroy() {
         await this.aliasMappingRepo.destroy();
-        return Promise.resolve();
+        return true;
     }
 }

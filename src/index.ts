@@ -26,12 +26,8 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
-import {Service} from "./token-adapter-svc";
+import { Service } from './token-adapter-svc';
 
-
-Service.start().then(() => {
- console.log("Token Adapter service up and running");
-});
-
+Service.start();

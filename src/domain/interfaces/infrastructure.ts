@@ -25,19 +25,31 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
-import {IHttpResponse, IPaymentTokenMapping} from "./types";
+import { IPaymentTokenMapping } from './types';
+import { TJson } from '../../infra';
 
 export interface ITokenMappingStorageRepo {
     init(): Promise<void>;
     destroy(): Promise<void>;
-    storeMapping(tokenMapping:IPaymentTokenMapping): Promise<void>;
-    getMapping(mappingID: string): Promise<IPaymentTokenMapping | undefined>
+    storeMapping(tokenMapping: IPaymentTokenMapping): Promise<void>;
+    getMapping(mappingID: string): Promise<IPaymentTokenMapping | undefined>;
 }
 
-export interface IHttpClient{
- init(): Promise<void>;
- destroy(): Promise<void>;
- send(url:string, payload:unknown | undefined , timeout_ms:number, method:string, headers: unknown | undefined):Promise<IHttpResponse | undefined>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TLogMethod = (message: string, meta?: any) => void;
+// todo: - think, if message should be only string
+//       - how to pass Error object
+//       - what type meta should have?
+
+export interface ILogger { // based on @mojaloop/central-services-logger impl.
+    error: TLogMethod;
+    warn: TLogMethod;
+    trace: TLogMethod;
+    info: TLogMethod;
+    verbose: TLogMethod;
+    debug: TLogMethod;
+    silly: TLogMethod;
+    child(context?: TJson): ILogger;
 }

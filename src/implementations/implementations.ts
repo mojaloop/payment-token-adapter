@@ -25,14 +25,12 @@
  --------------
  ******/
 
-"use strict";
+'use strict';
 
-import {IHttpClient, IHttpResponse, ITokenMappingStorageRepo} from "domain/interfaces";
-import {IPaymentTokenMapping} from "domain/interfaces";
-import axios from "axios";
+import { ITokenMappingStorageRepo, IPaymentTokenMapping } from '../domain/interfaces';
 
-export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo{
-    private mappings = new Map<string, IPaymentTokenMapping>;
+export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo {
+    private mappings = new Map<string, IPaymentTokenMapping>();
 
     destroy(): Promise<void> {
         return Promise.resolve(undefined);
@@ -48,36 +46,7 @@ export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo{
     }
 
     storeMapping(tokenMapping: IPaymentTokenMapping): Promise<void> {
-        this.mappings.set(tokenMapping.paymentToken,tokenMapping);
+        this.mappings.set(tokenMapping.paymentToken, tokenMapping);
         return Promise.resolve();
     }
-
 }
-
-export class AxiosHttpClient implements IHttpClient{
-    async destroy(): Promise<void> {
-        return Promise.resolve(undefined);
-    }
-
-    async init(): Promise<void> {
-        return Promise.resolve(undefined);
-    }
-
-    async send(url: string, payload: unknown | undefined, timeout_ms: number, method: string, headers: unknown | undefined): Promise<IHttpResponse | undefined> {
-        try{
-            const res = await axios.request({
-                url:url,
-                method:method,
-                data: payload ? payload : undefined,
-                timeout: timeout_ms,
-                headers: headers ? headers : undefined
-            });
-            return Promise.resolve({payload:res.data});
-        }catch (e: unknown) {
-            console.error(e);
-            return ;
-        }
-    }
-
-}
-
