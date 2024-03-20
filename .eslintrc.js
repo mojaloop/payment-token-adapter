@@ -18,6 +18,7 @@ module.exports = {
         indent: ['error', 4, { SwitchCase: 1 }],
         quotes: ['error', 'single', { allowTemplateLiterals: false }],
         'quote-props': ['error', 'as-needed'],
+        'no-console': 'error',
         '@typescript-eslint/no-explicit-any': 'error',
     },
     overrides: [

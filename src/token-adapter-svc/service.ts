@@ -29,11 +29,10 @@
 
 import process from 'node:process';
 import { Server } from '@hapi/hapi';
-import { loggerFactory } from '../infra';
 
-import { ITokenMappingStorageRepo } from '../domain/interfaces';
+import { ExternalPortalAggregate, SDKAggregate, ITokenMappingStorageRepo, sdkClientFactory } from '../domain';
 import { MemoryTokenMappingStorageRepo } from '../implementations';
-import { ExternalPortalAggregate, SDKAggregate, sdkClientFactory } from '../domain';
+import { loggerFactory } from '../infra';
 import { ExternalPortalRoutes } from './externalPortalRoutes';
 import { SDKRoutes } from './sdkRoutes';
 
@@ -59,7 +58,7 @@ export class Service {
         }
         this.tokenMappingStorageRepo = aliasMappingStorageRepo;
 
-        this.externalPortalAggregate = new ExternalPortalAggregate(this.tokenMappingStorageRepo);
+        this.externalPortalAggregate = new ExternalPortalAggregate(this.tokenMappingStorageRepo, logger);
         const sdkClient = sdkClientFactory({ coreConnectorUrl: CORE_CONNECTOR_URL });
         this.sdkAggregate = new SDKAggregate(this.tokenMappingStorageRepo, sdkClient, logger);
 
@@ -68,6 +67,7 @@ export class Service {
 
         // start server
         await this.setUpAndStartServers();
+        logger.info('PTA is started', { EXTERNAL_PORTAL_SERVER_PORT, SDK_SERVER_PORT, CORE_CONNECTOR_URL });
     }
 
     static async setUpAndStartServers(): Promise<void> {
@@ -83,8 +83,8 @@ export class Service {
                 host: SERVER_HOST,
             });
 
-            const externalPortalRoutes = new ExternalPortalRoutes(this.externalPortalAggregate);
-            const sdkRoutes = new SDKRoutes(this.sdkAggregate);
+            const externalPortalRoutes = new ExternalPortalRoutes(this.externalPortalAggregate, logger);
+            const sdkRoutes = new SDKRoutes(this.sdkAggregate, logger);
 
             this.externalPortalServer.route(externalPortalRoutes.getRoutes());
             this.externalPortalServer.route({
@@ -114,6 +114,7 @@ export class Service {
         });
     }
 
+    // todo: refactor
     static async stop() {
         // destroy aggregate and application
         await this.externalPortalAggregate.destroy();
@@ -124,6 +125,7 @@ export class Service {
     }
 }
 
+// todo: refactor it and move to /src/index.ts
 async function _handle_int_and_term_signals(signal: NodeJS.Signals): Promise<void> {
     logger.warn(`Service - ${signal} received - cleaning up...`);
     let clean_exit = false;

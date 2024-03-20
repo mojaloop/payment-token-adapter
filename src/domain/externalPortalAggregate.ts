@@ -27,28 +27,31 @@
 
 'use strict';
 
-import { ITokenMappingStorageRepo, IPaymentTokenMapping } from '../domain/interfaces';
+import { ITokenMappingStorageRepo, IPaymentTokenMapping, ILogger } from './interfaces';
 
 export class ExternalPortalAggregate {
-    constructor(private aliasMappingRepo: ITokenMappingStorageRepo) {}
+    constructor(
+      private readonly aliasMappingRepo: ITokenMappingStorageRepo,
+      private readonly logger: ILogger,
+    ) {}
 
     async init() {
         await this.aliasMappingRepo.init();
-        return Promise.resolve();
+        return true;
     }
 
     async createMapping(tokenMapping: IPaymentTokenMapping) {
-        console.log(tokenMapping);
+        this.logger.info('creating tokenMapping', { tokenMapping });
         await this.aliasMappingRepo.storeMapping(tokenMapping);
     }
 
     async getMapping(paymentToken: string): Promise<IPaymentTokenMapping | undefined> {
-        console.log(paymentToken);
+        this.logger.info('getting tokenMapping by paymentToken', { paymentToken });
         return await this.aliasMappingRepo.getMapping(paymentToken);
     }
 
     async destroy() {
         await this.aliasMappingRepo.destroy();
-        return Promise.resolve();
+        return true;
     }
 }

@@ -27,19 +27,21 @@
 
 'use strict';
 
-import { IRoutes, SDKAggregate } from '../domain';
-import { ServerRoute } from 'hapi';
-import { ReqRefDefaults } from '@hapi/hapi';
 import OpenAPIBackend from 'openapi-backend';
 import { SDKSchemeAdapter } from '@mojaloop/api-snippets';
+import { ReqRefDefaults } from '@hapi/hapi';
+import { ServerRoute } from 'hapi';
+import { IRoutes, SDKAggregate, ILogger } from '../domain';
 
 export class SDKRoutes implements IRoutes {
     //@ts-expect-error ReqRefDefaults not found
     private readonly routes: ServerRoute<ReqRefDefaults>[] = [];
     private readonly sdkAggregate: SDKAggregate;
+    private readonly logger: ILogger;
 
-    constructor(sdkAggregate: SDKAggregate) {
+    constructor(sdkAggregate: SDKAggregate, logger: ILogger) {
         this.sdkAggregate = sdkAggregate;
+        this.logger = logger;
 
         // initialise openapi backend with validation
         const api = new OpenAPIBackend({
@@ -53,7 +55,7 @@ export class SDKRoutes implements IRoutes {
             },
         });
 
-        api.init();
+        api.init(); // todo: remove async method from ctor
 
         this.routes.push({
             method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -81,7 +83,8 @@ export class SDKRoutes implements IRoutes {
 
     //@ts-expect-error h has no type
     private async getParties(context, request: Hapi.Request, h: Hapi.ResponseToolkit) {
-        console.log('Received request: GET /parties');
+        this.logger.info('Received request: GET /parties');
+        // todo: use middleware to log incoming requests details
         const params = context.request.params;
 
         const ID = params['ID'];
@@ -100,7 +103,8 @@ export class SDKRoutes implements IRoutes {
 
     //@ts-expect-error h has no type
     private async postQuotes(context, request: Hapi.Request, h: Hapi.ResponseToolkit) {
-        console.log('Received request: POST /quoterequests');
+        this.logger.info('Received request: POST /quoterequests');
+        // todo: use middleware to log incoming requests details
 
         const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest =
             request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
@@ -121,7 +125,8 @@ export class SDKRoutes implements IRoutes {
 
     //@ts-expect-error h has no type
     private async transfer(context, request: Hapi.Request, h: Hapi.ResponseToolkit) {
-        console.log('Received request: POST /transfers ');
+        this.logger.info('Received request: POST /transfers');
+        // todo: use middleware to log incoming requests details
 
         const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest =
             request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;

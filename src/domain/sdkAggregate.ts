@@ -34,9 +34,9 @@ import {
     PayeeIdType,
     TQuoteRequest,
     TTransferRequest,
-    TLookupPartyInfoResponse,
-    TCalculateQuoteResponse,
-    TCreateTransferResponse,
+    Payee,
+    Quote,
+    Transfer,
 } from './interfaces';
 
 export class SDKAggregate {
@@ -58,7 +58,7 @@ export class SDKAggregate {
 
 
     // todo: avoid returning string
-    async getParties(ID: string, Type: string): Promise<TLookupPartyInfoResponse | string> {
+    async getParties(ID: string, Type: string): Promise<Payee | string> {
         if (Type == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(ID);
             if (!tokenMapping) {
@@ -86,7 +86,7 @@ export class SDKAggregate {
         return res;
     }
 
-    async postQuotes(payload: TQuoteRequest): Promise<TCalculateQuoteResponse | string> {
+    async postQuotes(payload: TQuoteRequest): Promise<Quote | string> {
         if (payload.to.idType == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
             if (!tokenMapping) {
@@ -108,7 +108,7 @@ export class SDKAggregate {
     }
 
     // todo: improve error handling
-    async transfer(payload: TTransferRequest): Promise<TCreateTransferResponse | string> {
+    async transfer(payload: TTransferRequest): Promise<Transfer | string> {
         if (payload.to.idType == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
             if (!tokenMapping) {

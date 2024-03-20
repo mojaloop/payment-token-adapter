@@ -27,19 +27,20 @@
 
 'use strict';
 
-import { ServerRoute } from 'hapi';
-import { ExternalPortalAggregate, IRoutes } from '../domain';
-import { ReqRefDefaults } from '@hapi/hapi';
-import { PayeeIdType } from '../domain/interfaces';
 import OpenAPIBackend from 'openapi-backend';
+import { ReqRefDefaults } from '@hapi/hapi';
+import { ServerRoute } from 'hapi';
+import { ExternalPortalAggregate, IRoutes, PayeeIdType, ILogger } from '../domain';
 
 export class ExternalPortalRoutes implements IRoutes {
     //@ts-expect-error ReqRefDefaults not found
     private readonly routes: ServerRoute<ReqRefDefaults>[] = [];
     private readonly coreConnectorAggregate: ExternalPortalAggregate;
+    private readonly logger: ILogger;
 
-    constructor(tokenAggregate: ExternalPortalAggregate) {
+    constructor(tokenAggregate: ExternalPortalAggregate, logger: ILogger) {
         this.coreConnectorAggregate = tokenAggregate;
+        this.logger = logger;
 
         // initialise openapi backend with validation
         const api = new OpenAPIBackend({
@@ -87,7 +88,7 @@ export class ExternalPortalRoutes implements IRoutes {
 
     //@ts-expect-error h has no type
     private async registerTokenMapping(context, request: Hapi.Request, h: Hapi.ResponseToolkit) {
-        console.log('Received request');
+        this.logger.info('Received registerTokenMapping request');
         const payload = request.payload;
         await this.coreConnectorAggregate.createMapping({
             paymentToken: payload.paymentToken,
@@ -115,6 +116,7 @@ export class ExternalPortalRoutes implements IRoutes {
 
     //@ts-expect-error h has no type
     private async getTokenMapping(request, h) {
+        // todo: remove any testing functionality !!
         // this function is for testing not part of the api spec
         const params = request.params;
 

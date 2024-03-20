@@ -37,9 +37,6 @@ export interface IPaymentTokenMapping {
     payeeIdType: PayeeIdType;
 }
 
-// todo: think, if we need this type
-export type IHttpResponse<T extends Payee | Quote | Transfer > = T;
-
 export type Transfer = {
     completedTimestamp: string;
     fulfilment: string;
@@ -63,6 +60,7 @@ export type Quote = {
     transferAmountCurrency: string;
 };
 
+// todo: rename to Party
 export type Payee = {
     dateOfBirth: string;
     displayName: string;
@@ -101,15 +99,10 @@ export type TQuoteRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
 
 export type TTransferRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
 
-export type TLookupPartyInfoResponse = IHttpResponse<Payee>;
-
-export type TCalculateQuoteResponse = IHttpResponse<Quote>;
-
-export type TCreateTransferResponse = IHttpResponse<Transfer>;
-
-export interface ISDKBackendClient { // or ICoreConnectorClient?
-  lookupPartyInfo(idType: string, id: string): Promise<TLookupPartyInfoResponse | null>;
-  calculateQuote(payload: TQuoteRequest): Promise<TCalculateQuoteResponse | null>;
-  createTransfer(payload: TTransferRequest): Promise<TCreateTransferResponse | null>; // or performTransfer?
+export interface ISDKBackendClient {
+  lookupPartyInfo(idType: string, id: string): Promise<Payee | null>;
+  // todo: make idType as PayeeIdType
+  calculateQuote(payload: TQuoteRequest): Promise<Quote | null>;
+  createTransfer(payload: TTransferRequest): Promise<Transfer | null>; // or performTransfer?
 }
 

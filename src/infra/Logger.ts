@@ -11,12 +11,14 @@ const makeLogString = (message: string, meta?: unknown) => meta
     ? `${message} - ${typeof meta === 'object' ? stringify(meta) : meta}`
     : message;
 
+// todo: set logLevel from config
 export const loggerFactory = (context: TJson = {}): ILogger => new Logger(context);
 
 export class Logger implements ILogger {
     private readonly log = mlLogger;
     private readonly context: TJson = {};
 
+    // todo: make context TJson | string
     constructor(context: TJson) {
         this.context = context;
     }
@@ -49,11 +51,13 @@ export class Logger implements ILogger {
         this.log.isLevelEnabled && this.log.silly(this.formatLog(message, meta));
     }
 
+    // todo: make childContext TJson | string
     child(childContext: TJson) {
         return new Logger(Object.assign({}, this.context, childContext));
     }
 
     private formatLog(message: string, meta: TJson = {}): string {
+        // todo: get requestId (using AsyncLocalStorage)
         return makeLogString(message, Object.assign({}, meta, this.context));
     }
 }

@@ -4,9 +4,9 @@ import {
     ILogger,
     TQuoteRequest,
     TTransferRequest,
-    TLookupPartyInfoResponse,
-    TCalculateQuoteResponse,
-    TCreateTransferResponse,
+    Payee,
+    Quote,
+    Transfer,
 } from '../interfaces';
 
 export type TSDKClientDeps = {
@@ -40,10 +40,10 @@ export class SDKClient implements ISDKBackendClient {
         this.coreConnectorUrl = deps.coreConnectorUrl;
     }
 
-    async lookupPartyInfo(idType: string, id: string): Promise<TLookupPartyInfoResponse | null> {
+    async lookupPartyInfo(idType: string, id: string): Promise<Payee | null> {
         const url = `${this.coreConnectorUrl}/${ROUTES.parties}/${idType}/${id}`;
         try {
-            const { data } = await this.http.get<TLookupPartyInfoResponse>(url);
+            const { data } = await this.http.get<Payee>(url);
             this.logger.info('lookupPartyInfo result:', { url, data });
             return data;
         } catch (err) {
@@ -51,10 +51,10 @@ export class SDKClient implements ISDKBackendClient {
         }
     }
 
-    async calculateQuote(payload: TQuoteRequest): Promise<TCalculateQuoteResponse | null> {
+    async calculateQuote(payload: TQuoteRequest): Promise<Quote | null> {
         const url = `${this.coreConnectorUrl}/${ROUTES.quoteRequests}`;
         try {
-            const { data } = await this.http.post<TQuoteRequest, TCalculateQuoteResponse>(url, payload);
+            const { data } = await this.http.post<TQuoteRequest, Quote>(url, payload);
             this.logger.info('calculateQuote result:', { url, data });
             return data;
         } catch (err) {
@@ -62,10 +62,10 @@ export class SDKClient implements ISDKBackendClient {
         }
     }
 
-    async createTransfer(payload: TTransferRequest): Promise<TCreateTransferResponse | null> {
+    async createTransfer(payload: TTransferRequest): Promise<Transfer | null> {
         const url = `${this.coreConnectorUrl}/${ROUTES.transfers}`;
         try {
-            const { data } = await this.http.post<TTransferRequest, TCreateTransferResponse>(url, payload);
+            const { data } = await this.http.post<TTransferRequest, Transfer>(url, payload);
             this.logger.info('createTransfer result:', { url, data });
             return data;
         } catch (err) {
