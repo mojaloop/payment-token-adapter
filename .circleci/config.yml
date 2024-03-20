@@ -198,7 +198,8 @@ jobs:
           command: |
             docker-compose -f ./test/func/ttk-docker-compose.yml down
 
-  test-lint:
+  # split linting and unit tests into separate jobs
+  lint-unit_tests:
     executor: default-docker
     steps:
       - run:
@@ -210,8 +211,11 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run:
-          name: Execute lint tests
+          name: Execute linting
           command: npm run lint
+      - run:
+          name: Execute unit-tests
+          command: npm run test:unit
 
   release:
     executor: default-docker
@@ -388,7 +392,7 @@ workflows:
                 - /feature*/
                 - /bugfix*/
 
-      - test-lint:
+      - lint-unit_tests:
           context: org-global
           requires:
             - setup
@@ -406,7 +410,7 @@ workflows:
           requires:
             - pr-tools/pr-title-check
             - test-dependencies
-            - test-lint
+            - lint-unit_tests
 #           - test-func
           filters:
             branches:
@@ -427,7 +431,7 @@ workflows:
           requires:
             - pr-tools/pr-title-check
             - test-dependencies
-            - test-lint
+            - lint-unit_tests
 #           - test-func
             - build-local
           filters:
@@ -441,7 +445,7 @@ workflows:
           requires:
             - pr-tools/pr-title-check
             - test-dependencies
-            - test-lint
+            - lint-unit_tests
 #           - test-func
             - build-local
           filters:
