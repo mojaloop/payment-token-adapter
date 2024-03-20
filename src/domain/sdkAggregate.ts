@@ -27,147 +27,106 @@
 
 'use strict';
 
-import { IHttpClient, IHttpResponse, ITokenMappingStorageRepo, Payee, PayeeIdType } from './interfaces';
-import { SDKSchemeAdapter } from '@mojaloop/api-snippets';
+import {
+    ISDKBackendClient,
+    ITokenMappingStorageRepo,
+    ILogger,
+    PayeeIdType,
+    TQuoteRequest,
+    TTransferRequest,
+    Payee,
+    Quote,
+    Transfer,
+} from './interfaces';
 
 export class SDKAggregate {
-    private aliasMappingRepo: ITokenMappingStorageRepo;
-    private httpClient: IHttpClient;
-    private httpTimeOutMs: number = 5000; // todo: clarify, where do we set this value
-    private readonly CORE_CONNECTOR_URL: string;
-
-    constructor(aliasMappingRepo: ITokenMappingStorageRepo, httpClient: IHttpClient, CORE_CONNECTOR_URL: string) {
-        this.aliasMappingRepo = aliasMappingRepo;
-        this.httpClient = httpClient;
-        this.CORE_CONNECTOR_URL = CORE_CONNECTOR_URL;
-    }
+    constructor(
+      private readonly aliasMappingRepo: ITokenMappingStorageRepo,
+      private readonly sdkClient:ISDKBackendClient,
+      private readonly logger: ILogger,
+    ) {}
 
     async init() {
         await this.aliasMappingRepo.init();
-        return Promise.resolve();
+        return true;
     }
 
     async destroy() {
         await this.aliasMappingRepo.destroy();
-        return Promise.resolve();
+        return true;
     }
 
-    async getParties(ID: string, Type: string): Promise<IHttpResponse | undefined | string> {
+
+    // todo: avoid returning string
+    async getParties(ID: string, Type: string): Promise<Payee | string> {
         if (Type == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(ID);
             if (!tokenMapping) {
-                return;
+                this.logger.warn('no tokenMapping', { ID, Type });
+                return '';
             }
 
-            const res = await this.httpClient.send(
-                `${this.CORE_CONNECTOR_URL}/parties/${tokenMapping.payeeIdType}/${tokenMapping.payeeId}`,
-                undefined,
-                this.httpTimeOutMs,
-                'GET',
-                undefined,
-            );
+            const res = await this.sdkClient.lookupPartyInfo(tokenMapping.payeeIdType, tokenMapping.payeeId);
+
             if (!res) {
+                this.logger.error('no lookupPartyInfo results', { ID, Type });
                 return 'Http Request Error';
+                // todo: improve error handling
             }
-            res.payload = res.payload as Payee;
-            res.payload.idValue = ID;
-            res.payload.idType = Type;
+            res.idValue = ID;
+            res.idType = Type;
+
             return res;
         }
 
-        const res = await this.httpClient.send(
-            `${this.CORE_CONNECTOR_URL}/parties/${Type}/${ID}`,
-            undefined,
-            this.httpTimeOutMs,
-            'GET',
-            undefined,
-        );
+        const res = await this.sdkClient.lookupPartyInfo(Type, ID);
         if (!res) {
             return 'Http Request Error';
         }
         return res;
     }
 
-    async postQuotes(
-        payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest,
-    ): Promise<IHttpResponse | undefined | string> {
+    async postQuotes(payload: TQuoteRequest): Promise<Quote | string> {
         if (payload.to.idType == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
             if (!tokenMapping) {
-                return;
+                this.logger.warn(`no tokenMapping by to.idValue: ${payload.to.idValue}`);
+                return '';
             }
 
+            // todo: avoid modifying input payload
             payload.to.idType = tokenMapping.payeeIdType;
             payload.to.idValue = tokenMapping.payeeId;
-
-            const res = await this.httpClient.send(
-                `${this.CORE_CONNECTOR_URL}/quoterequests`,
-                payload,
-                this.httpTimeOutMs,
-                'POST',
-                {
-                    'Content-Type': 'application/json',
-                },
-            );
-            if (!res) {
-                return 'Http Request Error';
-            }
-            return res;
         }
 
-        const res = await this.httpClient.send(
-            `${this.CORE_CONNECTOR_URL}/quoterequests`,
-            payload,
-            this.httpTimeOutMs,
-            'POST',
-            {
-                'Content-Type': 'application/json',
-            },
-        );
+        const res = await this.sdkClient.calculateQuote(payload);
         if (!res) {
+            this.logger.error('no calculateQuote results:', { payload });
             return 'Http Request Error';
         }
         return res;
     }
 
-    async transfer(
-        payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest,
-    ): Promise<IHttpResponse | undefined | string> {
+    // todo: improve error handling
+    async transfer(payload: TTransferRequest): Promise<Transfer | string> {
         if (payload.to.idType == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(payload.to.idValue);
             if (!tokenMapping) {
-                return;
+                this.logger.warn(`no tokenMapping by to.idValue: ${payload.to.idValue}`);
+                return '';
             }
 
+            // todo: avoid modifying input payload
             payload.to.idType = tokenMapping.payeeIdType;
             payload.to.idValue = tokenMapping.payeeId;
-
-            const res = await this.httpClient.send(
-                `${this.CORE_CONNECTOR_URL}/transfers`,
-                payload,
-                this.httpTimeOutMs,
-                'POST',
-                {
-                    'Content-Type': 'application/json',
-                },
-            );
-            if (!res) {
-                return 'Http Request Error';
-            }
-            return res;
         }
-        const res = await this.httpClient.send(
-            `${this.CORE_CONNECTOR_URL}/transfers`,
-            payload,
-            this.httpTimeOutMs,
-            'POST',
-            {
-                'Content-Type': 'application/json',
-            },
-        );
+
+        const res = await this.sdkClient.createTransfer(payload);
         if (!res) {
+            this.logger.error('no createTransfer results:', { payload });
             return 'Http Request Error';
         }
         return res;
     }
+
 }

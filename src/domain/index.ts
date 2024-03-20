@@ -29,4 +29,5 @@
 
 export * from './externalPortalAggregate';
 export * from './sdkAggregate';
+export * from './sdkClient';
 export * from './interfaces/index';

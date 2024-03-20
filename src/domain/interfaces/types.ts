@@ -29,16 +29,13 @@
 
 import { ServerRoute } from 'hapi';
 import { ReqRefDefaults } from '@hapi/hapi';
+import {SDKSchemeAdapter} from '@mojaloop/api-snippets';
 
 export interface IPaymentTokenMapping {
     paymentToken: string;
     payeeId: string;
     payeeIdType: PayeeIdType;
 }
-
-export type IHttpResponse = {
-    payload: Payee | Quote | Transfer;
-};
 
 export type Transfer = {
     completedTimestamp: string;
@@ -63,6 +60,7 @@ export type Quote = {
     transferAmountCurrency: string;
 };
 
+// todo: rename to Party
 export type Payee = {
     dateOfBirth: string;
     displayName: string;
@@ -96,3 +94,15 @@ export interface IRoutes {
     //@ts-expect-error ReqRefDefaults not found
     getRoutes(): ServerRoute<ReqRefDefaults>[];
 }
+
+export type TQuoteRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
+
+export type TTransferRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
+
+export interface ISDKBackendClient {
+  lookupPartyInfo(idType: string, id: string): Promise<Payee | null>;
+  // todo: make idType as PayeeIdType
+  calculateQuote(payload: TQuoteRequest): Promise<Quote | null>;
+  createTransfer(payload: TTransferRequest): Promise<Transfer | null>; // or performTransfer?
+}
+

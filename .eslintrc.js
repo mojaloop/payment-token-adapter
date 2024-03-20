@@ -18,6 +18,8 @@ module.exports = {
         indent: ['error', 4, { SwitchCase: 1 }],
         quotes: ['error', 'single', { allowTemplateLiterals: false }],
         'quote-props': ['error', 'as-needed'],
+        'no-console': 'error',
+        '@typescript-eslint/no-explicit-any': 'error',
     },
     overrides: [
         {
@@ -29,5 +31,5 @@ module.exports = {
         node: true,
         jest: true,
     },
-    ignorePatterns: ['test/**'], // todo: enable eslint for tests
+    ignorePatterns: ['test/func/**', 'test/mocks/**'], // todo: enable eslint for tests
 };
