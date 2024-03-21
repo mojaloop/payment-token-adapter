@@ -30,7 +30,7 @@ export const loggingPlugin: Plugin<PluginOptions> = {
 
         server.ext({
             type: 'onPreResponse',
-            method: function (req: Request, h: ResponseToolkit) {
+            method: (req: Request, h: ResponseToolkit) => {
                 const { context } = req.app as ReqAppState; // todo: think, how to specify req.app type
                 const { path, method, response } = req;
                 const responseTimeSec = ((Date.now() - context.received) / 1000).toFixed(3);
