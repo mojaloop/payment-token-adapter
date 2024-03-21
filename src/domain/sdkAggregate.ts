@@ -61,14 +61,14 @@ export class SDKAggregate {
         if (idType == PayeeIdType.ALIAS) {
             const tokenMapping = await this.aliasMappingRepo.getMapping(id);
             if (!tokenMapping) {
-                this.logger.warn('no tokenMapping', { ID: id, Type: idType });
+                this.logger.warn('no tokenMapping', { id, idType });
                 return '';
             }
 
             const res = await this.sdkClient.lookupPartyInfo(tokenMapping.payeeIdType, tokenMapping.payeeId);
 
             if (!res) {
-                this.logger.error('no lookupPartyInfo results', { ID: id, Type: idType });
+                this.logger.error('no lookupPartyInfo results', { id, idType });
                 return 'Http Request Error';
                 // todo: improve error handling
             }
