@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/mojaloop/payment-token-adapter/compare/v1.3.0...v1.4.0) (2024-03-21)
+
+
+### Features
+
+* added logging plugin; removed ts-ignores ([6b1e983](https://github.com/mojaloop/payment-token-adapter/commit/6b1e983fc78a614dab87ff007283833da3c7dee4))
+* added logging plugin; removed ts-ignores ([7d0bdfb](https://github.com/mojaloop/payment-token-adapter/commit/7d0bdfb6b00964f7d7afd2da3ee010f363b40884))
+* added logging plugin; removed ts-ignores ([0db29ee](https://github.com/mojaloop/payment-token-adapter/commit/0db29ee8799b799c1a4812f757c72ec3a94e1927))
+* added logging plugin; removed ts-ignores ([694edc4](https://github.com/mojaloop/payment-token-adapter/commit/694edc434afd8b9c0fa99fe5ab6a79901a417864))
+
 ## [1.3.0](https://github.com/mojaloop/payment-token-adapter/compare/v1.1.2...v1.3.0) (2024-03-20)
 
 
