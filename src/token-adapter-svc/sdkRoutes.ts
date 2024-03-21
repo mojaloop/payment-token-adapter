@@ -74,8 +74,6 @@ export class SDKRoutes implements IRoutes {
     }
 
     private async getParties(context: Context, req: Request, h: ResponseToolkit) {
-        this.logger.info('Received request: GET /parties');
-        // todo: use middleware to log incoming requests details
         const { params} = context.request;
         const idType = params.IdType as PayeeIdType;
         const id = params.ID as string;
@@ -92,12 +90,9 @@ export class SDKRoutes implements IRoutes {
     }
 
     private async postQuotes(context: Context, req: Request, h: ResponseToolkit) {
-        this.logger.info('Received request: POST /quoterequests');
-        // todo: use middleware to log incoming requests details
-
         const payload = req.payload as TQuoteRequest;
 
-        // todo: add validation
+        // todo: add route validation instead of such checks
         if (!payload.to) {
             return h.response('Bad Request: Payload missing crucial info').code(400);
         }
@@ -114,11 +109,9 @@ export class SDKRoutes implements IRoutes {
     }
 
     private async transfer(context: Context, req: Request, h: ResponseToolkit) {
-        this.logger.info('Received request: POST /transfers');
-        // todo: use middleware to log incoming requests details
-
         const payload = req.payload as TTransferRequest;
 
+        // todo: add route validation instead of such checks
         if (!payload.to) {
             return h.response('Bad Request: Payload missing crucial info').code(400);
         }
