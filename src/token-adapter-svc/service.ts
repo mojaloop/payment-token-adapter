@@ -31,8 +31,8 @@ import process from 'node:process';
 import { Server } from '@hapi/hapi';
 
 import { ExternalPortalAggregate, SDKAggregate, ITokenMappingStorageRepo, sdkClientFactory } from '../domain';
-import { MemoryTokenMappingStorageRepo } from '../implementations';
-import { loggerFactory } from '../infra';
+import { MemoryTokenMappingStorageRepo, loggerFactory } from '../infra';
+import { loggingPlugin } from '../plugins';
 import { ExternalPortalRoutes } from './externalPortalRoutes';
 import { SDKRoutes } from './sdkRoutes';
 
@@ -43,6 +43,12 @@ const SERVER_HOST = process.env['SERVER_HOST'] || '0.0.0.0';
 const CORE_CONNECTOR_URL = process.env['CORE_CONNECTOR_URL'] || 'http://localhost:4040';
 
 const logger = loggerFactory({ context: 'PTA' });
+const plugins = [{
+    plugin: loggingPlugin,
+    options: { logger },
+}];
+// add other plugins here
+
 
 export class Service {
     static tokenMappingStorageRepo: ITokenMappingStorageRepo;
@@ -70,48 +76,34 @@ export class Service {
         logger.info('PTA is started', { EXTERNAL_PORTAL_SERVER_PORT, SDK_SERVER_PORT, CORE_CONNECTOR_URL });
     }
 
-    static async setUpAndStartServers(): Promise<void> {
-        return new Promise<void>((resolve) => {
-            // Start Hapi Server
-            this.externalPortalServer = new Server({
-                port: EXTERNAL_PORTAL_SERVER_PORT,
-                host: SERVER_HOST,
-            });
-
-            this.sdkServer = new Server({
-                port: SDK_SERVER_PORT,
-                host: SERVER_HOST,
-            });
-
-            const externalPortalRoutes = new ExternalPortalRoutes(this.externalPortalAggregate, logger);
-            const sdkRoutes = new SDKRoutes(this.sdkAggregate, logger);
-
-            this.externalPortalServer.route(externalPortalRoutes.getRoutes());
-            this.externalPortalServer.route({
-                method: '*',
-                path: '/{any*}',
-                handler: function (request, h) {
-                    return h.response('404 Error! Page Not Found!').code(404);
-                },
-            });
-
-            this.sdkServer.route(sdkRoutes.getRoutes());
-            this.sdkServer.route({
-                method: '*',
-                path: '/{any*}',
-                handler: function (request, h) {
-                    return h.response('404 Error! Page Not Found!').code(404);
-                },
-            });
-
-            this.externalPortalServer.start();
-            logger.info(`External Portal Server running on port ${this.externalPortalServer.info.uri}`);
-
-            this.sdkServer.start();
-            logger.info(`SDK Server running on port ${this.sdkServer.info.uri}`);
-
-            resolve();
+    static async setUpAndStartServers(): Promise<boolean> {
+        // Start Hapi Server
+        // todo: !! create a separate class HttpServer
+        this.externalPortalServer = new Server({
+            port: EXTERNAL_PORTAL_SERVER_PORT,
+            host: SERVER_HOST,
         });
+        await this.externalPortalServer.register(plugins);
+        const externalPortalRoutes = new ExternalPortalRoutes(this.externalPortalAggregate, logger);
+        this.externalPortalServer.route(externalPortalRoutes.getRoutes());
+
+        this.sdkServer = new Server({
+            port: SDK_SERVER_PORT,
+            host: SERVER_HOST,
+        });
+        await this.sdkServer.register(plugins);
+        const sdkRoutes = new SDKRoutes(this.sdkAggregate, logger);
+        this.sdkServer.route(sdkRoutes.getRoutes());
+
+        await Promise.all([
+            this.externalPortalServer.start(),
+            this.sdkServer.start(),
+        ]);
+
+        logger.info(`External Portal Server running on port ${this.externalPortalServer.info.uri}`);
+        logger.info(`SDK Server running on port ${this.sdkServer.info.uri}`);
+
+        return true;
     }
 
     // todo: refactor

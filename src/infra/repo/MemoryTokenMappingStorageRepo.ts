@@ -27,4 +27,26 @@
 
 'use strict';
 
-export * from './implementations';
+import { ITokenMappingStorageRepo, IPaymentTokenMapping } from '../../domain';
+
+export class MemoryTokenMappingStorageRepo implements ITokenMappingStorageRepo {
+    private mappings = new Map<string, IPaymentTokenMapping>();
+
+    destroy(): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+    getMapping(mappingID: string): Promise<IPaymentTokenMapping | undefined> {
+        // in the aggregate make sure to check if the returned mapping is defined
+        return Promise.resolve(this.mappings.get(mappingID));
+    }
+
+    init(): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+    storeMapping(tokenMapping: IPaymentTokenMapping): Promise<void> {
+        this.mappings.set(tokenMapping.paymentToken, tokenMapping);
+        return Promise.resolve();
+    }
+}

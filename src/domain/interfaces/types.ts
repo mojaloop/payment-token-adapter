@@ -27,8 +27,7 @@
 
 'use strict';
 
-import { ServerRoute } from 'hapi';
-import { ReqRefDefaults } from '@hapi/hapi';
+import { ServerRoute } from '@hapi/hapi';
 import {SDKSchemeAdapter} from '@mojaloop/api-snippets';
 
 export interface IPaymentTokenMapping {
@@ -91,8 +90,7 @@ export enum PayeeIdType {
 }
 
 export interface IRoutes {
-    //@ts-expect-error ReqRefDefaults not found
-    getRoutes(): ServerRoute<ReqRefDefaults>[];
+    getRoutes(): ServerRoute[];
 }
 
 export type TQuoteRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
@@ -100,8 +98,7 @@ export type TQuoteRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
 export type TTransferRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
 
 export interface ISDKBackendClient {
-  lookupPartyInfo(idType: string, id: string): Promise<Payee | null>;
-  // todo: make idType as PayeeIdType
+  lookupPartyInfo(idType: PayeeIdType, id: string): Promise<Payee | null>;
   calculateQuote(payload: TQuoteRequest): Promise<Quote | null>;
   createTransfer(payload: TTransferRequest): Promise<Transfer | null>; // or performTransfer?
 }

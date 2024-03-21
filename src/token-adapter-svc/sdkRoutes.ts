@@ -27,15 +27,14 @@
 
 'use strict';
 
-import OpenAPIBackend from 'openapi-backend';
-import { SDKSchemeAdapter } from '@mojaloop/api-snippets';
-import { ReqRefDefaults } from '@hapi/hapi';
-import { ServerRoute } from 'hapi';
-import { IRoutes, SDKAggregate, ILogger } from '../domain';
+import OpenAPIBackend, { Context } from 'openapi-backend';
+import { Request, ResponseToolkit, ServerRoute } from '@hapi/hapi';
+import { TQuoteRequest, TTransferRequest, IRoutes, SDKAggregate, ILogger, PayeeIdType } from '../domain';
+
+const API_SPEC_FILE = './src/api-spec/payment-token-adapter-spec-sdk.yaml';
 
 export class SDKRoutes implements IRoutes {
-    //@ts-expect-error ReqRefDefaults not found
-    private readonly routes: ServerRoute<ReqRefDefaults>[] = [];
+    private readonly routes: ServerRoute[] = [];
     private readonly sdkAggregate: SDKAggregate;
     private readonly logger: ILogger;
 
@@ -45,13 +44,13 @@ export class SDKRoutes implements IRoutes {
 
         // initialise openapi backend with validation
         const api = new OpenAPIBackend({
-            definition: './src/api-spec/payment-token-adapter-spec-sdk.yaml',
+            definition: API_SPEC_FILE,
             handlers: {
                 getParties: this.getParties.bind(this),
                 postQuotes: this.postQuotes.bind(this),
                 transfer: this.transfer.bind(this),
-                validationFail: async (context, req, h) => h.response({ err: context.validation.errors }).code(400),
-                notFound: async (context, req, h) => h.response({ context, err: 'not found' }).code(404),
+                validationFail: async (context, req, h) => h.response({ error: context.validation.errors }).code(400),
+                notFound: async (context, req, h) => h.response({ error: 'Not found' }).code(404),
             },
         });
 
@@ -60,38 +59,29 @@ export class SDKRoutes implements IRoutes {
         this.routes.push({
             method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
             path: '/{path*}',
-            //@ts-expect-error h has no type
-            handler: (req, h) =>
-                api.handleRequest(
-                    {
-                        method: req.method,
-                        path: req.path,
-                        body: req.payload,
-                        query: req.query,
-                        headers: req.headers,
-                    },
-                    req,
-                    h,
-                ),
+            handler: (req: Request, h: ResponseToolkit) => api.handleRequest({
+                method: req.method,
+                path: req.path,
+                body: req.payload,
+                query: req.query,
+                headers: req.headers,
+            }, req, h),
         });
     }
 
-    //@ts-expect-error ReqRefDefaults not found
-    getRoutes(): ServerRoute<ReqRefDefaults>[] {
+    getRoutes(): ServerRoute[] {
         return this.routes;
     }
 
-    //@ts-expect-error h has no type
-    private async getParties(context, request: Hapi.Request, h: Hapi.ResponseToolkit) {
+    private async getParties(context: Context, req: Request, h: ResponseToolkit) {
         this.logger.info('Received request: GET /parties');
         // todo: use middleware to log incoming requests details
-        const params = context.request.params;
+        const { params} = context.request;
+        const idType = params.IdType as PayeeIdType;
+        const id = params.ID as string;
 
-        const ID = params['ID'];
-        const Type = params['IdType'];
-
-        const result = await this.sdkAggregate.getParties(ID, Type);
-
+        const result = await this.sdkAggregate.getParties(idType, id);
+        // todo: refactor
         if (!result) {
             return h.response({ statusCode: 3204, message: 'ALIAS not found' }).code(404);
         } else if (typeof result == 'string') {
@@ -101,19 +91,19 @@ export class SDKRoutes implements IRoutes {
         }
     }
 
-    //@ts-expect-error h has no type
-    private async postQuotes(context, request: Hapi.Request, h: Hapi.ResponseToolkit) {
+    private async postQuotes(context: Context, req: Request, h: ResponseToolkit) {
         this.logger.info('Received request: POST /quoterequests');
         // todo: use middleware to log incoming requests details
 
-        const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest =
-            request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
+        const payload = req.payload as TQuoteRequest;
 
+        // todo: add validation
         if (!payload.to) {
             return h.response('Bad Request: Payload missing crucial info').code(400);
         }
 
         const result = await this.sdkAggregate.postQuotes(payload);
+        // todo: refactor
         if (!result) {
             return h.response({ statusCode: 3204, message: 'ALIAS not found' }).code(404);
         } else if (typeof result == 'string') {
@@ -123,19 +113,18 @@ export class SDKRoutes implements IRoutes {
         }
     }
 
-    //@ts-expect-error h has no type
-    private async transfer(context, request: Hapi.Request, h: Hapi.ResponseToolkit) {
+    private async transfer(context: Context, req: Request, h: ResponseToolkit) {
         this.logger.info('Received request: POST /transfers');
         // todo: use middleware to log incoming requests details
 
-        const payload: SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest =
-            request.payload as SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
+        const payload = req.payload as TTransferRequest;
 
         if (!payload.to) {
             return h.response('Bad Request: Payload missing crucial info').code(400);
         }
 
         const result = await this.sdkAggregate.transfer(payload);
+        // todo: refactor
         if (!result) {
             return h.response({ statusCode: 3204, message: 'ALIAS not found' }).code(404);
         } else if (typeof result == 'string') {
