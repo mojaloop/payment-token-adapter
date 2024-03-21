@@ -56,30 +56,29 @@ export class SDKAggregate {
         return true;
     }
 
-
     // todo: avoid returning string
-    async getParties(ID: string, Type: string): Promise<Payee | string> {
-        if (Type == PayeeIdType.ALIAS) {
-            const tokenMapping = await this.aliasMappingRepo.getMapping(ID);
+    async getParties(idType: PayeeIdType, id: string): Promise<Payee | string> {
+        if (idType == PayeeIdType.ALIAS) {
+            const tokenMapping = await this.aliasMappingRepo.getMapping(id);
             if (!tokenMapping) {
-                this.logger.warn('no tokenMapping', { ID, Type });
+                this.logger.warn('no tokenMapping', { id, idType });
                 return '';
             }
 
             const res = await this.sdkClient.lookupPartyInfo(tokenMapping.payeeIdType, tokenMapping.payeeId);
 
             if (!res) {
-                this.logger.error('no lookupPartyInfo results', { ID, Type });
+                this.logger.error('no lookupPartyInfo results', { id, idType });
                 return 'Http Request Error';
                 // todo: improve error handling
             }
-            res.idValue = ID;
-            res.idType = Type;
+            res.idValue = id;
+            res.idType = idType;
 
             return res;
         }
 
-        const res = await this.sdkClient.lookupPartyInfo(Type, ID);
+        const res = await this.sdkClient.lookupPartyInfo(idType, id);
         if (!res) {
             return 'Http Request Error';
         }

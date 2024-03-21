@@ -28,8 +28,7 @@ paths:
                   type: string
                   example: '256781466410'
                 payeeIdType:
-                  type: string
-                  example: MSISDN
+                  $ref: 'common.yaml#/components/schemas/IdType'
                 paymentToken:
                   type: string
                   example: CM2903E3E0WE
@@ -40,7 +39,7 @@ paths:
                   payeeIdType: MSISDN
                   paymentToken: CM2903E3E0WE
       responses:
-        '200':
+        '201':
           description: 'Successful storage of the Payment Token Mapping'
 
 

@@ -1,4 +1,3 @@
-/// <reference lib="dom" />
 // @ts-ignore
 
 /*****
@@ -79,35 +78,6 @@ describe("token-adapter-svc test suite",()=>{
          //Assert
          expect(Service.tokenMappingStorageRepo.storeMapping).toHaveBeenCalled();
      });
-
-     test("GET - token-adapter-svc: get token Mapping should return a mapping for an existent token mapping", async ()=>{
-        // Arrange
-         await axios.post(
-             'http://0.0.0.0:3000/tokens',
-             {
-                 paymentToken:"CM2903E3E0WE",
-                 payeeId:"256781666410",
-                 payeeIdType:"DEVICE"
-             },
-             {
-                 "headers":{
-                     "Content-Type":"application/json"
-                 }
-             }
-         );
-
-         // Act
-         const res = await axios.get(
-             "http://0.0.0.0:3000/parties/ALIAS/CM2903E3E0WE"
-         );
-
-         expect(res.data).toEqual({
-             paymentToken:"CM2903E3E0WE",
-             payeeId:"256781666410",
-             payeeIdType:"DEVICE"
-         });
-     });
-
 
      test("GET: token-adapter-svc: sdk : /parties with type ALIAS. Should return status code 200", async ()=>{
          // arrange
