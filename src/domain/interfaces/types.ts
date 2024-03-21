@@ -28,7 +28,11 @@
 'use strict';
 
 import { ServerRoute } from '@hapi/hapi';
-import {SDKSchemeAdapter} from '@mojaloop/api-snippets';
+import { SDKSchemeAdapter } from '@mojaloop/api-snippets';
+
+export type TQuoteRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
+
+export type TTransferRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
 
 export interface IPaymentTokenMapping {
     paymentToken: string;
@@ -67,7 +71,7 @@ export type Payee = {
     firstName: string;
     fspId: string;
     idSubValue: string;
-    idType: string;
+    idType: PayeeIdType;
     idValue: string;
     lastName: string;
     merchantClassificationCode: string;
@@ -89,17 +93,13 @@ export enum PayeeIdType {
     ALIAS = 'ALIAS',
 }
 
-export interface IRoutes {
-    getRoutes(): ServerRoute[];
-}
-
-export type TQuoteRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.quoteRequest;
-
-export type TTransferRequest = SDKSchemeAdapter.V2_0_0.Backend.Types.transferRequest;
-
 export interface ISDKBackendClient {
   lookupPartyInfo(idType: PayeeIdType, id: string): Promise<Payee | null>;
   calculateQuote(payload: TQuoteRequest): Promise<Quote | null>;
   createTransfer(payload: TTransferRequest): Promise<Transfer | null>; // or performTransfer?
+}
+
+export interface IRoutes {
+  getRoutes(): ServerRoute[];
 }
 

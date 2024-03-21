@@ -31,5 +31,5 @@ module.exports = {
         node: true,
         jest: true,
     },
-    ignorePatterns: ['test/func/**', 'test/mocks/**'], // todo: enable eslint for tests
+    ignorePatterns: ['test/func/**'], // todo: enable eslint for tests
 };

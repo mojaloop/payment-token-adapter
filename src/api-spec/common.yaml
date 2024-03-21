@@ -12,3 +12,4 @@ components:
         - ACCOUNT_ID
         - IBAN
         - ALIAS
+      description: 'Type of Id'

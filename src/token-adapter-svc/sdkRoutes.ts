@@ -28,8 +28,15 @@
 'use strict';
 
 import OpenAPIBackend, { Context } from 'openapi-backend';
-import { Request, ResponseToolkit, ServerRoute } from '@hapi/hapi';
-import { TQuoteRequest, TTransferRequest, IRoutes, SDKAggregate, ILogger, PayeeIdType } from '../domain';
+import { Request, ResponseToolkit, ServerRoute, ResponseValue } from '@hapi/hapi';
+import {
+    SDKAggregate,
+    TQuoteRequest,
+    TTransferRequest,
+    IRoutes,
+    ILogger,
+    PayeeIdType,
+} from '../domain';
 
 const API_SPEC_FILE = './src/api-spec/payment-token-adapter-spec-sdk.yaml';
 
@@ -67,6 +74,16 @@ export class SDKRoutes implements IRoutes {
                 headers: req.headers,
             }, req, h),
         });
+
+        this.routes.push({
+            method: ['GET'],
+            path: '/health',
+            handler: async (req: Request, h: ResponseToolkit) => {
+                const success = true; // todo: think about better healthCheck logic
+                return h.response({ success }).code(success ? 200 : 503);
+            }
+        });
+
     }
 
     getRoutes(): ServerRoute[] {
@@ -79,45 +96,23 @@ export class SDKRoutes implements IRoutes {
         const id = params.ID as string;
 
         const result = await this.sdkAggregate.getParties(idType, id);
-        // todo: refactor
-        if (!result) {
-            return h.response({ statusCode: 3204, message: 'ALIAS not found' }).code(404);
-        } else if (typeof result == 'string') {
-            return h.response({ statusCode: 2001, message: 'Internal server error' }).code(500);
-        } else {
-            return h.response(result).code(200);
-        }
+        return this.prepareResponse(result, h);
     }
 
     private async postQuotes(context: Context, req: Request, h: ResponseToolkit) {
         const payload = req.payload as TQuoteRequest;
-
-        // todo: add route validation instead of such checks
-        if (!payload.to) {
-            return h.response('Bad Request: Payload missing crucial info').code(400);
-        }
-
         const result = await this.sdkAggregate.postQuotes(payload);
-        // todo: refactor
-        if (!result) {
-            return h.response({ statusCode: 3204, message: 'ALIAS not found' }).code(404);
-        } else if (typeof result == 'string') {
-            return h.response({ statusCode: 2001, message: 'Internal server error' }).code(500);
-        } else {
-            return h.response(result).code(200);
-        }
+        return this.prepareResponse(result, h);
     }
 
     private async transfer(context: Context, req: Request, h: ResponseToolkit) {
         const payload = req.payload as TTransferRequest;
-
-        // todo: add route validation instead of such checks
-        if (!payload.to) {
-            return h.response('Bad Request: Payload missing crucial info').code(400);
-        }
-
         const result = await this.sdkAggregate.transfer(payload);
-        // todo: refactor
+        return this.prepareResponse(result, h);
+    }
+
+    // todo: improve logic
+    private async prepareResponse(result: ResponseValue, h: ResponseToolkit) {
         if (!result) {
             return h.response({ statusCode: 3204, message: 'ALIAS not found' }).code(404);
         } else if (typeof result == 'string') {

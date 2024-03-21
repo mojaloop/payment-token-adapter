@@ -21,7 +21,7 @@ paths:
           in: path
           required: true
           schema:
-            $ref: 'common.yaml#/components/schemas/IdType'
+            $ref: '#/components/schemas/IdType'
         - name: ID
           in: path
           required: true
@@ -32,54 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  dateOfBirth:
-                    type: string
-                    description: 'Date Of Birth'
-                  displayName:
-                    type: string
-                    description: 'Display Name'
-                  extensionList:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        key:
-                          type: string
-                        value:
-                          type: string
-                    description: "Extension List"
-                  firstName:
-                    type: string
-                    description: 'First Name'
-                  fspId:
-                    type: string
-                    description: 'FSP Id'
-                  idSubValue:
-                    type: string
-                    description: 'Id Sub Value'
-                  idType:
-                    type: string
-                    description: 'Type of Id'
-                  idValue:
-                    type: string
-                    description: 'ID Value'
-                  lastName:
-                    type: string
-                  merchantClassificationCode:
-                    type: string
-                  middleName:
-                    type: string
-                  type:
-                    type: string
-                  supportedCurrencies:
-                    type: array
-                    items:
-                      type: string
-                  kycInformation:
-                    type: string
-
+                $ref: '#/components/schemas/PartyInfo'
           description: 'Response containing details of the requested party'
       tags:
         - Discovery
@@ -96,6 +49,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - to
+              # todo: add other required fields
               properties:
                 homeR2PTransactionId:
                   type: string
@@ -128,51 +84,9 @@ paths:
                   type: string
                   example: "AED"
                 from:
-                  type: object
-                  properties:
-                    dateOfBirth:
-                      type: string
-                      example: "8477-05-21"
-                    displayName:
-                      type: string
-                    extensionList:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          value:
-                            type: string
-                    firstName:
-                      type: string
-                      description: 'First Name'
-                    fspId:
-                      type: string
-                      description: 'FSP Id'
-                    idSubValue:
-                      type: string
-                      description: 'Id Sub Value'
-                    idType:
-                      type: string
-                      description: 'Type of Id'
-                    idValue:
-                      type: string
-                      description: 'ID Value'
-                    lastName:
-                      type: string
-                    merchantClassificationCode:
-                      type: string
-                    middleName:
-                      type: string
-                    type:
-                      type: string
-                    supportedCurrencies:
-                      type: array
-                      items:
-                        type: string
-                    kycInformation:
-                      type: string
+                  $ref: '#/components/schemas/PartyInfo'
+                to:
+                  $ref: '#/components/schemas/PartyInfo'
                 geoCode:
                   type: object
                   properties:
@@ -193,52 +107,6 @@ paths:
                   example: "3cc5bf26-5462-34bb-b198-0b8f1569da4f"
                 subScenario:
                   type: string
-                to:
-                  type: object
-                  properties:
-                    dateOfBirth:
-                      type: string
-                      example: "8477-05-21"
-                    displayName:
-                      type: string
-                    extensionList:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          value:
-                            type: string
-                    firstName:
-                      type: string
-                      description: 'First Name'
-                    fspId:
-                      type: string
-                      description: 'FSP Id'
-                    idSubValue:
-                      type: string
-                      description: 'Id Sub Value'
-                    idType:
-                      type: string
-                      description: 'Type of Id'
-                    idValue:
-                      type: string
-                      description: 'ID Value'
-                    lastName:
-                      type: string
-                    merchantClassificationCode:
-                      type: string
-                    middleName:
-                      type: string
-                    type:
-                      type: string
-                    supportedCurrencies:
-                      type: array
-                      items:
-                        type: string
-                    kycInformation:
-                      type: string
                 transactionId:
                   type: string
                   example: "1eea8954-271b-2dcf-98d4-7cb8a426a279"
@@ -323,6 +191,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - to
               properties:
                 homeR2PTransactionId:
                   type: string
@@ -337,51 +207,9 @@ paths:
                   type: string
                   example: 'AED'
                 from:
-                  type: object
-                  properties:
-                    dateOfBirth:
-                      type: string
-                      example: "8477-05-21"
-                    displayName:
-                      type: string
-                    extensionList:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          value:
-                            type: string
-                    firstName:
-                      type: string
-                      description: 'First Name'
-                    fspId:
-                      type: string
-                      description: 'FSP Id'
-                    idSubValue:
-                      type: string
-                      description: 'Id Sub Value'
-                    idType:
-                      type: string
-                      description: 'Type of Id'
-                    idValue:
-                      type: string
-                      description: 'ID Value'
-                    lastName:
-                      type: string
-                    merchantClassificationCode:
-                      type: string
-                    middleName:
-                      type: string
-                    type:
-                      type: string
-                    supportedCurrencies:
-                      type: array
-                      items:
-                        type: string
-                    kycInformation:
-                      type: string
+                  $ref: '#/components/schemas/PartyInfo'
+                to:
+                  $ref: '#/components/schemas/PartyInfo'
                 ilpPacket:
                   type: object
                   properties:
@@ -495,52 +323,6 @@ paths:
                         type: string
                 subScenario:
                   type: string
-                to:
-                  type: object
-                  properties:
-                    dateOfBirth:
-                      type: string
-                      example: "8477-05-21"
-                    displayName:
-                      type: string
-                    extensionList:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          value:
-                            type: string
-                    firstName:
-                      type: string
-                      description: 'First Name'
-                    fspId:
-                      type: string
-                      description: 'FSP Id'
-                    idSubValue:
-                      type: string
-                      description: 'Id Sub Value'
-                    idType:
-                      type: string
-                      description: 'Type of Id'
-                    idValue:
-                      type: string
-                      description: 'ID Value'
-                    lastName:
-                      type: string
-                    merchantClassificationCode:
-                      type: string
-                    middleName:
-                      type: string
-                    type:
-                      type: string
-                    supportedCurrencies:
-                      type: array
-                      items:
-                        type: string
-                    kycInformation:
-                      type: string
                 transactionType:
                   type: string
                 transferId:
@@ -565,5 +347,57 @@ paths:
                     type: string
 
 
+components:
+  schemas:
+    IdType:
+      $ref: 'common.yaml#/components/schemas/IdType'
 
+    PartyInfo:
+      type: object
+      required:
+        - idType
+        - idValue
+      properties:
+        dateOfBirth:
+          type: string
+          example: "8477-05-21"
+        displayName:
+          type: string
+        extensionList:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              value:
+                type: string
+        firstName:
+          type: string
+          description: 'First Name'
+        fspId:
+          type: string
+          description: 'FSP Id'
+        idSubValue:
+          type: string
+          description: 'Id Sub Value'
+        idType:
+          $ref: '#/components/schemas/IdType'
+        idValue:
+          type: string
+          description: 'ID Value'
+        lastName:
+          type: string
+        merchantClassificationCode:
+          type: string
+        middleName:
+          type: string
+        type:
+          type: string
+        supportedCurrencies:
+          type: array
+          items:
+            type: string
+        kycInformation:
+          type: string
 

@@ -31,8 +31,8 @@ export const loggingPlugin: Plugin<PluginOptions> = {
         server.ext({
             type: 'onPreResponse',
             method: (req: Request, h: ResponseToolkit) => {
-                const { context } = req.app as ReqAppState; // todo: think, how to specify req.app type
                 const { path, method, response } = req;
+                const { context } = req.app as ReqAppState; // todo: think, how to specify req.app type
                 const responseTimeSec = ((Date.now() - context.received) / 1000).toFixed(3);
 
                 const statusCode = response instanceof Error

@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { IHttpClient, THttpClientFactory } from '../../infra';
 import {
     ISDKBackendClient,
@@ -13,6 +14,7 @@ export type TSDKClientDeps = {
   httpClientFactory: THttpClientFactory;
   logger: ILogger;
   coreConnectorUrl: string;
+  reThrowHttpError?: boolean;
 }
 
 // todo: use TSDKClientDeps to make TSDKClientFactoryDeps (make some fields optional)
@@ -32,12 +34,14 @@ export class SDKClient implements ISDKBackendClient {
     private readonly http: IHttpClient;
     private readonly logger: ILogger;
     private readonly coreConnectorUrl: string; // think, if we can make it as BaseUrl of httpClient
+    private readonly reThrowHttpError: boolean;
 
     constructor(deps: TSDKClientDeps) {
         const logger = deps.logger.child({ context: this.constructor.name });
         this.logger = logger;
         this.http = deps.httpClientFactory({ logger });
         this.coreConnectorUrl = deps.coreConnectorUrl;
+        this.reThrowHttpError = deps.reThrowHttpError || false;
     }
 
     async lookupPartyInfo(idType: string, id: string): Promise<Payee | null> {
@@ -74,8 +78,11 @@ export class SDKClient implements ISDKBackendClient {
     }
 
     private handleError(err: unknown, url: string): null {
-        // todo: improve error handling (check error type and fields)
-        this.logger.error(`error while sending request to ${url}: ${(err as Error)?.stack}`);
+        const { message, code, stack } = err as AxiosError;
+        this.logger.error(`error on sending http request to ${url}: ${message}`, { code, stack });
+
+        if (this.reThrowHttpError) throw err;
+
         return null;
     }
 }
