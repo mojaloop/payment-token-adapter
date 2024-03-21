@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/mojaloop/payment-token-adapter/compare/v1.4.0...v1.6.0) (2024-03-21)
+
+
+### Features
+
+* added healthCheck; improved routes validation; added PartyInfo swagger schema ([5b788ab](https://github.com/mojaloop/payment-token-adapter/commit/5b788ab8a4afa10ba39f3008c0a2edf6044b50ab))
+* added healthCheck; improved routes validation; added PartyInfo swagger schema ([87d1815](https://github.com/mojaloop/payment-token-adapter/commit/87d1815bc9019a4864e8c74a3a90559e88255abc))
+
 ## [1.4.0](https://github.com/mojaloop/payment-token-adapter/compare/v1.3.0...v1.4.0) (2024-03-21)
 
 
