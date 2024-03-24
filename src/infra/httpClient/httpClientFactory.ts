@@ -4,7 +4,7 @@ import { HttpClient } from './HttpClient';
 import { THttpClientFactory, THttpClientFactoryDeps } from './types';
 
 export const defaultHttpOptions: CreateAxiosDefaults = Object.freeze({
-    timeout: 3000,
+    timeout: 100000,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'
