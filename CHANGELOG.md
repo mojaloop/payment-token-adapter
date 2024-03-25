@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.2](https://github.com/mojaloop/payment-token-adapter/compare/v1.6.1...v1.6.2) (2024-03-25)
+
+
+### Bug Fixes
+
+* reduce timeout to 10s ([d89d34c](https://github.com/mojaloop/payment-token-adapter/commit/d89d34c70d2821d8b262bceb396f400f9ce87b07))
+
 ### [1.6.1](https://github.com/mojaloop/payment-token-adapter/compare/v1.6.0...v1.6.1) (2024-03-24)
 
 
